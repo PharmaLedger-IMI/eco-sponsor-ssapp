@@ -1,0 +1,54 @@
+<webc-container controller="ListParticipantsHistoryController">
+  <link rel="stylesheet" href="assets/css/trials.css" />
+  <div class="main-container">
+    <div class="trial-header">
+      <h1 class="trial-title">
+        <webc-link tag="trials">Trials</webc-link>
+        <span> / </span>
+        <label>{{ @trialId }}</label>
+        <span> / </span>
+        <button
+          data-tag="navigate-to-sites"
+          class="btn btn-bare btn-link"
+          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
+        >
+          SITES
+        </button>
+        <span> / </span>
+        <label>{{ @siteId }}</label>
+        <span> / </span>
+        <button
+          data-tag="navigate-to-subjects"
+          class="btn btn-bare btn-link"
+          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
+        >
+          PARTICIPANTS
+        </button>
+        <span> / </span>
+        <label>Participant</label>
+        <span> / </span>
+        <button
+          data-tag="navigate-to-participant-consents"
+          class="btn btn-bare btn-link"
+          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
+        >
+          CONSENTS
+        </button>
+        <span> / </span>
+        <label>History</label>
+      </h1>
+    </div>
+    <div class="page-content">
+      <div class="container">
+        <div data-if="@historyArrayNotEmpty">
+          <div slot="true">
+            <webc-template template="table-site-participants-history" data-view-model="@"></webc-template>
+          </div>
+          <div slot="false">
+            <div>No consent history data exist yet.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</webc-container>

@@ -251,6 +251,18 @@ export default class ListSitesController extends WebcController {
       });
     });
 
+    this.onTagClick('view-site-subjects', async (model) => {
+      console.log(model);
+      this.navigateToPageTag('site-participants', {
+        trialId: this.model.id,
+        trialKeySSI: this.model.keySSI,
+        trialUid: this.model.uid,
+        siteKeySSI: model.keySSI,
+        siteId: model.id,
+        siteUid: model.uid,
+      });
+    });
+
     this.onTagClick('filters-cleared', async () => {
       this.model.clearButtonDisabled = true;
       this.model.countries.value = null;

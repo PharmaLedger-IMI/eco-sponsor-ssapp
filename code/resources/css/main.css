@@ -171,6 +171,27 @@ header {
   gap: 0;
 }
 
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 2),
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 3),
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 4),
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 5) {
+  background: rgba(0, 135, 152, 0.19);
+}
+
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 6),
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 7),
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 8),
+.participants-data-table .webc-datatable--container > div:nth-child(8n + 9) {
+  background: rgba(0, 52, 91, 0.3);
+}
+
+.participants-data-table .webc-datatable--container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
+  align-items: baseline;
+  gap: 0;
+}
+
 button.btn.btn-bare.btn-link {
   margin: 0 !important;
   padding: 0 !important;

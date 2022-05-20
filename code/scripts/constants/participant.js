@@ -4,7 +4,7 @@ export const participantConsentStatusEnum = {
   Withdrew: 'Withdrew',
 };
 
-export const trialTableHeaders = [
+export const participantTableHeaders = [
   {
     column: 'participantId',
     label: 'Participant Id',
@@ -14,40 +14,82 @@ export const trialTableHeaders = [
     desc: null,
   },
   {
-    column: 'consentName',
-    label: 'Last Inform Consent Name',
+    column: 'status',
+    label: 'Status',
     notSortable: false,
     type: 'string',
     asc: null,
     desc: null,
   },
   {
-    column: 'consentVersion',
-    label: 'Last ICF version',
+    column: 'enrolledDate',
+    label: 'Enrolled Date',
     notSortable: false,
     type: 'string',
     asc: null,
     desc: null,
   },
   {
-    column: 'consentStatus',
-    label: 'Last ICF status',
+    column: null,
+    label: 'Options',
+    notSortable: true,
+    desc: null,
+  },
+];
+
+export const participantConsentsTableHeaders = [
+  {
+    column: 'name',
+    label: 'Consent Name',
     notSortable: false,
     type: 'string',
+    asc: null,
     desc: null,
   },
   {
-    column: 'patientSignature',
-    label: 'Last ICF patient or presentative signature',
+    column: 'type',
+    label: 'Type',
     notSortable: false,
     type: 'string',
+    asc: null,
     desc: null,
   },
   {
-    column: 'doctorSignature',
-    label: 'Last ICF HCP signature',
+    column: 'version',
+    label: 'Version',
     notSortable: false,
     type: 'string',
+    asc: null,
+    desc: null,
+  },
+  {
+    column: 'participantSigned',
+    label: 'TS Signed',
+    notSortable: false,
+    type: 'string',
+    asc: null,
+    desc: null,
+  },
+  {
+    column: 'participantWithDrew',
+    label: 'TS Withdrew',
+    notSortable: false,
+    type: 'string',
+    asc: null,
+    desc: null,
+  },
+  {
+    column: 'hcoSigned',
+    label: 'HCO Signature',
+    notSortable: false,
+    type: 'string',
+    asc: null,
+    desc: null,
+  },
+  {
+    column: null,
+    label: 'Options',
+    notSortable: true,
     desc: null,
   },
 ];

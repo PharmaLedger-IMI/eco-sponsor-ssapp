@@ -65,7 +65,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.existingIds = props[0].existingIds || null;
     this.existingVersions = props[0].existingVersions || null;
     this.site = props[0].site || null;
-    debugger;
     this.selectedVersion = this.isUpdate
       ? Math.max.apply(
           Math,

@@ -109,25 +109,48 @@ export default class ListTrialsController extends WebcController {
       }
       console.log('DATA MESSAGE:', data);
       data = JSON.parse(data);
-      debugger;
       switch (data.operation) {
-        case Constants.MESSAGES.SPONSOR.SIGN_ECOSENT:
-        case Constants.MESSAGES.SPONSOR.UPDATE_ECOSENT: {
-          await this.participantsService.updateParticipant(data.useCaseSpecifics, data.ssi, data.senderIdentity);
-          eventBusService.emitEventListeners(Topics.RefreshParticipants + data.useCaseSpecifics.trialSSI, data);
-          break;
-        }
-        case 'update-site-status': {
-          debugger;
+        // case Constants.MESSAGES.SPONSOR.SIGN_ECOSENT:
+        // case Constants.MESSAGES.SPONSOR.UPDATE_ECOSENT: {
+        //   await this.participantsService.updateParticipant(data.useCaseSpecifics, data.ssi, data.senderIdentity);
+        //   eventBusService.emitEventListeners(Topics.RefreshParticipants + data.useCaseSpecifics.trialSSI, data);
+        //   break;
+        // }
+        case Constants.MESSAGES.SPONSOR.UPDATE_SITE_STATUS: {
           if (data.stageInfo.siteSSI) {
             await this.sitesService.updateSiteStage(data.stageInfo.siteSSI);
           }
+          break;
         }
-        case 'tp-added': {
-          debugger;
+        case Constants.MESSAGES.HCO.SEND_HCO_DSU_TO_SPONSOR: {
+          if (data.ssi) {
+            await this.sitesService.addHCODsu(data.ssi, data.senderIdentity);
+          }
+          break;
+        }
+        case Constants.MESSAGES.SPONSOR.TP_ADDED: {
           if (data.ssi) {
             await this.participantsService.addParticipant(data.ssi, data.senderIdentity);
           }
+          break;
+        }
+        case Constants.MESSAGES.SPONSOR.TP_CONSENT_UPDATE: {
+          if (data.ssi) {
+            await this.participantsService.updateParticipantConsent(data.ssi, data.senderIdentity, data.consentSSI);
+          }
+          break;
+        }
+        case Constants.MESSAGES.SPONSOR.SIGN_ECOSENT: {
+          if (data.ssi) {
+            await this.participantsService.hcoSignConsent(data.ssi, data.senderIdentity, data.consentUid);
+          }
+          break;
+        }
+        case Constants.MESSAGES.SPONSOR.ADDED_TS_NUMBER: {
+          if (data.ssi) {
+            await this.participantsService.addParticipantNumber(data.ssi, data.senderIdentity);
+          }
+          break;
         }
       }
     });

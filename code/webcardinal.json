@@ -67,6 +67,41 @@
       "icon": "fa-times"
     },
     {
+      "name": "Site Participants",
+      "path": "/sites/participants",
+      "src": "site-participants.html",
+      "tag": "site-participants",
+      "icon": "fa-times"
+    },
+    {
+      "name": "Site Participant's Consents",
+      "path": "/sites/participants/consents",
+      "src": "site-participants-consents.html",
+      "tag": "site-participants-consents",
+      "icon": "fa-times"
+    },
+    {
+      "name": "Site Participant's History",
+      "path": "/sites/participants/history",
+      "src": "site-participants-history.html",
+      "tag": "site-participants-history",
+      "icon": "fa-times"
+    },
+    {
+      "name": "Site Participant's Consent Preview",
+      "path": "/sites/participants/preview",
+      "src": "site-participant-preview.html",
+      "tag": "site-participant-preview",
+      "icon": "fa-times"
+    },
+    {
+      "name": "Site Participant's Status",
+      "path": "/sites/participants/status",
+      "src": "site-participant-status.html",
+      "tag": "site-participant-status",
+      "icon": "fa-times"
+    },
+    {
       "name": "trial",
       "path": "/trial",
       "src": "trial.html",

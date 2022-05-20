@@ -29,14 +29,24 @@ export default class SitesService extends DSUService {
     return result;
   }
 
-  async getSiteFromUid(trialKeySSI, siteUid) {
-    const site = await this.storageService.filterAsync(this.getTableName(trialKeySSI), `did == ${siteUid}`);
-    return site;
-  }
-
   async getSiteFromDB(did, trialKeySSI) {
     const result = await this.storageService.getRecordAsync(this.getTableName(trialKeySSI), did);
     return result;
+  }
+
+  async getSiteFromKeySSI(siteKeySSI, trialKeySSI) {
+    const test = await this.storageService.filterAsync(this.getTableName(trialKeySSI));
+    const result = await this.storageService.filterAsync(this.getTableName(trialKeySSI), `keySSI == ${siteKeySSI}`);
+    return result.length > 0 && result[0];
+  }
+
+  async addHCODsu(ssi, siteDid) {
+    // const HCODsu = await this.mountEntityAsync(ssi);
+    // const site = await this.getSiteFromDB(siteDid, trial.keySSI);
+
+    // const trial =
+    // this.getSiteFromDB(siteDid, )
+    return;
   }
 
   async createSite(data, id) {
@@ -117,7 +127,6 @@ export default class SitesService extends DSUService {
     const trialDB = await this.trialsService.getTrialFromDB(siteDSU.trialId);
     const site = await this.getSiteFromDB(siteDSU.did, trialDB.keySSI);
     const statusDSU = await this.getEntityAsync(site.statusUid, this.getStatusPath(site.uid));
-    debugger;
     const updatedSite = await this.storageService.updateRecordAsync(this.getTableName(trialDB.keySSI), site.did, {
       ...site,
       stage: statusDSU.stage,

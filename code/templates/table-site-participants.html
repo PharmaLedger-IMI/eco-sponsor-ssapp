@@ -1,0 +1,17 @@
+<webc-container controller="TableTemplateController" data-view-model="@" class="participants-data-table data-table">
+  <webc-datatable datasource="@dataSource" class="table-cell-web align-items-center justify-content-center">
+    <div slot="header" class="table-header" data-for="@headerItems" style="display: contents">
+      <span class="py-2">{{ @name }}</span>
+    </div>
+
+    <div class="">{{@number}}</div>
+    <div class="">{{@status}}</div>
+    <div class="">{{@enrolledDate}}</div>
+    <div class="">
+      <button data-tag="view-participant-status" class="btn btn-bare btn-link">Status</button> |
+      <button data-tag="view-participant-consents" class="btn btn-bare btn-link">Consents</button>
+    </div>
+
+    <div slot="no-data">There are no items to display</div>
+  </webc-datatable>
+</webc-container>
