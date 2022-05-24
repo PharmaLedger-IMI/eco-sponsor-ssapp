@@ -17,17 +17,10 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/PharmaLedger-IMI/eco-workspace"
+    "url": "https://github.com/PharmaLedger-IMI/eco-sponsor-ssapp"
   },
-  "homepage": "https://github.com/PharmaLedger-IMI/eco-workspace",
+  "homepage": "https://github.com/PharmaLedger-IMI/eco-sponsor-ssapp",
   "dependencies": {
     "octopus": "git+http://github.com/privatesky/octopus.git"
-  },
-  "devDependencies": {
-    "@ionic/cli": "^6.13.1",
-    "@ionic/core": "^5.6.0",
-    "@ionic/pwa-elements": "^3.0.2",
-    "eslint": "^8.9.0",
-    "ionicons": "^5.5.1"
   }
 }
