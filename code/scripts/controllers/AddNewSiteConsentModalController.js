@@ -216,8 +216,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
           );
         } else {
           outcome = await this.consentsService.addSiteConsent(result, this.keySSI, this.site);
-          // this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_CONSENT, outcome.sReadSSI, 'Site consent', this.site.did);
-          this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_CONSENT, this.site.uid, 'Site consent', this.site.did);
+          this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_CONSENT, this.site.uid, 'Site consent', this.site.did, outcome.uid);
         }
         this.model.submitButtonDisabled = false;
         this.send('confirmed', outcome);
