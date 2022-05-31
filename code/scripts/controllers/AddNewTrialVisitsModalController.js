@@ -70,6 +70,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
     this.onTagClick('create-visits', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
         Papa.parse(this.file[0], {
           complete: async (results, file) => {
             console.log(results, file);
@@ -121,6 +122,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
                     result,
                     this.model.consents.value
                   );
+                  window.WebCardinal.loader.hidden = true;
                   this.send('confirmed', outcome);
                 } else {
                   throw new Error('No consent is selected');
@@ -137,6 +139,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
         //   };
         // });
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the visits'));
         console.log(error);
       }

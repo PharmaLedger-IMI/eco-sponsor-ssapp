@@ -163,6 +163,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
 
     this.onTagClick('create-consent', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
         console.log(JSON.parse(JSON.stringify(this.model.consent)));
         let valid = true;
         for (const x in this.model.consent) {
@@ -216,11 +217,19 @@ export default class AddNewSiteConsentModalController extends WebcController {
           );
         } else {
           outcome = await this.consentsService.addSiteConsent(result, this.keySSI, this.site);
-          this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_CONSENT, this.site.uid, 'Site consent', this.site.did, outcome.uid);
+          this.sendMessageToHco(
+            Constants.MESSAGES.HCO.ADD_CONSENT,
+            this.site.uid,
+            'Site consent',
+            this.site.did,
+            outcome.uid
+          );
         }
         this.model.submitButtonDisabled = false;
+        window.WebCardinal.loader.hidden = true;
         this.send('confirmed', outcome);
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the site consent'));
         console.log(error);
       }

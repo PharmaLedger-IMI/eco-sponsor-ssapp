@@ -75,6 +75,7 @@ export default class ListTrialConsentsController extends WebcController {
   }
 
   async getParticipants() {
+    window.WebCardinal.loader.hidden = false;
     const model = await this.participantsService.getTrialParticipants(this.model.trialKeySSI, this.model.siteKeySSI);
     console.log(JSON.parse(JSON.stringify(this.model.trialConsents)));
     const site = await this.sitesService.getSite(this.model.siteUid);
@@ -82,6 +83,7 @@ export default class ListTrialConsentsController extends WebcController {
     console.log(JSON.parse(JSON.stringify(site)));
     this.model.participants = JSON.parse(JSON.stringify(model));
     this.model.data = JSON.parse(JSON.stringify(model));
+    window.WebCardinal.loader.hidden = true;
   }
 
   showFeedbackToast(title, message, alertType) {

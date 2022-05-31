@@ -36,13 +36,16 @@ export default class EditSiteContactModalController extends WebcController {
   attachAll() {
     this.onTagClick('update-contact', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
         const site = {
           name: this.model.site.name.value,
         };
         Object.assign(this.site, site);
         const result = await this.sitesService.updateSiteContact(this.site, this.site.did, this.trialKeySSI);
+        window.WebCardinal.loader.hidden = true;
         this.send('confirmed', result);
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an updating the site'));
         console.log(error);
       }

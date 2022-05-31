@@ -109,6 +109,7 @@ export default class ListSitesController extends WebcController {
   }
 
   async getSites() {
+    window.WebCardinal.loader.hidden = false;
     if (!this.model.trial) {
       await this.getTrial();
     }
@@ -121,6 +122,7 @@ export default class ListSitesController extends WebcController {
 
     this.sites = sites;
     this.setSitesModel(sites);
+    window.WebCardinal.loader.hidden = true;
   }
 
   setSitesModel(sites) {

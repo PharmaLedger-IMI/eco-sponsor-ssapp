@@ -110,6 +110,7 @@ export default class AddNewSiteModalController extends WebcController {
 
     this.onTagClick('create-site', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
         let valid = true;
         for (const x in this.model.site) {
           if (!this.model.site[x].value || this.model.site[x].value === '') {
@@ -148,8 +149,10 @@ export default class AddNewSiteModalController extends WebcController {
         };
         const result = await this.sitesService.createSite(site, this.trialId);
         this.model.submitButtonDisabled = false;
+        window.WebCardinal.loader.hidden = true;
         this.send('confirmed', result);
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the site'));
         console.log(error);
       }

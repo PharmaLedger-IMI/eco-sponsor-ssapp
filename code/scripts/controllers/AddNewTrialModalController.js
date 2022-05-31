@@ -87,6 +87,8 @@ export default class AddNewTrialModalController extends WebcController {
 
     this.onTagClick('create-trial', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
+
         this.model.submitButtonDisabled = true;
         const trial = {
           name: this.model.trial.name.value,
@@ -97,8 +99,10 @@ export default class AddNewTrialModalController extends WebcController {
         };
         const result = await this.trialsService.createTrial(trial);
         this.model.submitButtonDisabled = false;
+        window.WebCardinal.loader.hidden = true;
         this.send('confirmed', result);
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the trial'));
         console.log(error);
       }

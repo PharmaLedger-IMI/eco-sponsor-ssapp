@@ -75,6 +75,7 @@ export default class ListTrialConsentsController extends WebcController {
   }
 
   async getConsents() {
+    window.WebCardinal.loader.hidden = false;
     this.model.trialConsents = await this.consentService.getTrialConsents(this.model.trialKeySSI);
     console.log(JSON.parse(JSON.stringify(this.model.trialConsents)));
     const site = await this.sitesService.getSite(this.model.siteUid);
@@ -92,6 +93,7 @@ export default class ListTrialConsentsController extends WebcController {
       )} ${this.checkConsentVersion(x) ? 'NEW' : ''}`,
     }));
     this.model.consents = model;
+    window.WebCardinal.loader.hidden = true;
     this.checkAddConsentButton();
   }
 

@@ -164,6 +164,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
     this.onTagClick('create-consent', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
         if (!this.isUpdate) {
           let valid = true;
           for (const x in this.model.consent) {
@@ -205,6 +206,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
           };
           const result = await this.consentsService.createTrialConsent(consent, this.trialId);
           this.model.submitButtonDisabled = false;
+          window.WebCardinal.loader.hidden = true;
           this.send('confirmed', result);
         } else {
           let valid = true;
@@ -249,9 +251,11 @@ export default class AddNewTrialConsentModalController extends WebcController {
           // console.log(JSON.stringify(this.site, null, 2), JSON.stringify(this.isUpdate, null, 2));
           const result = await this.consentsService.updateTrialConsent(version, this.trialId, this.site, this.isUpdate);
           this.model.submitButtonDisabled = false;
+          window.WebCardinal.loader.hidden = true;
           this.send('confirmed', result);
         }
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the trial'));
         console.log(error);
       }

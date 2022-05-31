@@ -76,6 +76,7 @@ export default class ListParticipantsConsentsController extends WebcController {
   }
 
   async getConsents() {
+    window.WebCardinal.loader.hidden = false;
     const model = await this.participantsService.getParticipantConsentHistory(
       this.model.participantUid,
       this.model.trialKeySSI,
@@ -96,6 +97,7 @@ export default class ListParticipantsConsentsController extends WebcController {
       };
     });
     this.model.data = JSON.parse(JSON.stringify(dataModel));
+    window.WebCardinal.loader.hidden = true;
   }
 
   showFeedbackToast(title, message, alertType) {

@@ -32,8 +32,10 @@ export default class ListTrialVisitsController extends WebcController {
   }
 
   async init() {
+    window.WebCardinal.loader.hidden = false;
     await this.getConsents();
     await this.getVisits();
+    window.WebCardinal.loader.hidden = true;
   }
 
   async getConsents() {

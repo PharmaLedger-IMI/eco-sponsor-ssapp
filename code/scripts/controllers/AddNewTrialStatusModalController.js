@@ -31,9 +31,12 @@ export default class AddNewTrialStatusModalController extends WebcController {
   attachAll() {
     this.onTagClick('submit', async () => {
       try {
+        window.WebCardinal.loader.hidden = false;
         const result = await this.trialsService.changeTrialStatus(this.model.status.value, this.trial);
+        window.WebCardinal.loader.hidden = true;
         this.send('confirmed', result);
       } catch (error) {
+        window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue updating the status/stage'));
         console.log(error);
       }

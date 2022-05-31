@@ -68,9 +68,12 @@ export default class TrialParticipantsController extends WebcController {
 
   async getParticipants() {
     try {
+      window.WebCardinal.loader.hidden = false;
       this.participants = await this.participantsService.getTrialParticipants(this.keySSI);
       this.setDataModel(this.participants);
+      window.WebCardinal.loader.hidden = true;
     } catch (error) {
+      window.WebCardinal.loader.hidden = true;
       console.log(error);
       this.showErrorModal('ERROR: There was an issue accessing consents object', 'Result', () => {});
     }

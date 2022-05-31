@@ -159,10 +159,13 @@ export default class ListTrialsController extends WebcController {
 
   async getTrials() {
     try {
+      window.WebCardinal.loader.hidden = false;
       this.trials = await this.trialsService.getTrials();
       // this.updateCountryOptions(this.trials);
       this.setTrialsModel(this.trials);
+      window.WebCardinal.loader.hidden = true;
     } catch (error) {
+      window.WebCardinal.loader.hidden = true;
       console.log(error);
       this.showFeedbackToast('ERROR', 'There was an issue accessing trials object', 'toast');
     }
@@ -234,10 +237,12 @@ export default class ListTrialsController extends WebcController {
       this.showModalFromTemplate(
         'add-new-trial',
         () => {
+          window.WebCardinal.loader.hidden = true;
           this.getTrials();
           this.showFeedbackToast('Result', 'Trial added successfully', 'toast');
         },
         (event) => {
+          window.WebCardinal.loader.hidden = true;
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);

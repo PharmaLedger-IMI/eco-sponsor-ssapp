@@ -37,6 +37,7 @@ export default class PreviewConsentController extends WebcController {
   }
 
   async init() {
+    window.WebCardinal.loader.hidden = false;
     const econsentFilePath = this.getEconsentManualFilePath(
       this.model.uid,
       this.model.consent.uid,
@@ -91,6 +92,7 @@ export default class PreviewConsentController extends WebcController {
 
     this.loadingTask = pdfjsLib.getDocument({ data: pdfData });
     this.renderPage(this.model.pdf.currentPage);
+    window.WebCardinal.loader.hidden = true;
   }
 
   renderPage = (pageNo) => {
