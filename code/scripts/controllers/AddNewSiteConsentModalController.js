@@ -24,7 +24,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
   };
 
   attachment = {
-    label: 'Select files',
+    label: 'Select file',
 
     listFiles: true,
     filesAppend: false,

@@ -32,7 +32,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
   };
 
   attachment = {
-    label: 'Select files',
+    label: 'Select file',
 
     listFiles: true,
     filesAppend: false,
