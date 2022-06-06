@@ -185,7 +185,10 @@ export default class AddNewSiteConsentModalController extends WebcController {
           }
         }
 
-        if (!valid) return;
+        if (!valid) {
+          window.WebCardinal.loader.hidden = true;
+          return;
+        }
 
         const result = {
           trialConsentVersion: this.model.consent.trialConsentVersion,

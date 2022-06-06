@@ -136,7 +136,10 @@ export default class AddNewSiteModalController extends WebcController {
           valid = false;
         }
 
-        if (!valid) return;
+        if (!valid) {
+          window.WebCardinal.loader.hidden = true;
+          return;
+        }
 
         this.model.submitButtonDisabled = true;
         const site = {

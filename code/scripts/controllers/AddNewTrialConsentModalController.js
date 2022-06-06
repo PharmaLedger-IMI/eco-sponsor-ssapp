@@ -189,7 +189,10 @@ export default class AddNewTrialConsentModalController extends WebcController {
           }
 
           console.log(JSON.stringify(this.model.consent));
-          if (!valid) return;
+          if (!valid) {
+            window.WebCardinal.loader.hidden = true;
+            return;
+          }
 
           this.model.submitButtonDisabled = true;
           const consent = {
@@ -240,7 +243,10 @@ export default class AddNewTrialConsentModalController extends WebcController {
             valid = false;
           }
 
-          if (!valid) return;
+          if (!valid) {
+            window.WebCardinal.loader.hidden = true;
+            return;
+          }
 
           const version = {
             version: this.model.consent.version.value,
