@@ -132,7 +132,7 @@ export default class ListTrialConsentsController extends WebcController {
     }
   }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 
@@ -149,13 +149,13 @@ export default class ListTrialConsentsController extends WebcController {
         async (_event) => {
           await this.getConsents();
           this.checkAddConsentButton();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {
@@ -184,7 +184,7 @@ export default class ListTrialConsentsController extends WebcController {
           // const response = event.detail;
           await this.getConsents();
           this.checkAddConsentButton();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           // this.sendMessageToHco(
           //   Constants.MESSAGES.HCO.ADD_CONSENT,
           //   response.sReadSSI,
@@ -196,7 +196,7 @@ export default class ListTrialConsentsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {

@@ -86,7 +86,7 @@ export default class ListTrialConsentsController extends WebcController {
     this.model.data = model;
   }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 
@@ -103,7 +103,7 @@ export default class ListTrialConsentsController extends WebcController {
         async (_event) => {
           // const response = event.detail;
           await this.getConsents();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           // this.model.sites.forEach((country) =>
           //   country.sites.forEach((site) => this.sendMessageToHco('add-trial-consent', null, 'Trial consent', site.did))
           // );
@@ -113,7 +113,7 @@ export default class ListTrialConsentsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {
@@ -135,7 +135,7 @@ export default class ListTrialConsentsController extends WebcController {
         (_event) => {
           // const response = event.detail;
           this.getConsents();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           // this.sendMessageToHco('add-econsent-version', response.keySSI, 'New consent version', selectedSite.did);
           // eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
         },
@@ -143,7 +143,7 @@ export default class ListTrialConsentsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {

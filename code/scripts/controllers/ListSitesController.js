@@ -155,7 +155,7 @@ export default class ListSitesController extends WebcController {
     this.setSitesModel(result);
   }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 
@@ -193,14 +193,14 @@ export default class ListSitesController extends WebcController {
           const response = event.detail;
           this.getSites();
           this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_SITE, response.keySSI, 'Site added', response.did);
-          this.showFeedbackToast('Result', 'Site added successfully', 'toast');
+          this.showInformationModal('Result', 'Site added successfully', 'toast');
           eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new site', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new site', 'toast');
           }
         },
         {
@@ -222,14 +222,14 @@ export default class ListSitesController extends WebcController {
           const response = event.detail;
           this.getSites();
           this.sendMessageToHco(Constants.MESSAGES.SPONSOR.UPDATE_SITE, response.uid, 'Site updated', response.did);
-          this.showFeedbackToast('Result', 'Site added successfully', 'toast');
+          this.showInformationModal('Result', 'Site added successfully', 'toast');
           eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new site', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new site', 'toast');
           }
         },
         {

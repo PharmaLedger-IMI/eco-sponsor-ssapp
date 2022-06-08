@@ -174,7 +174,7 @@ export default class TrialDetailsController extends WebcController {
       const data = target.getAttribute('data-custom');
       await this.changeSiteStatus(siteStatusesEnum.OnHold, data);
       await this.getSites();
-      this.showFeedbackToast('Result', 'Site status changed successfully', 'toast');
+      this.showInformationModal('Result', 'Site status changed successfully', 'toast');
       eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
     });
 
@@ -182,7 +182,7 @@ export default class TrialDetailsController extends WebcController {
       const data = target.getAttribute('data-custom');
       await this.changeSiteStatus(siteStatusesEnum.Active, data);
       await this.getSites();
-      this.showFeedbackToast('Result', 'Site status changed successfully', 'toast');
+      this.showInformationModal('Result', 'Site status changed successfully', 'toast');
       eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
     });
 
@@ -190,7 +190,7 @@ export default class TrialDetailsController extends WebcController {
       const data = target.getAttribute('data-custom');
       await this.changeSiteStatus(siteStatusesEnum.Cancelled, data);
       await this.getSites();
-      this.showFeedbackToast('Result', 'Site status changed successfully', 'toast');
+      this.showInformationModal('Result', 'Site status changed successfully', 'toast');
       eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
     });
 
@@ -202,14 +202,14 @@ export default class TrialDetailsController extends WebcController {
           const response = event.detail;
           this.getSites();
           this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_SITE, response.keySSI, 'Site added', response.did);
-          this.showFeedbackToast('Result', 'Site added successfully', 'toast');
+          this.showInformationModal('Result', 'Site added successfully', 'toast');
           eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new site', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new site', 'toast');
           }
         },
         {
@@ -229,7 +229,7 @@ export default class TrialDetailsController extends WebcController {
         async (_event) => {
           // const response = event.detail;
           await this.getConsents();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           // this.model.sites.forEach((country) =>
           //   country.sites.forEach((site) => this.sendMessageToHco('add-trial-consent', null, 'Trial consent', site.did))
           // );
@@ -239,7 +239,7 @@ export default class TrialDetailsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {
@@ -271,7 +271,7 @@ export default class TrialDetailsController extends WebcController {
         async (event) => {
           const response = event.detail;
           await this.getConsents();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_CONSENT, response.keySSI, 'Trial consent', selectedSite.did);
 
           eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
@@ -280,7 +280,7 @@ export default class TrialDetailsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {
@@ -369,7 +369,7 @@ export default class TrialDetailsController extends WebcController {
         (_event) => {
           // const response = event.detail;
           this.getConsents();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           // this.sendMessageToHco('add-econsent-version', response.keySSI, 'New consent version', selectedSite.did);
           eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
         },
@@ -377,7 +377,7 @@ export default class TrialDetailsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {
@@ -406,7 +406,7 @@ export default class TrialDetailsController extends WebcController {
         (event) => {
           const response = event.detail;
           this.getConsents();
-          this.showFeedbackToast('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Result', 'Consent added successfully', 'toast');
           this.sendMessageToHco('add-econsent-version', response.keySSI, 'New consent version', selectedSite.did);
           eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
         },
@@ -414,7 +414,7 @@ export default class TrialDetailsController extends WebcController {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
         {
@@ -602,7 +602,7 @@ export default class TrialDetailsController extends WebcController {
   //   return JSON.parse(JSON.stringify(result.map((x) => ({ ...x, selected: false }))));
   // }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 

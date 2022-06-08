@@ -167,7 +167,7 @@ export default class ListTrialsController extends WebcController {
     } catch (error) {
       window.WebCardinal.loader.hidden = true;
       console.log(error);
-      this.showFeedbackToast('ERROR', 'There was an issue accessing trials object', 'toast');
+      this.showInformationModal('ERROR', 'There was an issue accessing trials object', 'toast');
     }
   }
 
@@ -203,7 +203,7 @@ export default class ListTrialsController extends WebcController {
     this.setTrialsModel(result);
   }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 
@@ -239,14 +239,14 @@ export default class ListTrialsController extends WebcController {
         () => {
           window.WebCardinal.loader.hidden = true;
           this.getTrials();
-          this.showFeedbackToast('Result', 'Trial added successfully', 'toast');
+          this.showInformationModal('Result', 'Trial added successfully', 'toast');
         },
         (event) => {
           window.WebCardinal.loader.hidden = true;
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new trial', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new trial', 'toast');
           }
         },
         {
@@ -263,13 +263,13 @@ export default class ListTrialsController extends WebcController {
     //     const trial = await this.trialsService.getTrialFromDB(event.data);
     //     const sites = await this.sitesService.getSites(trial.keySSI);
     //     await this.trialsService.deleteTrial(event.data);
-    //     this.showFeedbackToast('Result', 'Trial deleted successfully', 'toast');
+    //     this.showInformationModal('Result', 'Trial deleted successfully', 'toast');
     //     this.getTrials();
     //     sites.forEach((site) => {
     //       this.sendMessageToHco('delete-trial', event.data, 'the trial was removed ', site.did);
     //     });
     //   } catch (error) {
-    //     this.showFeedbackToast('Result', 'ERROR: The was an error, trial cannot be deleted right now', 'toast');
+    //     this.showInformationModal('Result', 'ERROR: The was an error, trial cannot be deleted right now', 'toast');
     //   }
     // });
 
@@ -303,13 +303,13 @@ export default class ListTrialsController extends WebcController {
         async (event) => {
           await this.updateSiteStatuses(event.detail);
           await this.getTrials();
-          this.showFeedbackToast('Result', 'Trial status changed successfully', 'toast');
+          this.showInformationModal('Result', 'Trial status changed successfully', 'toast');
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.log(error);
-            this.showFeedbackToast('Result', 'ERROR: There was an issue creating the new trial', 'toast');
+            this.showInformationModal('Result', 'ERROR: There was an issue creating the new trial', 'toast');
           }
         },
         {

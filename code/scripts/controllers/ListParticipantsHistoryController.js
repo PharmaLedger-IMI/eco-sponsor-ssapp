@@ -74,7 +74,7 @@ export default class ListParticipantsHistoryController extends WebcController {
 
   async init() {}
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 

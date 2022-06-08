@@ -100,7 +100,7 @@ export default class ListParticipantsConsentsController extends WebcController {
     window.WebCardinal.loader.hidden = true;
   }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 

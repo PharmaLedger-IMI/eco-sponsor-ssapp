@@ -181,7 +181,7 @@ export default class VisitsProceduresController extends WebcController {
     return;
   }
 
-  showFeedbackToast(title, message, alertType) {
+  showInformationModal(title, message, alertType) {
     this.showErrorModal(message, title, () => {});
   }
 
@@ -465,7 +465,7 @@ export default class VisitsProceduresController extends WebcController {
       let error = null;
       const randomizationIdx = this.model.visits.findIndex((x) => x.checkbox.checked === true);
       if (randomizationIdx < 0) {
-        this.showFeedbackToast('Error', 'Please make sure you define the randomization visit', 'toast');
+        this.showInformationModal('Error', 'Please make sure you define the randomization visit', 'toast');
         return;
       }
       const result = this.model.visits.map((x, idx) => {
@@ -502,7 +502,7 @@ export default class VisitsProceduresController extends WebcController {
       });
 
       if (error) {
-        this.showFeedbackToast('Error', 'Please make sure all fields are filled-in', 'toast');
+        this.showInformationModal('Error', 'Please make sure all fields are filled-in', 'toast');
         return;
       }
 
