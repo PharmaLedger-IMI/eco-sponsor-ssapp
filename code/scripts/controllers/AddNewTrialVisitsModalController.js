@@ -11,14 +11,15 @@ export default class AddNewTrialConsentModalController extends WebcController {
     required: true,
     selectOptions: [],
     disabled: false,
+    invalidValue: false,
   };
 
   attachment = {
     label: 'Select files',
-
     listFiles: true,
     filesAppend: false,
     files: [],
+    invalidValue: false,
   };
 
   file = null;
@@ -70,6 +71,21 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
     this.onTagClick('create-visits', async () => {
       try {
+        if (!this.file || this.file.length === 0) {
+          Object.assign(this.model.visits.attachment, { invalidValue: true });
+          setTimeout(() => {
+            Object.assign(this.model.visits.attachment, { invalidValue: null });
+          }, 2000);
+          return;
+        }
+        if (!this.model.consents.value || this.model.consents.value === '') {
+          Object.assign(this.model.consents, { invalidValue: true });
+          setTimeout(() => {
+            Object.assign(this.model.consents, { invalidValue: null });
+          }, 2000);
+          return;
+        }
+
         window.WebCardinal.loader.hidden = false;
         Papa.parse(this.file[0], {
           complete: async (results, file) => {

@@ -13,6 +13,10 @@
         </div>
       </div>
       <psk-files-chooser style="margin: 10px" view-model="visits.attachment" event-name="add-file"> </psk-files-chooser>
+      <span data-if="@visits.attachment.invalidValue" class="d-flex flex-row">
+        <i class="red-invalid fas fa-times mr-2"></i>
+        <small class="form-text text-danger">No file selected</small>
+      </span>
     </div>
   </div>
 </div>
