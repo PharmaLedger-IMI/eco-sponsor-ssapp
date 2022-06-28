@@ -8,7 +8,7 @@ import { consentTableHeaders } from '../constants/consent.js';
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
 
-export default class ConsentHistoryConsentsController extends WebcController {
+export default class ConsentHistoryController extends WebcController {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = consentTableHeaders;

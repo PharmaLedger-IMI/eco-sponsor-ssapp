@@ -14,7 +14,7 @@ const Constants = commonServices.Constants;
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
 
-export default class ListTrialConsentsController extends WebcController {
+export default class ListSiteConsentsController extends WebcController {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = siteConsentTableHeaders;

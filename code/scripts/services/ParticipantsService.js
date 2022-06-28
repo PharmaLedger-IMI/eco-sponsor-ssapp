@@ -1,4 +1,3 @@
-import ConsentsService from '../services/ConsentsService.js';
 import { participantConsentStatusEnum, senderType } from '../constants/participant.js';
 const commonServices = require('common-services');
 const SharedStorage = commonServices.SharedStorage;
@@ -16,7 +15,6 @@ export default class ParticipantsService extends DSUService {
   constructor(DSUStorage) {
     super('/participants');
     this.storageService = SharedStorage.getSharedStorage(DSUStorage);
-    this.consentsService = new ConsentsService(DSUStorage);
     this.trialsService = new TrialsService(DSUStorage);
     this.sitesService = new SitesService(DSUStorage);
   }
@@ -153,22 +151,24 @@ export default class ParticipantsService extends DSUService {
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
       const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
 
-      const consentDSU = await this.mountParticipantConsent(consentSSI, participantDSU);
+      if (consentSSI) {
+        const consentDSU = await this.mountParticipantConsent(consentSSI, participantDSU);
 
-      let consent = await this.getParticipantConsentFromDb(consentDSU.uid, trial.keySSI, site.keySSI);
-      let consentDb = null;
-      if (consent) {
-        consentDb = await this.storageService.updateRecordAsync(
-          this.getConsentTableName(trial.keySSI, site.keySSI),
-          consentDSU.uid,
-          consentDSU
-        );
-      } else {
-        consentDb = await this.storageService.insertRecordAsync(
-          this.getConsentTableName(trial.keySSI, site.keySSI),
-          consentDSU.uid,
-          consentDSU
-        );
+        let consent = await this.getParticipantConsentFromDb(consentDSU.uid, trial.keySSI, site.keySSI);
+        let consentDb = null;
+        if (consent) {
+          consentDb = await this.storageService.updateRecordAsync(
+            this.getConsentTableName(trial.keySSI, site.keySSI),
+            consentDSU.uid,
+            consentDSU
+          );
+        } else {
+          consentDb = await this.storageService.insertRecordAsync(
+            this.getConsentTableName(trial.keySSI, site.keySSI),
+            consentDSU.uid,
+            consentDSU
+          );
+        }
       }
 
       const updatedParticipant = await this.storageService.updateRecordAsync(

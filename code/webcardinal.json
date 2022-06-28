@@ -102,6 +102,13 @@
       "icon": "fa-times"
     },
     {
+      "name": "Participant's Devices",
+      "path": "/sites/participants/devices",
+      "src": "site-participant-devices.html",
+      "tag": "site-participant-devices",
+      "icon": "fa-times"
+    },
+    {
       "name": "trial",
       "path": "/trial",
       "src": "trial.html",
