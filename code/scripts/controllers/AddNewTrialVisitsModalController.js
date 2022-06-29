@@ -15,10 +15,11 @@ export default class AddNewTrialConsentModalController extends WebcController {
   };
 
   attachment = {
-    label: 'Select files',
-    listFiles: true,
+    label: 'Select file',
+    listFiles: false,
     filesAppend: false,
     files: [],
+    name:"",
     invalidValue: false,
   };
 
@@ -41,6 +42,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.setModel({
       consents: {
         ...this.consentsTemplate,
+        value: this.consents[0].id,
         selectOptions: this.consents.map((x) => ({ value: x.id, label: x.name })),
       },
       visits: { attachment: this.attachment },
@@ -51,7 +53,10 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
   attachAll() {
     this.on('add-file', (event) => {
-      if (event.data) this.file = event.data;
+      if (event.data) {
+        this.file = event.data[0];
+        this.model.visits.attachment.name = this.file.name
+      }
     });
 
     this.model.addExpression(
@@ -64,10 +69,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
         ),
       'consents.selectOptions'
     );
-
-    this.on('add-file', (event) => {
-      if (event.data) this.file = event.data;
-    });
 
     this.onTagClick('create-visits', async () => {
       try {
@@ -87,7 +88,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
         }
 
         window.WebCardinal.loader.hidden = false;
-        Papa.parse(this.file[0], {
+        Papa.parse(this.file, {
           complete: async (results, file) => {
             console.log(results, file);
 

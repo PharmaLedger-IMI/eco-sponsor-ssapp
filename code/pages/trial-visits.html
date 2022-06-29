@@ -20,7 +20,7 @@
 
         <div class="d-flex flex-column">
           <div class="d-flex flex-row">
-            <div data-if="@consents" style="display: contents">
+            <div data-if="@hasConsents" style="display: contents">
               <div slot="true" style="display: contents">
                 <ul class="nav flex-column nav-pills" data-for="@consents">
                   <li class="nav-item m-2" data-if="@selected">
@@ -30,44 +30,50 @@
                     <a data-tag="select-consent" slot="false" class="nav-link" style="cursor: pointer">{{ @name }}</a>
                   </li>
                 </ul>
-              </div>
-              <div slot="false">There are no consents.</div>
-            </div>
-            <div data-if="@selectedVisits" class="flex-grow-1" style="overflow: auto; max-height: 40vh">
-              <div class="d-flex flex-row m-2">
-                <div class="">
-                  <div class="border-top font-weight-bold pr-5">Visit</div>
-                  <div class="font-weight-bold pr-5">Week</div>
-                  <div class="font-weight-bold pr-5">Day</div>
-                  <div class="font-weight-bold border-bottom pr-5">Visit window (days)</div>
-                  <div
-                    class="procedures-container"
-                    style="display: contents"
-                    data-for="@selectedVisits.data.0.procedures"
-                  >
-                    <div class="pr-5">{{ @name }}</div>
-                  </div>
-                </div>
+                <div data-if="@selectedVisits.hasData" class="flex-grow-1" style="overflow: auto; max-height: 40vh">
+                  <div class="d-flex flex-row m-2" slot="true">
+                    <div>
+                      <div class="border-top font-weight-bold pr-5">Visit</div>
+                      <div class="font-weight-bold pr-5">Week</div>
+                      <div class="font-weight-bold pr-5">Day</div>
+                      <div class="font-weight-bold border-bottom pr-5">Visit window (days)</div>
+                      <div
+                              class="procedures-container"
+                              style="display: contents"
+                              data-for="@selectedVisits.data.0.procedures"
+                      >
+                        <div class="pr-5">{{ @name }}</div>
+                      </div>
+                    </div>
 
-                <div data-for="@selectedVisits.data" style="display: contents">
-                  <div>
-                    <div class="px-2 border-top font-weight-bold">{{@name}}</div>
-                    <div class="px-2 font-weight-bold">{{@week}}</div>
-                    <div class="px-2 font-weight-bold">{{@day}}</div>
-                    <div data-if="@visitWindow" style="display: contents">
-                      <div class="px-2 border-bottom font-weight-bold" slot="true">
-                        {{@visitWindow.windowFrom}} {{@visitWindow.windowTo}}
-                      </div>
-                      <div class="px-2 border-bottom font-weight-bold" slot="false">X</div>
-                    </div>
-                    <div class="procedures-container" style="display: contents" data-for="@procedures">
-                      <div data-if="@checked" style="display: contents">
-                        <div class="px-2" slot="true">X</div>
-                        <div class="px-2" slot="false">&nbsp;</div>
+                    <div data-for="@selectedVisits.data" style="display: contents">
+                      <div>
+                        <div class="px-2 border-top font-weight-bold">{{@name}}</div>
+                        <div class="px-2 font-weight-bold">{{@week}}</div>
+                        <div class="px-2 font-weight-bold">{{@day}}</div>
+                        <div data-if="@visitWindow" style="display: contents">
+                          <div class="px-2 border-bottom font-weight-bold" slot="true">
+                            {{@visitWindow.windowFrom}} {{@visitWindow.windowTo}}
+                          </div>
+                          <div class="px-2 border-bottom font-weight-bold" slot="false">X</div>
+                        </div>
+                        <div class="procedures-container" style="display: contents" data-for="@procedures">
+                          <div data-if="@checked" style="display: contents">
+                            <div class="px-2" slot="true">X</div>
+                            <div class="px-2" slot="false">&nbsp;</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <div class="alert alert-light d-flex flex-row m-2" slot="false">
+                    No Visits & Procedures added yet
+                  </div>
+
                 </div>
+              </div>
+              <div class="alert alert-light d-flex flex-row m-2" slot="false">
+                There are no consents.
               </div>
             </div>
           </div>
