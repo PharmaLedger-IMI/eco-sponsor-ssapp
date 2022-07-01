@@ -204,7 +204,16 @@ export default class ListTrialsController extends WebcController {
   }
 
   showInformationModal(title, message, alertType) {
-    this.showErrorModal(message, title, () => {});
+    this.showErrorModal(
+      message,
+      title,
+      () => {},
+      () => {},
+      {
+        disableExpanding: true,
+        disableCancelButton: true,
+      }
+    );
   }
 
   attachEvents() {
