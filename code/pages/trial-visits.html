@@ -14,7 +14,7 @@
       <div class="container">
         <div class="w-100 d-flex flex-wrap justify-content-between align-items-center py-3 mb-5">
           <div class="ml-auto">
-            <button class="btn btn-primary" data-tag="add-visits">Add Visits</button>
+            <button class="btn btn-primary" data-tag="add-visits" disabled="@hasConsents">Add Visits</button>
           </div>
         </div>
 
@@ -38,9 +38,9 @@
                       <div class="font-weight-bold pr-5">Day</div>
                       <div class="font-weight-bold border-bottom pr-5">Visit window (days)</div>
                       <div
-                              class="procedures-container"
-                              style="display: contents"
-                              data-for="@selectedVisits.data.0.procedures"
+                        class="procedures-container"
+                        style="display: contents"
+                        data-for="@selectedVisits.data.0.procedures"
                       >
                         <div class="pr-5">{{ @name }}</div>
                       </div>
@@ -66,15 +66,10 @@
                       </div>
                     </div>
                   </div>
-                  <div class="alert alert-light d-flex flex-row m-2" slot="false">
-                    No Visits & Procedures added yet
-                  </div>
-
+                  <div class="alert alert-light d-flex flex-row m-2" slot="false">No Visits & Procedures added yet</div>
                 </div>
               </div>
-              <div class="alert alert-light d-flex flex-row m-2" slot="false">
-                There are no consents.
-              </div>
+              <div class="alert alert-light d-flex flex-row m-2" slot="false">There are no consents.</div>
             </div>
           </div>
         </div>

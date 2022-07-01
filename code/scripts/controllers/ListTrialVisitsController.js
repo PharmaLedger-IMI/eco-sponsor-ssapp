@@ -42,7 +42,7 @@ export default class ListTrialVisitsController extends WebcController {
     this.consents = await this.consentService.getTrialConsents(this.model.keySSI);
     console.log(JSON.parse(JSON.stringify(this.consents)));
     this.model.consents = this.consents.map((x, idx) => ({ ...x, selected: idx === 0 ? true : false }));
-    this.model.hasConsents = this.model.consents.length > 0;
+    this.model.hasNoConsents = this.model.consents.length === 0;
   }
 
   async getVisits() {
@@ -53,8 +53,7 @@ export default class ListTrialVisitsController extends WebcController {
       (x) => x.consentId === this.model.consents.find((x) => x.selected === true).id
     ) || { data: [] };
 
-    this.model.selectedVisits.hasData = this.model.selectedVisits.data.length>0;
-
+    this.model.selectedVisits.hasData = this.model.selectedVisits.data.length > 0;
   }
 
   attachEvents() {
@@ -69,7 +68,7 @@ export default class ListTrialVisitsController extends WebcController {
       this.model.selectedVisits = JSON.parse(JSON.stringify(this.model.visits)).find(
         (x) => x.consentId === model.id
       ) || { data: [] };
-      this.model.selectedVisits.hasData = this.model.selectedVisits.data.length>0;
+      this.model.selectedVisits.hasData = this.model.selectedVisits.data.length > 0;
       console.log(JSON.parse(JSON.stringify(this.model.selectedVisits)));
     });
 

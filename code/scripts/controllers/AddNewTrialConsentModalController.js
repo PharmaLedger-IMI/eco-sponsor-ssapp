@@ -13,6 +13,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
     required: true,
     selectOptions: this.typesArray,
     disabled: false,
+    value: this.typesArray[0].value,
   };
 
   name = {
