@@ -323,7 +323,7 @@ export default class ListTrialsController extends WebcController {
         },
         {
           controller: 'AddNewTrialStatusModalController',
-          disableExpanding: false,
+          disableExpanding: true,
           disableBackdropClosing: true,
           trial: model,
         }

@@ -15,6 +15,7 @@ export default class AddNewSiteModalController extends WebcController {
     required: true,
     selectOptions: this.trialCountriesArray,
     selectionType: 'multiple',
+    value: this.trialCountriesArray[0].value,
   };
 
   name = {

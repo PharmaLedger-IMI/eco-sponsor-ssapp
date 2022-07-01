@@ -25,10 +25,10 @@ export default class AddNewSiteConsentModalController extends WebcController {
 
   attachment = {
     label: 'Select file',
-
     listFiles: true,
     filesAppend: false,
     files: [],
+    name: '',
   };
 
   file = {
@@ -115,6 +115,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
               label: x.name,
             })),
             disabled: false,
+            value: filteredConsents[0].name,
           },
           trialConsentId: filteredConsents[0].id,
           trialConsentVersion: Math.max.apply(
@@ -144,9 +145,11 @@ export default class AddNewSiteConsentModalController extends WebcController {
       console.log(event);
       if (event.data) {
         this.model.consent.file.value = event.data;
+        this.model.consent.attachment.name = event.data[0].name;
       }
       if (!event.data || event.data.length === 0) {
         this.model.consent.file.value = null;
+        this.model.consent.attachment.name = '';
       }
     });
 

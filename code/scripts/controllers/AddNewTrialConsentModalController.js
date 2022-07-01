@@ -34,10 +34,10 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
   attachment = {
     label: 'Select file',
-
     listFiles: true,
     filesAppend: false,
     files: [],
+    name: '',
   };
 
   id = {
@@ -49,7 +49,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
   };
 
   file = {
-    label: 'Consent FIle',
+    label: 'Consent File',
     name: 'file',
     required: true,
     placeholder: 'Please select a file...',
@@ -156,10 +156,13 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.on('add-file', (event) => {
       console.log(event);
       if (event.data) {
+        debugger;
         this.model.consent.file.value = event.data;
+        this.model.consent.attachment.name = event.data[0].name;
       }
       if (!event.data || event.data.length === 0) {
         this.model.consent.file.value = null;
+        this.model.consent.attachment.name = '';
       }
     });
 

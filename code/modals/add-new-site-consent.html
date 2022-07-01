@@ -46,7 +46,11 @@
   </div>
   <div class="m-2">
     <label>{{ @consent.attachment.label }}</label><br>
-    <psk-files-chooser style="margin: 10px" view-model="consent.attachment" event-name="add-file"> </psk-files-chooser>
+    <!-- <psk-files-chooser style="margin: 10px" view-model="consent.attachment" event-name="add-file"> </psk-files-chooser> -->
+    <div class='input-group d-flex justify-content-between align-items-center'>
+      <input class='form-control' disabled value='@consent.attachment.name' placeholder="Select a *.pdf file"/>
+      <psk-files-chooser style="margin: 10px" data-view-model="@consent.attachment" event-name="add-file" accept=".pdf" class="classic-file-chooser"> </psk-files-chooser>
+    </div>
     <span data-if="@consent.file.invalidValue" class="d-flex flex-row">
       <i class="red-invalid fas fa-times mr-2"></i>
       <small class="form-text text-danger">No file selected</small>

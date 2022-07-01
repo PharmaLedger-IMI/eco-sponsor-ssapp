@@ -243,7 +243,7 @@ export default class ListSitesController extends WebcController {
         },
         {
           controller: 'EditSiteContactModalController',
-          disableExpanding: false,
+          disableExpanding: true,
           disableBackdropClosing: true,
           site: model,
         }

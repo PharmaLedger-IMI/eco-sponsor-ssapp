@@ -24,6 +24,7 @@ export default class ListTrialVisitsController extends WebcController {
       id,
       keySSI,
       uid,
+      hasNoConsents: true,
     };
 
     this.attachEvents();
