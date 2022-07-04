@@ -78,12 +78,42 @@ export default class ListSiteParticipantsController extends WebcController {
     window.WebCardinal.loader.hidden = false;
     const model = await this.participantsService.getTrialParticipants(this.model.trialKeySSI, this.model.siteKeySSI);
     console.log(JSON.parse(JSON.stringify(this.model.trialConsents)));
-    const site = await this.sitesService.getSite(this.model.siteUid);
-
-    console.log(JSON.parse(JSON.stringify(site)));
     this.model.participants = JSON.parse(JSON.stringify(model));
     this.model.data = JSON.parse(JSON.stringify(model));
+    this.getStatistics();
     window.WebCardinal.loader.hidden = true;
+  }
+
+  getStatistics() {
+    const participants = JSON.parse(JSON.stringify(this.model.participants));
+    const numberOfParticipants = participants && participants.length > 0 && participants.length;
+    if (numberOfParticipants) {
+      const statistics = {};
+      statistics.enrolled = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.ENROLLED);
+      statistics.withdrew = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.WITHDRAW);
+      statistics.declined = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.DECLINED);
+      statistics.screened = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.SCREENED);
+      statistics.planned = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.PLANNED);
+      statistics.endOfTreatment = participants.filter(
+        (x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.END_OF_TREATMENT
+      );
+      statistics.completed = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.COMPLETED);
+      statistics.discontinued = participants.filter(
+        (x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.DISCONTINUED
+      );
+      statistics.screenFailed = participants.filter(
+        (x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.SCREEN_FAILED
+      );
+      for (const key in statistics) {
+        if (Object.hasOwnProperty.call(statistics, key)) {
+          statistics[key] = statistics[key].length;
+        }
+      }
+      statistics.percentageEnrolled = ((statistics.planned / numberOfParticipants) * 100).toFixed(2);
+      this.model.statistics = statistics;
+    } else {
+      this.model.statistics = null;
+    }
   }
 
   showInformationModal(title, message, alertType) {

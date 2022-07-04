@@ -24,6 +24,30 @@
       <div class="container">
         <div data-if="@participantsArrayNotEmpty">
           <div slot="true">
+            <div class="row statistics">
+              <div class="col-md-1">Planned</div>
+              <div class="col-md-1">Screened</div>
+              <div class="col-md-1">Enrolled</div>
+              <div class="col-md-2">Enrollment Percentage</div>
+              <div class="col-md-1">Withdrawn</div>
+              <div class="col-md-1">Declined</div>
+              <div class="col-md-2">End of treatment</div>
+              <div class="col-md-1">Completed</div>
+              <div class="col-md-1">Discontinued</div>
+              <div class="col-md-1">Scr. failed</div>
+            </div>
+            <div class="row statistics">
+              <div class="col-md-1">{{@statistics.planned}}</div>
+              <div class="col-md-1">{{@statistics.screened}}</div>
+              <div class="col-md-1">{{@statistics.enrolled}}</div>
+              <div class="col-md-2">{{@statistics.percentageEnrolled}} %</div>
+              <div class="col-md-1">{{@statistics.withdrew}}</div>
+              <div class="col-md-1">{{@statistics.declined}}</div>
+              <div class="col-md-2">{{@statistics.endOfTreatment}}</div>
+              <div class="col-md-1">{{@statistics.completed}}</div>
+              <div class="col-md-1">{{@statistics.discontinued}}</div>
+              <div class="col-md-1">{{@statistics.screenFailed}}</div>
+            </div>
             <webc-template template="table-site-participants" data-view-model="@"></webc-template>
           </div>
           <div slot="false">
