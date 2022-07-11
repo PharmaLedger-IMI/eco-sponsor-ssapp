@@ -19,10 +19,18 @@ export default class AddNewSiteModalController extends WebcController {
   };
 
   name = {
-    label: 'Health Care Professional Last Name',
+    label: 'Principal Investigator',
     name: 'name',
     required: true,
     placeholder: 'Please insert a name...',
+    value: '',
+  };
+
+  siteName = {
+    label: 'Site Name',
+    name: 'name',
+    required: true,
+    placeholder: 'Please insert a site name...',
     value: '',
   };
 
@@ -60,6 +68,7 @@ export default class AddNewSiteModalController extends WebcController {
       site: {
         id: this.id,
         name: this.name,
+        siteName: this.siteName,
         countries: this.countries,
         did: this.did,
       },
@@ -145,6 +154,7 @@ export default class AddNewSiteModalController extends WebcController {
         this.model.submitButtonDisabled = true;
         const site = {
           name: this.model.site.name.value,
+          siteName: this.model.site.siteName.value,
           id: this.model.site.id.value,
           did: this.model.site.did.value,
           country: this.model.site.countries.value,

@@ -21,6 +21,14 @@
       </span>
     </div>
     <div class="m-2">
+      <label>{{ @site.siteName.label }}</label><br>
+      <input  class="form-control" data-view-model="@site.siteName"></input>
+      <span data-if="@site.siteName.invalidValue" class="d-flex flex-row">
+        <i class="red-invalid fas fa-times mr-2"></i>
+        <small class="form-text text-danger">Please provide a site name</small>
+      </span>
+    </div>
+    <div class="m-2">
       <label>{{ @site.name.label }}</label><br>
       <input  class="form-control" data-view-model="@site.name"></input>
       <span data-if="@site.name.invalidValue" class="d-flex flex-row">
