@@ -25,6 +25,7 @@ export default class ListTrialVisitsController extends WebcController {
       keySSI,
       uid,
       hasNoConsents: true,
+      hasConsents: false,
     };
 
     this.attachEvents();
@@ -44,6 +45,7 @@ export default class ListTrialVisitsController extends WebcController {
     console.log(JSON.parse(JSON.stringify(this.consents)));
     this.model.consents = this.consents.map((x, idx) => ({ ...x, selected: idx === 0 ? true : false }));
     this.model.hasNoConsents = this.model.consents.length === 0;
+    this.model.hasConsents = this.model.consents.length > 0;
   }
 
   async getVisits() {
