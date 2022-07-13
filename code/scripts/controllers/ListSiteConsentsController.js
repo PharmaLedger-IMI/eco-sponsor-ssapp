@@ -175,6 +175,7 @@ export default class ListSiteConsentsController extends WebcController {
           selectedConsent: null,
           siteConsent: null,
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
+          trialUid: this.model.trialUid
         }
       );
     });
@@ -216,6 +217,7 @@ export default class ListSiteConsentsController extends WebcController {
           selectedConsent,
           siteConsent: model,
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
+          trialUid: this.model.trialUid
         }
       );
     });

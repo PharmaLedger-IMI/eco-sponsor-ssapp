@@ -298,6 +298,7 @@ export default class ListSitesController extends WebcController {
       operation: operation,
       ssi: ssi,
       shortDescription: shortMessage,
+      trialUid: this.model.uid
     });
   }
 }

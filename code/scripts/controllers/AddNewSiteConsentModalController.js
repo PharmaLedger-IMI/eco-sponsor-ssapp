@@ -49,6 +49,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
     this.consents = props[0].consents || [];
     this.siteConsent = props[0].siteConsent || null;
     this.selectedConsent = props[0].selectedConsent || [];
+    this.trialUid = props[0].trialUid || null;
 
     let { trialKeySSI } = this.history.location.state;
 
@@ -214,6 +215,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
         const exists = this.site.consents.find((x) => x.trialConsentId === this.model.consent.trialConsentId && x.name);
         if (exists) {
           outcome = await this.consentsService.addSiteConsentVersion(result, this.keySSI, this.site);
+          console.log('this.model.consent', this.model.consent)
           this.sendMessageToHco(
             Constants.MESSAGES.SPONSOR.ADD_CONSENT_VERSION,
             this.site.uid,
@@ -243,11 +245,14 @@ export default class AddNewSiteConsentModalController extends WebcController {
   }
 
   sendMessageToHco(operation, ssi, shortMessage, receiverDid, econsentUid = null) {
+    console.log('this.model.consent', this.model.consent)
+
     let communicationService = getCommunicationServiceInstance();
     const message = {
       operation: operation,
       ssi: ssi,
       shortDescription: shortMessage,
+      trialUid: this.trialUid
     };
 
     if (econsentUid) {
