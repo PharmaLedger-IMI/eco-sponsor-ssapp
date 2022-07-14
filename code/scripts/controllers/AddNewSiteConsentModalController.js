@@ -215,7 +215,6 @@ export default class AddNewSiteConsentModalController extends WebcController {
         const exists = this.site.consents.find((x) => x.trialConsentId === this.model.consent.trialConsentId && x.name);
         if (exists) {
           outcome = await this.consentsService.addSiteConsentVersion(result, this.keySSI, this.site);
-          console.log('this.model.consent', this.model.consent)
           this.sendMessageToHco(
             Constants.MESSAGES.SPONSOR.ADD_CONSENT_VERSION,
             this.site.uid,
@@ -245,8 +244,6 @@ export default class AddNewSiteConsentModalController extends WebcController {
   }
 
   sendMessageToHco(operation, ssi, shortMessage, receiverDid, econsentUid = null) {
-    console.log('this.model.consent', this.model.consent)
-
     let communicationService = getCommunicationServiceInstance();
     const message = {
       operation: operation,
