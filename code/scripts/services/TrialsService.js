@@ -32,6 +32,13 @@ export default class TrialsService extends DSUService {
   }
 
   async createTrial(data) {
+    try{
+      this.storageService.beginBatch();
+    }
+    catch (e) {
+     console.log(e);
+    }
+
     const trial = await this.saveEntityAsync({
       ...data,
       stage: trialStagesEnum.Created,
@@ -55,6 +62,9 @@ export default class TrialsService extends DSUService {
       visitsSReadSSI: visits.sReadSSI,
       consents: [],
     });
+
+    await this.storageService.commitBatch();
+
     return trial;
   }
 

@@ -44,6 +44,7 @@ export default class VisitsService extends DSUService {
       });
     }
 
+    //TODO: use Promise.allSettled to start in parallel
     const updatedVisitsDSU = await this.updateEntityAsync({ ...visitsDSU, visits: visitsDb.visits });
 
     await this.storageService.updateRecordAsync(this.VISITS_TABLE, trialKeySSI, {

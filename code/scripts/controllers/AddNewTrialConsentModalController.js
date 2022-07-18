@@ -154,9 +154,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
     });
 
     this.on('add-file', (event) => {
-      console.log(event);
       if (event.data) {
-        debugger;
         this.model.consent.file.value = event.data;
         this.model.consent.attachment.name = event.data[0].name;
       }
