@@ -19,12 +19,6 @@ export default class VisitsService extends DSUService {
   }
 
   async createTrialVisits(trialKeySSI) {
-    try {
-      await this.storageService.beginBatchAsync();
-    } catch (e) {
-      console.log(e);
-    }
-
     const visits = await this.saveEntityAsync({
       visits: [],
     });
@@ -35,7 +29,6 @@ export default class VisitsService extends DSUService {
       visits: [],
     });
 
-    await this.storageService.commitBatch();
     return visits;
   }
 
