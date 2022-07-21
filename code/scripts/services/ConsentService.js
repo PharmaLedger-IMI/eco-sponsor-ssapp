@@ -34,7 +34,7 @@ export default class ConsentService extends DSUService {
 
   async addSiteConsent(model, trialKeySSI, siteDSU) {
     try{
-      this.storageService.beginBatch();
+      await this.storageService.beginBatchAsync();
     }
     catch (e) {
       console.log(e)
@@ -248,7 +248,7 @@ export default class ConsentService extends DSUService {
 
   async createTrialConsent(data, trialId) {
     try{
-      this.storageService.beginBatch();
+      await this.storageService.beginBatchAsync();
     }
     catch (e){
       console.log(e)

@@ -33,7 +33,7 @@ export default class TrialsService extends DSUService {
 
   async createTrial(data) {
     try {
-      this.storageService.beginBatch();
+      await this.storageService.beginBatchAsync();
     } catch (e) {
       console.log(e);
     }
