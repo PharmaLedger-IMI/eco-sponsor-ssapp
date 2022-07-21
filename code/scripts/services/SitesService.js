@@ -50,6 +50,12 @@ export default class SitesService extends DSUService {
   }
 
   async createSite(data, id) {
+    try {
+      this.storageService.beginBatch();
+    } catch (e) {
+      console.log(e);
+    }
+
     const trial = await this.trialsService.getTrialFromDB(id);
     const visits = await this.visitsService.getTrialVisits(trial.keySSI);
 
@@ -72,11 +78,11 @@ export default class SitesService extends DSUService {
       trialSReadSSI: trial.sReadSSI,
     });
 
-    await this.unmountEntityAsync(status.uid, '/statuses');
-    await this.mountEntityAsync(status.keySSI, this.getStatusPath(site.uid));
-    await this.mountEntityAsync(visits.keySSI, this.getVisitsPath(site.uid));
+    const unmountStatus = this.unmountEntityAsync(status.uid, '/statuses');
+    const mountStatus = this.mountEntityAsync(status.keySSI, this.getStatusPath(site.uid));
+    const mountVisits = this.mountEntityAsync(visits.keySSI, this.getVisitsPath(site.uid));
 
-    await this.addSiteToDB(
+    const addSiteToDb = this.addSiteToDB(
       {
         ...data,
         keySSI: site.keySSI,
@@ -97,6 +103,11 @@ export default class SitesService extends DSUService {
       },
       trial.keySSI
     );
+
+    const result = await Promise.allSettled([unmountStatus, mountStatus, mountVisits, addSiteToDb]);
+
+    await this.storageService.commitBatch();
+
     return site;
   }
 

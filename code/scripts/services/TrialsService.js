@@ -32,11 +32,10 @@ export default class TrialsService extends DSUService {
   }
 
   async createTrial(data) {
-    try{
+    try {
       this.storageService.beginBatch();
-    }
-    catch (e) {
-     console.log(e);
+    } catch (e) {
+      console.log(e);
     }
 
     const trial = await this.saveEntityAsync({
@@ -68,15 +67,6 @@ export default class TrialsService extends DSUService {
     return trial;
   }
 
-  // async deleteTrial(id) {
-  //   const selectedTrial = await this.storageService.getRecordAsync(this.TRIALS_TABLE, id);
-
-  //   await this.storageService.updateRecordAsync(this.TRIALS_TABLE, selectedTrial.id, {
-  //     ...selectedTrial,
-  //     deleted: true,
-  //   });
-  // }
-
   async addTrialToDB(data) {
     const newRecord = await this.storageService.insertRecordAsync(this.TRIALS_TABLE, data.id, data);
     return newRecord;
@@ -101,27 +91,49 @@ export default class TrialsService extends DSUService {
   }
 
   async changeTrialStatus(status, trial) {
+    debugger;
+    try {
+      this.storageService.beginBatch();
+    } catch (e) {
+      console.log(e);
+    }
+
     const trialDb = await this.getTrialFromDB(trial.id);
-    const updatedTrial = await this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, {
+    const trialDSU = await this.getEntityAsync(trial.uid);
+
+    const updatedTrial = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, {
       ...trialDb,
       status,
     });
+    const updatedDSU = this.updateEntityAsync({ ...trialDSU, status });
 
-    const trialDSU = await await this.getEntityAsync(trial.uid);
-    await this.updateEntityAsync({ ...trialDSU, status });
-    return updatedTrial;
+    const result = await Promise.allSettled([updatedTrial, updatedDSU]);
+
+    await this.storageService.commitBatch();
+
+    return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 
   async changeTrialStage(stage, trial) {
+    debugger;
+    try {
+      this.storageService.beginBatch();
+    } catch (e) {
+      console.log(e);
+    }
+
     const trialDb = await this.getTrialFromDB(trial.id);
-    const updatedTrial = await this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, {
+    const trialDSU = await this.getEntityAsync(trial.uid);
+
+    const updatedTrial = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, {
       ...trialDb,
       stage,
     });
+    const updatedDSU = this.updateEntityAsync({ ...trialDSU, stage });
 
-    const trialDSU = await await this.getEntityAsync(trial.uid);
-    await this.updateEntityAsync({ ...trialDSU, stage });
+    const result = await Promise.allSettled([updatedTrial, updatedDSU]);
 
-    return updatedTrial;
+    await this.storageService.commitBatch();
+    return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 }
