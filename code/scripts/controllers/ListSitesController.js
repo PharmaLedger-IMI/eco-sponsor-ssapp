@@ -231,7 +231,7 @@ export default class ListSitesController extends WebcController {
           const response = event.detail;
           this.getSites();
           this.sendMessageToHco(Constants.MESSAGES.SPONSOR.UPDATE_SITE, response.uid, 'Site updated', response.did);
-          this.showInformationModal('Result', 'Site added successfully', 'toast');
+          this.showInformationModal('Result', 'Contact name changed successfully', 'toast');
           eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
         },
         (event) => {
@@ -298,7 +298,7 @@ export default class ListSitesController extends WebcController {
       operation: operation,
       ssi: ssi,
       shortDescription: shortMessage,
-      trialUid: this.model.uid
+      trialUid: this.model.uid,
     });
   }
 }

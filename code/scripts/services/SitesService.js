@@ -35,7 +35,6 @@ export default class SitesService extends DSUService {
   }
 
   async getSiteFromKeySSI(siteKeySSI, trialKeySSI) {
-    const test = await this.storageService.filterAsync(this.getTableName(trialKeySSI));
     const result = await this.storageService.filterAsync(this.getTableName(trialKeySSI), `keySSI == ${siteKeySSI}`);
     return result.length > 0 && result[0];
   }
@@ -51,7 +50,7 @@ export default class SitesService extends DSUService {
 
   async createSite(data, id) {
     try {
-      this.storageService.beginBatch();
+      await this.storageService.beginBatchAsync();
     } catch (e) {
       console.log(e);
     }
@@ -112,28 +111,55 @@ export default class SitesService extends DSUService {
   }
 
   async changeSiteStatus(status, did, trialKeySSI) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const site = await this.getSiteFromDB(did, trialKeySSI);
-    const updatedSite = await this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), site.did, {
+    const statusDSU = await this.getEntityAsync(site.statusUid, this.getStatusPath(site.uid));
+
+    const updatedSite = this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), site.did, {
       ...site,
       status,
     });
+    const updatedStatusDSU = this.updateEntityAsync({ ...statusDSU, status }, this.getStatusPath(site.uid));
 
-    const statusDSU = await this.getEntityAsync(site.statusUid, this.getStatusPath(site.uid));
-    await this.updateEntityAsync({ ...statusDSU, status }, this.getStatusPath(site.uid));
+    const result = await Promise.allSettled([updatedSite, updatedStatusDSU]);
 
-    return updatedSite;
+    await this.storageService.commitBatch();
+
+    return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 
   async updateSiteContact(model, did, trialKeySSI) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const siteDSU = await this.getSite(model.uid);
-    const updatedSite = await this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), did, {
+
+    const updatedSiteDSU = this.updateEntityAsync({ ...siteDSU, name: model.name });
+    const updatedSite = this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), did, {
       ...model,
     });
-    const updatedSiteDSU = await this.updateEntityAsync({ ...siteDSU, name: model.name });
-    return updatedSite;
+
+    const result = await Promise.allSettled([updatedSite, updatedSiteDSU]);
+
+    await this.storageService.commitBatch();
+    return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 
   async updateSiteStage(siteKeySSI) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const siteDSU = await this.getSite(siteKeySSI);
     const trialDB = await this.trialsService.getTrialFromDB(siteDSU.trialId);
     const site = await this.getSiteFromDB(siteDSU.did, trialDB.keySSI);
@@ -147,10 +173,17 @@ export default class SitesService extends DSUService {
       await this.trialsService.changeTrialStage(trialStagesEnum.Recruiting, trialDB);
     }
 
+    await this.storageService.commitBatch();
     return updatedSite;
   }
 
   async changeSiteStage(stage, did, trialKeySSI) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const site = await this.getSiteFromDB(did, trialKeySSI);
     const updatedSite = await this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), site.did, {
       ...site,
@@ -160,6 +193,7 @@ export default class SitesService extends DSUService {
     const statusDSU = await this.getEntityAsync(site.statusUid, this.getStatusPath(site.uid));
     await this.updateEntityAsync({ ...statusDSU, stage }, this.getStatusPath(site.uid));
 
+    await this.storageService.commitBatch();
     return updatedSite;
   }
 
@@ -172,13 +206,17 @@ export default class SitesService extends DSUService {
     } else {
       site.consents = [...site.consents, data];
     }
-    await this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), site.did, {
+
+    const siteDSU = await this.getEntityAsync(site.uid);
+
+    const updatedSiteDSU = this.updateEntityAsync({ ...siteDSU, consents: site.consents });
+    const updatedSiteDB = this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), site.did, {
       ...site,
     });
 
-    const siteDSU = await this.getEntityAsync(site.uid);
-    const updatedSiteDSU = await this.updateEntityAsync({ ...siteDSU, consents: site.consents });
-    return updatedSiteDSU;
+    const result = await Promise.allSettled([updatedSiteDSU, updatedSiteDB]);
+
+    return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 
   // async deleteSite(did, trialKeySSI) {

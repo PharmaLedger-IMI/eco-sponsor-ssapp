@@ -19,7 +19,6 @@ export default class ParticipantsService extends DSUService {
     this.sitesService = new SitesService(DSUStorage);
   }
 
-  // TODO: catch error only upper level and show pop up
   async getTrialParticipants(trialKeySSI, siteKeySSI) {
     try {
       let result = null;
@@ -39,15 +38,27 @@ export default class ParticipantsService extends DSUService {
   }
 
   async getParticipantConsentHistory(participantUid, trialKeySSI, siteKeySSI) {
-    const participant = await this.getParticipantFromDb(participantUid, trialKeySSI, siteKeySSI);
-    const consents = await this.getParticipantConsents(trialKeySSI, siteKeySSI);
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
+    const participantPromise = this.getParticipantFromDb(participantUid, trialKeySSI, siteKeySSI);
+    const consentsPromise = this.getParticipantConsents(trialKeySSI, siteKeySSI);
+    const sitePromise = this.sitesService.getSiteFromKeySSI(siteKeySSI, trialKeySSI);
+
+    const allPromiseResults = await Promise.allSettled([participantPromise, consentsPromise, sitePromise]);
+
+    const participant = allPromiseResults[0].status === 'fulfilled' ? allPromiseResults[0].value : null;
+    const consents = allPromiseResults[1].status === 'fulfilled' ? allPromiseResults[0].value : null;
+    const site = allPromiseResults[2].status === 'fulfilled' ? allPromiseResults[0].value : null;
 
     const result = consents.map((x) => ({
       ...x,
       versions: x.versions.map((z) => ({ ...z, actions: z.actions.filter((y) => y.tpDid === participant.did) })),
     }));
 
-    const site = await this.sitesService.getSiteFromKeySSI(siteKeySSI, trialKeySSI);
     let siteConsents = site.consents;
 
     siteConsents = siteConsents.map((x) => ({
@@ -77,10 +88,18 @@ export default class ParticipantsService extends DSUService {
       }),
     }));
 
+    await this.storageService.commitBatch();
+
     return siteConsents;
   }
 
   async updateParticipant(data, ssi, siteDid) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     try {
       const trialUid = data.trialSSI;
       const tpDid = data.tpDid;
@@ -122,12 +141,20 @@ export default class ParticipantsService extends DSUService {
       // }
       // list = await this.getTrialParticipants(trialKeySSI);
       // return list;
+
+      await this.storageService.commitBatch();
     } catch (error) {
       console.log(error.message);
     }
   }
 
   async addParticipant(ssi, siteDid) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     try {
       const participantDSU = await this.mountEntityAsync(ssi);
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
@@ -139,6 +166,8 @@ export default class ParticipantsService extends DSUService {
       );
       console.log(newParticipant);
 
+      await this.storageService.commitBatch();
+
       return newParticipant;
     } catch (error) {
       console.log(error.message);
@@ -146,6 +175,12 @@ export default class ParticipantsService extends DSUService {
   }
 
   async updateParticipantConsent(participantUid, siteDid, consentSSI) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     try {
       const participantDSU = await this.getParticipant(participantUid);
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
@@ -179,6 +214,7 @@ export default class ParticipantsService extends DSUService {
 
       console.log(updatedParticipant);
 
+      await this.storageService.commitBatch();
       return updatedParticipant;
     } catch (error) {
       console.log(error.message);
@@ -186,6 +222,12 @@ export default class ParticipantsService extends DSUService {
   }
 
   async hcoSignConsent(participantUid, siteDid, consentUid) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     try {
       const participantDSU = await this.getParticipant(participantUid);
       const consentDSU = await this.getEntityAsync(consentUid, this.getConsentPath(participantDSU));
@@ -216,6 +258,7 @@ export default class ParticipantsService extends DSUService {
 
       console.log(updatedParticipant);
 
+      await this.storageService.commitBatch();
       return updatedParticipant;
     } catch (error) {
       console.log(error.message);
@@ -223,6 +266,12 @@ export default class ParticipantsService extends DSUService {
   }
 
   async addParticipantNumber(participantUid, siteDid) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     try {
       const participantDSU = await this.getParticipant(participantUid);
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
@@ -236,6 +285,7 @@ export default class ParticipantsService extends DSUService {
 
       console.log(updatedParticipant);
 
+      await this.storageService.commitBatch();
       return updatedParticipant;
     } catch (error) {
       console.log(error.message);

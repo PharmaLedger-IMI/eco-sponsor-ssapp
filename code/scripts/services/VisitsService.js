@@ -19,6 +19,12 @@ export default class VisitsService extends DSUService {
   }
 
   async createTrialVisits(trialKeySSI) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const visits = await this.saveEntityAsync({
       visits: [],
     });
@@ -28,10 +34,18 @@ export default class VisitsService extends DSUService {
       sReadSSI: visits.sReadSSI,
       visits: [],
     });
+
+    await this.storageService.commitBatch();
     return visits;
   }
 
   async updateTrialVisits(trialKeySSI, data, consentId) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const visitsDb = await this.getTrialVisits(trialKeySSI);
     const visitsDSU = await this.getEntityAsync(visitsDb.uid);
     let exists = visitsDb.visits.findIndex((x) => x.consentId === consentId);
@@ -44,14 +58,16 @@ export default class VisitsService extends DSUService {
       });
     }
 
-    //TODO: use Promise.allSettled to start in parallel
-    const updatedVisitsDSU = await this.updateEntityAsync({ ...visitsDSU, visits: visitsDb.visits });
-
-    await this.storageService.updateRecordAsync(this.VISITS_TABLE, trialKeySSI, {
+    const updatedVisitsDSU = this.updateEntityAsync({ ...visitsDSU, visits: visitsDb.visits });
+    const updatedVisitsDB = this.storageService.updateRecordAsync(this.VISITS_TABLE, trialKeySSI, {
       ...visitsDb,
     });
 
-    return updatedVisitsDSU;
+    const result = await Promise.allSettled([updatedVisitsDSU, updatedVisitsDB]);
+
+    await this.storageService.commitBatch();
+
+    return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 
   async addVisitsToDB(trialKeySSI, data) {

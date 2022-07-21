@@ -91,9 +91,8 @@ export default class TrialsService extends DSUService {
   }
 
   async changeTrialStatus(status, trial) {
-    debugger;
     try {
-      this.storageService.beginBatch();
+      this.storageService.getEntityAsync();
     } catch (e) {
       console.log(e);
     }
@@ -115,9 +114,8 @@ export default class TrialsService extends DSUService {
   }
 
   async changeTrialStage(stage, trial) {
-    debugger;
     try {
-      this.storageService.beginBatch();
+      this.storageService.getEntityAsync();
     } catch (e) {
       console.log(e);
     }

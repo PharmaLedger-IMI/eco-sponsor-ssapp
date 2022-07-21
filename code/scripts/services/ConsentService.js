@@ -33,11 +33,10 @@ export default class ConsentService extends DSUService {
   }
 
   async addSiteConsent(model, trialKeySSI, siteDSU) {
-    try{
+    try {
       await this.storageService.beginBatchAsync();
-    }
-    catch (e) {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
     const site = await this.siteService.getSiteFromDB(siteDSU.did, trialKeySSI);
     const path = this.getConsentPath(site.uid);
@@ -47,16 +46,11 @@ export default class ConsentService extends DSUService {
       model.versions[0].file
     );
     consent.versions[0].attachment = model.versions[0].file.name;
-    const {keySSI,sReadSSI,...restData} = consent;
-    // const updatedConsentDSU = _.clone(consent);
-    // delete updatedConsentDSU.keySSI;
-    // delete updatedConsentDSU.sReadSSI;
+    const { keySSI, sReadSSI, ...restData } = consent;
 
-
-    //TODO 3 promises with Promise.allSettled
     const updatedConsent = await this.updateEntityAsync(restData, path);
 
-    await this.addConsentToDB(
+    const updatedConsentDB = this.addConsentToDB(
       {
         keySSI: consent.keySSI,
         uid: consent.uid,
@@ -76,7 +70,9 @@ export default class ConsentService extends DSUService {
       },
       site.keySSI
     );
-    await this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
+    const updatedSiteConsents = this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
+
+    const result = await Promise.allSettled([updatedConsentDB, updatedSiteConsents]);
 
     await this.storageService.commitBatch();
 
@@ -84,6 +80,12 @@ export default class ConsentService extends DSUService {
   }
 
   async addSiteConsentVersion(model, trialKeySSI, siteDSU) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const site = await this.siteService.getSiteFromDB(siteDSU.did, trialKeySSI);
     const selectedSiteConsent = site.consents.find((x) => x.trialConsentId === model.trialConsentId);
     const path = this.getConsentPath(site.uid);
@@ -95,99 +97,16 @@ export default class ConsentService extends DSUService {
     model.versions[0].attachment = model.file.name;
     consentDSU.versions.push(model.versions[0]);
     const updatedConsent = await this.updateEntityAsync(consentDSU, path);
-    await this.updateConsentToDB(updatedConsent, site.keySSI);
-    await this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
+
+    const updatedConsentDB = this.updateConsentToDB(updatedConsent, site.keySSI);
+    const updatedSiteConsent = this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
+
+    const result = await Promise.allSettled([updatedConsentDB, updatedSiteConsent]);
+
+    await this.storageService.commitBatch();
 
     return updatedConsent;
   }
-
-  // async deleteConsent(trialKeySSI, consentKeySSI) {
-  //   const trialConsents = await this.storageService.getRecordAsync(this.CONSENTS_TABLE, trialKeySSI);
-  //   let selectedConsent = trialConsents.consents.find((x) => x.keySSI === consentKeySSI);
-  //   let idx = trialConsents.consents.indexOf(selectedConsent);
-
-  //   selectedConsent = { ...selectedConsent, deleted: true };
-
-  //   trialConsents.consents[idx] = selectedConsent;
-
-  //   await this.storageService.updateRecordAsync(this.CONSENTS_TABLE, trialKeySSI, trialConsents);
-
-  //   return;
-  // }
-  //TODO to be deleted
-  /*async createConsent(data, trialKeySSI, site = null) {
-    if (site) {
-      const path = this.getConsentPath(site.keySSI);
-      const consent = await this.saveEntityAsync(data, path);
-      const attachment = await this.uploadFile(
-        `${path}${consent.uid}/versions/${data.versions[0].version}/${data.versions[0].file.name}`,
-        data.versions[0].file
-      );
-      consent.versions[0].attachment = data.versions[0].file.name;
-      const updatedConsent = await this.updateEntityAsync(consent, path);
-
-      await this.addConsentToDB(
-        {
-          id: data.id,
-          keySSI: consent.uid,
-          name: data.name,
-          type: data.type,
-          uid: consent.uid,
-          versions: [
-            {
-              version: data.versions[0].version,
-              versionDate: data.versions[0].versionDate,
-              attachment: data.versions[0].file.name,
-            },
-          ],
-        },
-        site.keySSI
-      );
-      await this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
-      const visits = await this.visitsService.getTrialVisits(trialKeySSI);
-      if (visits.consents.indexOf(data.name) === -1) {
-        visits.consents.push(data.name);
-        await this.visitsService.updateTrialVisits(trialKeySSI, visits);
-      }
-      return consent;
-    }
-  }*/
-
-  //TODO to be deleted
-  /*async updateConsent(data, trialKeySSI, site, consent) {
-    const selectedSiteConsent = site.consents.find((x) => x.id === consent.id);
-    const path = this.getConsentPath(site.keySSI);
-    const consentDSU = await this.getEntityAsync(selectedSiteConsent.uid, path);
-    const attachment = await this.uploadFile(
-      `${path}${consentDSU.keySSI}/versions/${data.version}/${data.file.name}`,
-      data.file
-    );
-    data.attachment = data.file.name;
-    consentDSU.versions.push(data);
-
-    const updatedConsentDSU = _.clone(consentDSU);
-    delete updatedConsentDSU.keySSI;
-    delete updatedConsentDSU.sReadSSI;
-    const updatedConsent = await this.updateEntityAsync(updatedConsentDSU, path);
-    await this.updateConsentToDB(updatedConsent, site.keySSI);
-    await this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
-
-    return updatedConsent;
-  }*/
-
-  // async deleteConsent(trialKeySSI, consentKeySSI) {
-  //   const trialConsents = await this.storageService.getRecordAsync(this.CONSENTS_TABLE, trialKeySSI);
-  //   let selectedConsent = trialConsents.consents.find((x) => x.keySSI === consentKeySSI);
-  //   let idx = trialConsents.consents.indexOf(selectedConsent);
-
-  //   selectedConsent = { ...selectedConsent, deleted: true };
-
-  //   trialConsents.consents[idx] = selectedConsent;
-
-  //   await this.storageService.updateRecordAsync(this.CONSENTS_TABLE, trialKeySSI, trialConsents);
-
-  //   return;
-  // }
 
   async addConsentToDB(data, keySSI) {
     let record = null;
@@ -223,35 +142,16 @@ export default class ConsentService extends DSUService {
 
     return updatedRecord;
   }
-  //TODO to be deleted
-  // async updateBaseConsentVisits(visits, trialKeySSI, siteKeySSI) {
-  //   const site = await this.siteService.getSite(siteKeySSI);
-  //   const consents = site.consents;
-  //   for (const consent of consents) {
-  //     const tempVisits = visits.map((x) => ({
-  //       ...x,
-  //       procedures: x.procedures.filter((x) => x.consent.keySSI === consent.keySSI),
-  //     }));
-  //
-  //     consent.visits = tempVisits;
-  //     const updatedConsent = await this.updateEntityAsync(consent);
-  //     await this.updateConsentToDB(updatedConsent, site.keySSI);
-  //     await this.siteService.updateSiteConsents(updatedConsent, site.did, trialKeySSI);
-  //   }
-  //
-  //   return;
-  // }
 
   getConsentPath(siteUid) {
     return `${this.SITES_PATH}/${siteUid}/consent/`;
   }
 
   async createTrialConsent(data, trialId) {
-    try{
+    try {
       await this.storageService.beginBatchAsync();
-    }
-    catch (e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
     const trial = await this.trialsService.getTrialFromDB(trialId);
     const path = this.getTrialConsentPath(trial.uid);
@@ -261,15 +161,10 @@ export default class ConsentService extends DSUService {
       data.versions[0].file
     );
     consent.versions[0].attachment = data.versions[0].file.name;
-    const {keySSI,sReadSSI,...restData} = consent;
-    //const updatedConsentDSU = _.clone(consent);
-    //delete updatedConsentDSU.keySSI;
-    //delete updatedConsentDSU.sReadSSI;
+    const { keySSI, sReadSSI, ...restData } = consent;
     const updatedConsent = await this.updateEntityAsync(restData, path);
 
-
-    //TODO parallel
-    await this.addConsentToDB(
+    const updatedConsentDB = this.addConsentToDB(
       {
         id: data.id,
         keySSI: consent.keySSI,
@@ -288,14 +183,22 @@ export default class ConsentService extends DSUService {
       trial.keySSI
     );
 
-    await this.trialsService.updateTrialConsents(updatedConsent, trial.uid);
+    const updatedTrialConsent = this.trialsService.updateTrialConsents(updatedConsent, trial.uid);
+
+    const result = await Promise.allSettled([updatedConsentDB, updatedTrialConsent]);
 
     await this.storageService.commitBatch();
-    // TODO: make all ids keySSIs so unique
+
     return consent;
   }
 
   async updateTrialConsent(data, trialId, site, consent) {
+    try {
+      await this.storageService.beginBatchAsync();
+    } catch (e) {
+      console.log(e);
+    }
+
     const trial = await this.trialsService.getTrialFromDB(trialId);
     const path = this.getTrialConsentPath(trial.uid);
     const consentDSU = await this.getEntityAsync(consent.uid, path);
@@ -306,8 +209,13 @@ export default class ConsentService extends DSUService {
     data.attachment = data.file.name;
     consentDSU.versions.push(data);
     const updatedConsent = await this.updateEntityAsync(consentDSU, path);
-    await this.updateConsentToDB(updatedConsent, trial.keySSI);
-    await this.trialsService.updateTrialConsents(updatedConsent, trial.uid);
+
+    const updatedConsentDb = this.updateConsentToDB(updatedConsent, trial.keySSI);
+    const updatedTrialConsent = this.trialsService.updateTrialConsents(updatedConsent, trial.uid);
+
+    const result = await Promise.allSettled([updatedConsentDb, updatedTrialConsent]);
+
+    await this.storageService.commitBatch();
 
     return updatedConsent;
   }
@@ -316,7 +224,6 @@ export default class ConsentService extends DSUService {
     return `${this.TRIALS_PATH}/${trialUid}/consent/`;
   }
 
-  //TODO: do it in DSUService
   uploadFile(path, file) {
     let getFileContentAsBuffer = (file, callback) => {
       let fileReader = new FileReader();
