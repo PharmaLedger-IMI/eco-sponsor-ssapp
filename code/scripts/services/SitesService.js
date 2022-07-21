@@ -77,11 +77,11 @@ export default class SitesService extends DSUService {
       trialSReadSSI: trial.sReadSSI,
     });
 
-    const unmountStatus = this.unmountEntityAsync(status.uid, '/statuses');
-    const mountStatus = this.mountEntityAsync(status.keySSI, this.getStatusPath(site.uid));
-    const mountVisits = this.mountEntityAsync(visits.keySSI, this.getVisitsPath(site.uid));
+    await this.unmountEntityAsync(status.uid, '/statuses');
+    await this.mountEntityAsync(status.keySSI, this.getStatusPath(site.uid));
+    await this.mountEntityAsync(visits.keySSI, this.getVisitsPath(site.uid));
 
-    const addSiteToDb = this.addSiteToDB(
+    const addSiteToDb = await this.addSiteToDB(
       {
         ...data,
         keySSI: site.keySSI,
@@ -102,8 +102,6 @@ export default class SitesService extends DSUService {
       },
       trial.keySSI
     );
-
-    const result = await Promise.allSettled([unmountStatus, mountStatus, mountVisits, addSiteToDb]);
 
     await this.storageService.commitBatch();
 

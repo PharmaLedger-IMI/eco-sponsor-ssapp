@@ -115,31 +115,35 @@ export default class ListTrialsController extends WebcController {
         // }
         case Constants.MESSAGES.SPONSOR.UPDATE_SITE_STATUS: {
           if (data.stageInfo.siteSSI) {
-            await this.sitesService.updateSiteStage(data.stageInfo.siteSSI);
+            return await this.sitesService.updateSiteStage(data.stageInfo.siteSSI);
           }
           break;
         }
         case Constants.MESSAGES.HCO.SEND_HCO_DSU_TO_SPONSOR: {
           if (data.ssi) {
-            await this.sitesService.addHCODsu(data.ssi, data.senderIdentity);
+            return await this.sitesService.addHCODsu(data.ssi, data.senderIdentity);
           }
           break;
         }
         case Constants.MESSAGES.SPONSOR.TP_ADDED: {
           if (data.ssi) {
-            await this.participantsService.addParticipant(data.ssi, data.senderIdentity);
+            return await this.participantsService.addParticipant(data.ssi, data.senderIdentity);
           }
           break;
         }
         case Constants.MESSAGES.SPONSOR.TP_CONSENT_UPDATE: {
           if (data.ssi) {
-            await this.participantsService.updateParticipantConsent(data.ssi, data.senderIdentity, data.consentSSI);
+            return await this.participantsService.updateParticipantConsent(
+              data.ssi,
+              data.senderIdentity,
+              data.consentSSI
+            );
           }
           break;
         }
         case Constants.MESSAGES.SPONSOR.SIGN_ECOSENT: {
           if (data.ssi) {
-            await this.participantsService.hcoSignConsent(data.ssi, data.senderIdentity, data.consentUid);
+            return await this.participantsService.hcoSignConsent(data.ssi, data.senderIdentity, data.consentUid);
           }
           break;
         }
