@@ -114,12 +114,6 @@ export default class TrialsService extends DSUService {
   }
 
   async changeTrialStage(stage, trial) {
-    try {
-      this.storageService.beginBatchAsync();
-    } catch (e) {
-      console.log(e);
-    }
-
     const trialDb = await this.getTrialFromDB(trial.id);
     const trialDSU = await this.getEntityAsync(trial.uid);
 
@@ -131,7 +125,6 @@ export default class TrialsService extends DSUService {
 
     const result = await Promise.allSettled([updatedTrial, updatedDSU]);
 
-    await this.storageService.commitBatch();
     return result[0].status === 'fulfilled' ? result[0].value : null;
   }
 }
