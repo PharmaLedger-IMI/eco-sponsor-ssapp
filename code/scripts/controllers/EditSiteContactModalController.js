@@ -22,11 +22,11 @@ export default class EditSiteContactModalController extends WebcController {
 
     this.sitesService = new SitesService(this.DSUStorage);
 
-    this.setModel({
+    this.model = {
       site: {
         name: this.name,
       },
-    });
+    };
 
     this.attachAll();
   }

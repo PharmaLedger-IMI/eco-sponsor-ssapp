@@ -62,7 +62,7 @@ export default class AddNewSiteModalController extends WebcController {
 
     this.sitesService = new SitesService(this.DSUStorage);
 
-    this.setModel({
+    this.model = {
       site: {
         id: this.id,
         name: this.name,
@@ -71,7 +71,7 @@ export default class AddNewSiteModalController extends WebcController {
         did: this.did,
       },
       submitButtonDisabled: true,
-    });
+    };
 
     this.didService = getDidServiceInstance();
     this.didService.getDID().then((did) => {

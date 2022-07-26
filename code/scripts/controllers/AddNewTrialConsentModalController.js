@@ -82,7 +82,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.consentsService = new ConsentService(this.DSUStorage);
 
     if (this.isUpdate) {
-      this.setModel({
+      this.model = {
         consent: {
           id: { ...this.id, value: this.isUpdate.id, disabled: true },
           name: { ...this.name, value: this.isUpdate.name, disabled: true },
@@ -96,9 +96,9 @@ export default class AddNewTrialConsentModalController extends WebcController {
           file: this.file,
         },
         submitButtonDisabled: true,
-      });
+      };
     } else {
-      this.setModel({
+      this.model = {
         consent: {
           id: this.id,
           name: this.name,
@@ -112,7 +112,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
           file: this.file,
         },
         submitButtonDisabled: true,
-      });
+      };
     }
 
     this.attachAll();

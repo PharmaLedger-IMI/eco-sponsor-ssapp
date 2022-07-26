@@ -39,14 +39,14 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.consentsService = new ConsentService(this.DSUStorage);
     this.visitsService = new VisitsService(this.DSUStorage);
 
-    this.setModel({
+    this.model = {
       consents: {
         ...this.consentsTemplate,
         value: this.consents[0].id,
         selectOptions: this.consents.map((x) => ({ value: x.id, label: x.name })),
       },
       visits: { attachment: this.attachment },
-    });
+    };
 
     this.attachAll();
   }

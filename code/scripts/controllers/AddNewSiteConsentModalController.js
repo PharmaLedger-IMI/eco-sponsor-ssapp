@@ -70,7 +70,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
           ) + 1
         : 1;
 
-      this.setModel({
+      this.model = {
         newConsent: !(this.selectedConsent && this.siteConsent),
         existingConsent: this.selectedConsent && this.siteConsent,
         consent: {
@@ -95,12 +95,12 @@ export default class AddNewSiteConsentModalController extends WebcController {
           attachment: this.attachment,
         },
         submitButtonDisabled: true,
-      });
+      };
     } else {
       const filteredConsents = this.consents.filter(
         (x) => this.site.consents.findIndex((y) => y.trialConsentId === x.id) === -1
       );
-      this.setModel({
+      this.model = {
         newConsent: !(this.selectedConsent && this.siteConsent),
         existingConsent: this.selectedConsent && this.siteConsent,
         consent: {
@@ -135,7 +135,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
           attachment: this.attachment,
         },
         submitButtonDisabled: true,
-      });
+      };
     }
     this.attachAll();
   }

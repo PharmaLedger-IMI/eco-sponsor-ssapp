@@ -48,7 +48,7 @@ export default class AddNewTrialModalController extends WebcController {
       .getDID()
       .then((identityString) => {
         this.did.value = identityString;
-        this.setModel({
+        this.model = {
           trial: {
             id: this.id,
             name: this.name,
@@ -56,7 +56,7 @@ export default class AddNewTrialModalController extends WebcController {
             did: this.did,
           },
           submitButtonDisabled: false,
-        });
+        };
       });
 
     this.attachAll();
