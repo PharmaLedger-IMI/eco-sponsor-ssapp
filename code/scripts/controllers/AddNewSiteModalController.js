@@ -60,8 +60,6 @@ export default class AddNewSiteModalController extends WebcController {
     this.trialKeySSI = keySSI;
     this.trialId = id;
 
-    console.log(props);
-
     this.sitesService = new SitesService(this.DSUStorage);
 
     this.setModel({

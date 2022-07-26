@@ -19,7 +19,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
     listFiles: false,
     filesAppend: false,
     files: [],
-    name:"",
+    name: '',
     invalidValue: false,
   };
 
@@ -55,7 +55,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.on('add-file', (event) => {
       if (event.data) {
         this.file = event.data[0];
-        this.model.visits.attachment.name = this.file.name
+        this.model.visits.attachment.name = this.file.name;
       }
     });
 
@@ -90,8 +90,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
         window.WebCardinal.loader.hidden = false;
         Papa.parse(this.file, {
           complete: async (results, file) => {
-            console.log(results, file);
-
             if (results.data && results.data.length > 0) {
               const dataArray = results.data;
               const visitNamesIdx = dataArray.findIndex((x) => x[0] === 'Visit');

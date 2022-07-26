@@ -77,7 +77,6 @@ export default class ListSiteParticipantsController extends WebcController {
   async getParticipants() {
     window.WebCardinal.loader.hidden = false;
     const model = await this.participantsService.getTrialParticipants(this.model.trialKeySSI, this.model.siteKeySSI);
-    console.log(JSON.parse(JSON.stringify(this.model.trialConsents)));
     this.model.participants = JSON.parse(JSON.stringify(model));
     this.model.data = JSON.parse(JSON.stringify(model));
     this.getStatistics();
@@ -136,12 +135,7 @@ export default class ListSiteParticipantsController extends WebcController {
       'data'
     );
 
-    this.onTagClick('view-participant-status', async (model) => {
-      console.log(model);
-    });
-
     this.onTagClick('view-participant-consents', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants-consents', {
         participantUid: model.uid,
         trialId: this.model.trialId,
@@ -154,7 +148,6 @@ export default class ListSiteParticipantsController extends WebcController {
     });
 
     this.onTagClick('view-participant-status', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participant-status', {
         participantUid: model.uid,
         trialId: this.model.trialId,
@@ -167,7 +160,6 @@ export default class ListSiteParticipantsController extends WebcController {
     });
 
     this.onTagClick('view-participant-devices', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participant-devices', {
         participantUid: model.uid,
         trialId: this.model.trialId,

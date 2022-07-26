@@ -12,7 +12,6 @@ export default class SitePreviewConsentController extends WebcController {
     super(...props);
     let { trialId, trialKeySSI, trialUid, siteId, siteKeySSI, siteUid, data, history } = this.history.location.state;
 
-    console.log(trialId, trialKeySSI, siteId, siteKeySSI, data, history);
     this.model = {
       trialId,
       trialKeySSI,
@@ -125,7 +124,6 @@ export default class SitePreviewConsentController extends WebcController {
     let canvas = document.createElement('canvas');
     canvas.style.display = 'block';
     let context = canvas.getContext('2d');
-    console.log(viewport, page);
     canvas.height = viewport.height;
     canvas.width = viewport.width;
     page.render({ canvasContext: context, viewport: viewport });

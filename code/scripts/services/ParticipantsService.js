@@ -24,7 +24,6 @@ export default class ParticipantsService extends DSUService {
       let result = null;
       try {
         result = await this.storageService.filterAsync(this.getTableName(trialKeySSI, siteKeySSI));
-        console.log(result);
       } catch (e) {
         result = undefined;
       }
@@ -164,8 +163,6 @@ export default class ParticipantsService extends DSUService {
         participantDSU.uid,
         participantDSU
       );
-      console.log(newParticipant);
-
       await this.storageService.commitBatch();
 
       return newParticipant;
@@ -212,8 +209,6 @@ export default class ParticipantsService extends DSUService {
         participantDSU
       );
 
-      console.log(updatedParticipant);
-
       await this.storageService.commitBatch();
       return updatedParticipant;
     } catch (error) {
@@ -256,8 +251,6 @@ export default class ParticipantsService extends DSUService {
         participantDSU
       );
 
-      console.log(updatedParticipant);
-
       await this.storageService.commitBatch();
       return updatedParticipant;
     } catch (error) {
@@ -282,8 +275,6 @@ export default class ParticipantsService extends DSUService {
         participantDSU.uid,
         participantDSU
       );
-
-      console.log(updatedParticipant);
 
       await this.storageService.commitBatch();
       return updatedParticipant;

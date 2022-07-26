@@ -40,8 +40,6 @@ class WrapperDataSource extends DataSource {
 export default class TableTemplateController extends WebcController {
   constructor(...props) {
     super(...props);
-    console.log(JSON.parse(JSON.stringify(this.model.data)));
-    console.log(JSON.parse(JSON.stringify(this.model.headers)));
     this.model.dataSource = new WrapperDataSource(
       JSON.parse(JSON.stringify(this.model.data)),
       JSON.parse(JSON.stringify(this.model.headers))

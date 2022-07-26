@@ -68,7 +68,6 @@ export default class ListTrialConsentsController extends WebcController {
   async getConsents() {
     window.WebCardinal.loader.hidden = false;
     const consents = await this.consentService.getTrialConsents(this.model.keySSI);
-    console.log(JSON.parse(JSON.stringify(consents)));
     this.setConsentsModel(JSON.parse(JSON.stringify(consents)));
     this.consents = consents;
     window.WebCardinal.loader.hidden = true;
@@ -173,7 +172,6 @@ export default class ListTrialConsentsController extends WebcController {
         ...x,
         versionDate: new Date(x.versionDate).toLocaleDateString('en-UK'),
       }));
-      console.log(JSON.parse(JSON.stringify(data)));
       this.navigateToPageTag('consent-history', {
         id: this.model.id,
         keySSI: this.model.keySSI,

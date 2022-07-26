@@ -42,7 +42,6 @@ export default class ListTrialVisitsController extends WebcController {
 
   async getConsents() {
     this.consents = await this.consentService.getTrialConsents(this.model.keySSI);
-    console.log(JSON.parse(JSON.stringify(this.consents)));
     this.model.consents = this.consents.map((x, idx) => ({ ...x, selected: idx === 0 ? true : false }));
     this.model.hasNoConsents = this.model.consents.length === 0;
     this.model.hasConsents = this.model.consents.length > 0;
@@ -50,7 +49,6 @@ export default class ListTrialVisitsController extends WebcController {
 
   async getVisits() {
     const visitsData = await this.visitsService.getTrialVisits(this.model.keySSI);
-    console.log(visitsData);
     this.model.visits = visitsData.visits;
     this.model.selectedVisits = JSON.parse(JSON.stringify(this.model.visits)).find(
       (x) => x.consentId === this.model.consents.find((x) => x.selected === true).id
@@ -72,12 +70,9 @@ export default class ListTrialVisitsController extends WebcController {
         (x) => x.consentId === model.id
       ) || { data: [] };
       this.model.selectedVisits.hasData = this.model.selectedVisits.data.length > 0;
-      console.log(JSON.parse(JSON.stringify(this.model.selectedVisits)));
     });
 
     this.onTagClick('add-visits', async () => {
-      console.log('Adding event');
-
       this.showModalFromTemplate(
         'add-new-trial-visits',
         (event) => {

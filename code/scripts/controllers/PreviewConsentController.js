@@ -12,9 +12,6 @@ export default class PreviewConsentController extends WebcController {
     super(...props);
     let { id, keySSI, uid, data, history } = this.history.location.state;
 
-    console.log('CONSTRUCTOR:', history);
-
-    console.log(data);
     this.model = {
       id,
       keySSI,
@@ -110,7 +107,6 @@ export default class PreviewConsentController extends WebcController {
     let canvas = document.createElement('canvas');
     canvas.style.display = 'block';
     let context = canvas.getContext('2d');
-    console.log(viewport, page);
     canvas.height = viewport.height;
     canvas.width = viewport.width;
     page.render({ canvasContext: context, viewport: viewport });

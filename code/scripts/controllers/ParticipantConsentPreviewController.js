@@ -50,7 +50,6 @@ export default class ParticipantConsentPreviewController extends WebcController 
 
   attachEvents() {
     this.onTagClick('navigate-to-participant-consents', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants-consents', {
         participantUid: this.model.participantUid,
         trialId: this.model.trialId,
@@ -63,7 +62,6 @@ export default class ParticipantConsentPreviewController extends WebcController 
     });
 
     this.onTagClick('view-participant-consent-preview', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participant-preview', {
         participantUid: this.model.participantUid,
         trialId: this.model.trialId,
@@ -83,7 +81,6 @@ export default class ParticipantConsentPreviewController extends WebcController 
       });
     });
     this.onTagClick('navigate-to-subjects', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants', {
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
@@ -140,7 +137,6 @@ export default class ParticipantConsentPreviewController extends WebcController 
     let canvas = document.createElement('canvas');
     canvas.style.display = 'block';
     let context = canvas.getContext('2d');
-    console.log(viewport, page);
     canvas.height = viewport.height;
     canvas.width = viewport.width;
     page.render({ canvasContext: context, viewport: viewport });

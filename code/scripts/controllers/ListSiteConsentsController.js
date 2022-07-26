@@ -77,10 +77,8 @@ export default class ListSiteConsentsController extends WebcController {
   async getConsents() {
     window.WebCardinal.loader.hidden = false;
     this.model.trialConsents = await this.consentService.getTrialConsents(this.model.trialKeySSI);
-    console.log(JSON.parse(JSON.stringify(this.model.trialConsents)));
     const site = await this.sitesService.getSite(this.model.siteUid);
 
-    console.log(JSON.parse(JSON.stringify(site)));
     const model = this.getSiteConsents(site);
     this.model.site = site;
     this.model.data = model.map((x) => ({
@@ -98,8 +96,6 @@ export default class ListSiteConsentsController extends WebcController {
   }
 
   checkConsentVersion(x) {
-    console.log(x);
-    console.log(this.model.trialConsents);
     const maxVersion = this.getMaxVersionNumber(this.model.trialConsents.find((y) => y.id === x.trialConsentId));
     if (maxVersion === x.version) return false;
     else return true;
@@ -111,13 +107,9 @@ export default class ListSiteConsentsController extends WebcController {
     } else if (this.model.trialConsents.length > this.model.site.consents.length) {
       this.model.addConsentButtonDisabled = false;
     } else this.model.addConsentButtonDisabled = true;
-
-    console.log(this.model.trialConsents.length, this.model.site.consents.length, this.model.addConsentButtonDisabled);
   }
 
   getSiteConsents(site) {
-    console.log(JSON.parse(JSON.stringify(this.model.trialConsents)));
-    console.log(JSON.parse(JSON.stringify(site.consents)));
     if (!site.consents || site.consents.length === 0) {
       return [];
     } else {
@@ -175,19 +167,15 @@ export default class ListSiteConsentsController extends WebcController {
           selectedConsent: null,
           siteConsent: null,
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
-          trialUid: this.model.trialUid
+          trialUid: this.model.trialUid,
         }
       );
     });
 
     this.onTagClick('add-site-consent', async (model) => {
-      console.log(model);
-
       const selectedConsent = JSON.parse(
         JSON.stringify(this.model.trialConsents.find((x) => x.id === model.trialConsentId))
       );
-      console.log(selectedConsent);
-
       this.showModalFromTemplate(
         'add-new-site-consent',
         async (_event) => {
@@ -217,20 +205,18 @@ export default class ListSiteConsentsController extends WebcController {
           selectedConsent,
           siteConsent: model,
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
-          trialUid: this.model.trialUid
+          trialUid: this.model.trialUid,
         }
       );
     });
 
     this.onTagClick('view-site-consent-history', async (model) => {
-      console.log(model);
       const selectedConsent = this.model.data.find((x) => x.uid === model.uid);
       const data = selectedConsent.versions.map((x) => ({
         ...selectedConsent,
         ...x,
         versionDate: new Date(x.versionDate).toLocaleDateString('en-UK'),
       }));
-      console.log(JSON.parse(JSON.stringify(data)));
       this.navigateToPageTag('site-consent-history', {
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,

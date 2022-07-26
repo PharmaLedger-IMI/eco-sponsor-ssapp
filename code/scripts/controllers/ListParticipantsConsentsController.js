@@ -121,7 +121,6 @@ export default class ListParticipantsConsentsController extends WebcController {
     );
 
     this.onTagClick('view-participant-consent-history', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants-history', {
         participantUid: this.model.participantUid,
         trialId: this.model.trialId,
@@ -135,7 +134,6 @@ export default class ListParticipantsConsentsController extends WebcController {
     });
 
     this.onTagClick('view-participant-consent-preview', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participant-preview', {
         participantUid: this.model.participantUid,
         trialId: this.model.trialId,
@@ -157,7 +155,6 @@ export default class ListParticipantsConsentsController extends WebcController {
     });
 
     this.onTagClick('navigate-to-subjects', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants', {
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,

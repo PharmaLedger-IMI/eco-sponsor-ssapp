@@ -128,7 +128,6 @@ export default class ListParticipantsStatusController extends WebcController {
     });
 
     this.onTagClick('navigate-to-subjects', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants', {
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,

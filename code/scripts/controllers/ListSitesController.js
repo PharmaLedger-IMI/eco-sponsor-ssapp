@@ -195,7 +195,6 @@ export default class ListSitesController extends WebcController {
     });
 
     this.onTagClick('add-site', async () => {
-      console.log(JSON.stringify(this.model.sites, null, 2));
       this.showModalFromTemplate(
         'add-new-site',
         (event) => {
@@ -224,7 +223,6 @@ export default class ListSitesController extends WebcController {
     });
 
     this.onTagClick('edit-site-contact', async (model) => {
-      console.log(JSON.stringify(model));
       this.showModalFromTemplate(
         'edit-site-contact',
         (event) => {
@@ -251,7 +249,6 @@ export default class ListSitesController extends WebcController {
     });
 
     this.onTagClick('view-site-consents', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-consents', {
         trialId: this.model.id,
         trialKeySSI: this.model.keySSI,
@@ -263,7 +260,6 @@ export default class ListSitesController extends WebcController {
     });
 
     this.onTagClick('view-site-subjects', async (model) => {
-      console.log(model);
       this.navigateToPageTag('site-participants', {
         trialId: this.model.id,
         trialKeySSI: this.model.keySSI,

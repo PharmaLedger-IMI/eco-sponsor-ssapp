@@ -100,7 +100,6 @@ export default class AddNewSiteConsentModalController extends WebcController {
       const filteredConsents = this.consents.filter(
         (x) => this.site.consents.findIndex((y) => y.trialConsentId === x.id) === -1
       );
-      console.log(filteredConsents);
       this.setModel({
         newConsent: !(this.selectedConsent && this.siteConsent),
         existingConsent: this.selectedConsent && this.siteConsent,
@@ -143,7 +142,6 @@ export default class AddNewSiteConsentModalController extends WebcController {
 
   attachAll() {
     this.on('add-file', (event) => {
-      console.log(event);
       if (event.data) {
         this.model.consent.file.value = event.data;
         this.model.consent.attachment.name = event.data[0].name;
@@ -168,7 +166,6 @@ export default class AddNewSiteConsentModalController extends WebcController {
     this.onTagClick('create-consent', async () => {
       try {
         window.WebCardinal.loader.hidden = false;
-        console.log(JSON.parse(JSON.stringify(this.model.consent)));
         let valid = true;
         for (const x in this.model.consent) {
           // TODO: check if file selected
@@ -249,7 +246,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
       operation: operation,
       ssi: ssi,
       shortDescription: shortMessage,
-      trialUid: this.trialUid
+      trialUid: this.trialUid,
     };
 
     if (econsentUid) {
