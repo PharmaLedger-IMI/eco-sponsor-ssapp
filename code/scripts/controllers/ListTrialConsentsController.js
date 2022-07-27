@@ -5,6 +5,7 @@ import { consentTableHeaders } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 import SitesService from '../services/SitesService.js';
 import ConsentService from '../services/ConsentService.js';
+import { consentTypeEnum } from '../constants/consent.js';
 
 // import eventBusService from '../services/EventBusService.js';
 // import { Topics } from '../constants/topics.js';
@@ -54,6 +55,7 @@ export default class ListTrialConsentsController extends WebcController {
       clearButtonDisabled: true,
       type: 'consents',
       tableLength: 7,
+      mandatoryExists: null,
     };
 
     this.attachEvents();
@@ -82,6 +84,7 @@ export default class ListTrialConsentsController extends WebcController {
     }));
 
     this.model.consents = model;
+    this.model.mandatoryExists = !!consents.find((x) => x.type === consentTypeEnum.Mandatory);
     this.model.data = model;
   }
 
@@ -109,13 +112,8 @@ export default class ListTrialConsentsController extends WebcController {
       this.showModalFromTemplate(
         'add-new-trial-consent',
         async (_event) => {
-          // const response = event.detail;
           await this.getConsents();
           this.showInformationModal('Result', 'Consent added successfully', 'toast');
-          // this.model.sites.forEach((country) =>
-          //   country.sites.forEach((site) => this.sendMessageToHco('add-trial-consent', null, 'Trial consent', site.did))
-          // );
-          // eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
         },
         (event) => {
           const error = event.detail || null;
@@ -130,6 +128,7 @@ export default class ListTrialConsentsController extends WebcController {
           disableBackdropClosing: true,
           isUpdate: false,
           existingIds: this.model.consents.map((x) => x.id) || [],
+          mandatoryExists: this.model.mandatoryExists,
         }
       );
     });
@@ -161,6 +160,7 @@ export default class ListTrialConsentsController extends WebcController {
           site: null,
           isUpdate: selectedConsent,
           existingVersions: existingVersions || [],
+          mandatoryExists: this.model.mandatoryExists,
         }
       );
     });

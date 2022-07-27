@@ -73,6 +73,11 @@ export default class AddNewTrialConsentModalController extends WebcController {
         ) + 1
       : 1;
 
+    this.mandatoryExists = props[0].mandatoryExists;
+    if (!this.mandatoryExists) {
+      this.type.selectOptions = this.typesArray.filter((x) => x.value === consentTypeEnum.Mandatory);
+    }
+
     let { id, keySSI, uid } = this.history.location.state;
 
     this.keySSI = keySSI;

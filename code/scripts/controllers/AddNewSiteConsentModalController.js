@@ -1,4 +1,5 @@
 import ConsentService from '../services/ConsentService.js';
+import { consentTypeEnum } from '../constants/consent.js';
 const commonServices = require('common-services');
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const Constants = commonServices.Constants;
@@ -50,6 +51,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
     this.siteConsent = props[0].siteConsent || null;
     this.selectedConsent = props[0].selectedConsent || [];
     this.trialUid = props[0].trialUid || null;
+    this.mandatoryExists = props[0].mandatoryExists;
 
     let { trialKeySSI } = this.history.location.state;
 
@@ -97,9 +99,15 @@ export default class AddNewSiteConsentModalController extends WebcController {
         submitButtonDisabled: true,
       };
     } else {
-      const filteredConsents = this.consents.filter(
+      let filteredConsents = this.consents.filter(
         (x) => this.site.consents.findIndex((y) => y.trialConsentId === x.id) === -1
       );
+      if (!this.mandatoryExists) {
+        filteredConsents = this.consents
+          .filter((x) => this.site.consents.findIndex((y) => y.trialConsentId === x.id) === -1)
+          .filter((x) => x.type === consentTypeEnum.Mandatory);
+      }
+
       this.model = {
         newConsent: !(this.selectedConsent && this.siteConsent),
         existingConsent: this.selectedConsent && this.siteConsent,

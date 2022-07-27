@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
-import { siteConsentTableHeaders } from '../constants/consent.js';
+import { siteConsentTableHeaders, consentTypeEnum } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const { getDidServiceInstance } = commonServices.DidService;
 import SitesService from '../services/SitesService.js';
@@ -63,6 +63,7 @@ export default class ListSiteConsentsController extends WebcController {
       type: 'consents',
       tableLength: 7,
       addConsentButtonDisabled: true,
+      mandatoryExists: null,
     };
 
     this.attachEvents();
@@ -80,6 +81,7 @@ export default class ListSiteConsentsController extends WebcController {
     const site = await this.sitesService.getSite(this.model.siteUid);
 
     const model = this.getSiteConsents(site);
+    this.model.mandatoryExists = !!model.find((x) => x.type === consentTypeEnum.Mandatory);
     this.model.site = site;
     this.model.data = model.map((x) => ({
       ...x,
@@ -168,6 +170,7 @@ export default class ListSiteConsentsController extends WebcController {
           siteConsent: null,
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
           trialUid: this.model.trialUid,
+          mandatoryExists: this.model.mandatoryExists,
         }
       );
     });
