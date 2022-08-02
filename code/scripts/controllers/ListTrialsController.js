@@ -81,6 +81,16 @@ export default class ListTrialsController extends WebcController {
     this.trialsService = new TrialsService(this.DSUStorage);
     this.participantsService = new ParticipantsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
+    let communicationService = getCommunicationServiceInstance();
+
+    this.model.publicDidReady = false;
+    communicationService.onPrimaryDidReady((err, didDocument)=>{
+
+      if(err){
+        throw err;
+      }
+      this.model.publicDidReady = true;
+    })
 
     this.model = {
       statuses: this.statuses,
