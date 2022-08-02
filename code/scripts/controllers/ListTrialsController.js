@@ -81,10 +81,10 @@ export default class ListTrialsController extends WebcController {
     this.trialsService = new TrialsService(this.DSUStorage);
     this.participantsService = new ParticipantsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
-    let communicationService = getCommunicationServiceInstance();
+    this.CommunicationService = getCommunicationServiceInstance();
 
     this.model.publicDidReady = false;
-    communicationService.onPrimaryDidReady((err, didDocument)=>{
+    this.CommunicationService.onPrimaryDidReady((err, didDocument)=>{
 
       if(err){
         throw err;
@@ -363,8 +363,7 @@ export default class ListTrialsController extends WebcController {
   }
 
   sendMessageToHco(operation, ssi, shortMessage, receiverDid) {
-    let communicationService = getCommunicationServiceInstance();
-    communicationService.sendMessage(receiverDid, {
+    this.CommunicationService.sendMessage(receiverDid, {
       operation: operation,
       ssi: ssi,
       shortDescription: shortMessage,
