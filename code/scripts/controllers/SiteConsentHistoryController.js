@@ -1,14 +1,11 @@
 // eslint-disable-next-line no-undef
-import { siteConsentTableHeaders } from '../constants/consent.js';
-
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
+import { siteConsentHistoryTableHeaders } from '../constants/consent.js';
 
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
 
 export default class SiteConsentHistoryController extends WebcController {
-  headers = siteConsentTableHeaders;
+  headers = siteConsentHistoryTableHeaders;
 
   consents = null;
 

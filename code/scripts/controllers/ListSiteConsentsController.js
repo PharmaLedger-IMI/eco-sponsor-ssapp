@@ -99,8 +99,7 @@ export default class ListSiteConsentsController extends WebcController {
 
   checkConsentVersion(x) {
     const maxVersion = this.getMaxVersionNumber(this.model.trialConsents.find((y) => y.id === x.trialConsentId));
-    if (maxVersion === x.version) return false;
-    else return true;
+    return maxVersion !== x.versions[x.versions.length - 1].trialConsentVersion;
   }
 
   checkAddConsentButton() {
