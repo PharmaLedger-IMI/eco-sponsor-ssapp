@@ -1,5 +1,5 @@
-<webc-container controller="TableTemplateController" data-view-model="@" class="trials-data-table data-table">
-  <webc-datatable datasource="@dataSource" class="table-cell-web align-items-center justify-content-center">
+<webc-container controller="TableTemplateController" data-view-model="@" class="data-table">
+  <webc-datatable datasource="@dataSource" class="trials-list-table common-datatable dt-5-col">
     <div slot="header" class="table-header" data-for="@headerItems" style="display: contents">
       <span class="py-2">{{ @name }}</span>
     </div>
@@ -8,12 +8,12 @@
     <div class="">{{@name}}</div>
     <div class="">{{@created}}</div>
     <div class="">{{@status}}</div>
-    <div class="">{{@stage}}</div>
     <div class="">
       <button data-tag="view-trial-status" class="btn btn-bare btn-link">Status</button> |
       <button data-tag="view-trial-consents" class="btn btn-bare btn-link">Consents</button> |
       <button data-tag="view-trial-visits" class="btn btn-bare btn-link">Visits</button> |
-      <button data-tag="view-trial-sites" class="btn btn-bare btn-link">Sites</button>
+      <button data-tag="view-trial-sites" class="btn btn-bare btn-link">Sites</button> |
+      <button data-tag="set-recruitment-period" class="btn btn-bare btn-link">Recruitment Period</button>
     </div>
 
     <div slot="no-data">There are no items to display</div>

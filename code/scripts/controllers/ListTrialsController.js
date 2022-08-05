@@ -8,10 +8,6 @@ const Constants = commonServices.Constants;
 import ParticipantsService from '../services/ParticipantsService.js';
 import SitesService from '../services/SitesService.js';
 
-import eventBusService from '../services/EventBusService.js';
-import { Topics } from '../constants/topics.js';
-import { senderType } from '../constants/participant.js';
-
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
 
@@ -21,13 +17,6 @@ export default class ListTrialsController extends WebcController {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = trialTableHeaders;
-
-  // countries = {
-  //   label: 'Select country',
-  //   placeholder: 'Please select an option',
-  //   required: false,
-  //   options: [],
-  // };
 
   statuses = {
     label: 'Select a status',
@@ -84,18 +73,17 @@ export default class ListTrialsController extends WebcController {
     this.CommunicationService = getCommunicationServiceInstance();
 
     this.model.publicDidReady = false;
-    this.CommunicationService.onPrimaryDidReady((err, didDocument)=>{
-
+    this.CommunicationService.onPrimaryDidReady((err)=>{
       if(err){
         throw err;
       }
+
       this.model.publicDidReady = true;
-    })
+    });
 
     this.model = {
       statuses: this.statuses,
       stages: this.stages,
-      // countries: this.countries,
       search: this.search,
       trials: [],
       pagination: this.pagination,
@@ -117,12 +105,6 @@ export default class ListTrialsController extends WebcController {
       console.log('DATA MESSAGE:', data);
       data = JSON.parse(data);
       switch (data.operation) {
-        // case Constants.MESSAGES.SPONSOR.SIGN_ECOSENT:
-        // case Constants.MESSAGES.SPONSOR.UPDATE_ECOSENT: {
-        //   await this.participantsService.updateParticipant(data.useCaseSpecifics, data.ssi, data.senderIdentity);
-        //   eventBusService.emitEventListeners(Topics.RefreshParticipants + data.useCaseSpecifics.trialSSI, data);
-        //   break;
-        // }
         case Constants.MESSAGES.SPONSOR.UPDATE_SITE_STATUS: {
           if (data.stageInfo.siteSSI) {
             return await this.sitesService.updateSiteStage(data.stageInfo.siteSSI);
@@ -175,7 +157,6 @@ export default class ListTrialsController extends WebcController {
     try {
       window.WebCardinal.loader.hidden = false;
       this.trials = await this.trialsService.getTrials();
-      // this.updateCountryOptions(this.trials);
       this.setTrialsModel(this.trials);
       window.WebCardinal.loader.hidden = true;
     } catch (error) {
@@ -201,9 +182,6 @@ export default class ListTrialsController extends WebcController {
   filterData() {
     let result = this.trials;
 
-    // if (this.model.countries.value) {
-    //   result = result.filter((x) => x.countries.includes(this.model.countries.value));
-    // }
     if (this.model.statuses.value) {
       result = result.filter((x) => x.status === this.model.statuses.value);
     }
@@ -217,7 +195,7 @@ export default class ListTrialsController extends WebcController {
     this.setTrialsModel(result);
   }
 
-  showInformationModal(title, message, alertType) {
+  showInformationModal(title, message) {
     this.showErrorModal(
       message,
       title,
@@ -281,21 +259,6 @@ export default class ListTrialsController extends WebcController {
       );
     });
 
-    // this.on('delete-trial', async (event) => {
-    //   try {
-    //     const trial = await this.trialsService.getTrialFromDB(event.data);
-    //     const sites = await this.sitesService.getSites(trial.keySSI);
-    //     await this.trialsService.deleteTrial(event.data);
-    //     this.showInformationModal('Result', 'Trial deleted successfully', 'toast');
-    //     this.getTrials();
-    //     sites.forEach((site) => {
-    //       this.sendMessageToHco('delete-trial', event.data, 'the trial was removed ', site.did);
-    //     });
-    //   } catch (error) {
-    //     this.showInformationModal('Result', 'ERROR: The was an error, trial cannot be deleted right now', 'toast');
-    //   }
-    // });
-
     this.onTagClick('view-trial-sites', async (model) => {
       this.navigateToPageTag('sites', {
         id: model.id,
@@ -344,9 +307,34 @@ export default class ListTrialsController extends WebcController {
       );
     });
 
+    this.onTagClick('set-recruitment-period', (model, target, event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const onCloseHandler = () => {};
+      const recruitmentPeriodSetHandler = async (event) => {
+        window.WebCardinal.loader.hidden = false;
+        const response = event.detail;
+        const recruitmentPeriod = {
+          ...response,
+          toShowDate: new Date(response.startDate).toLocaleDateString() + ' - ' + new Date(response.endDate).toLocaleDateString()
+        };
+        await this.trialsService.updateTrialDetails(model, {recruitmentPeriod});
+        await this.getTrials();
+        window.WebCardinal.loader.hidden = true;
+      }
+      const modalConfiguration = {
+        controller: 'modals/EditRecruitmentPeriodController',
+        disableExpanding: false,
+        disableBackdropClosing: true,
+        title: 'Edit Recruitment Period',
+        recruitmentPeriod: model.recruitmentPeriod
+      };
+
+      this.showModalFromTemplate('edit-recruitment-period', recruitmentPeriodSetHandler, onCloseHandler, modalConfiguration);
+    });
+
     this.onTagClick('filters-cleared', async () => {
       this.model.clearButtonDisabled = true;
-      // this.model.countries.value = null;
       this.model.statuses.value = null;
       this.model.stages.value = null;
       this.model.search.value = null;

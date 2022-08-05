@@ -127,4 +127,16 @@ export default class TrialsService extends DSUService {
 
     return result[0].status === 'fulfilled' ? result[0].value : null;
   }
+
+  async updateTrialDetails(trial, trialNewDetails) {
+    const trialDb = await this.getTrialFromDB(trial.id);
+    const trialDSU = await this.getEntityAsync(trial.uid);
+
+    const updateTrialDB = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, {
+      ...trialDb,
+      ...trialNewDetails,
+    });
+    const updatedTrialDSU = this.updateEntityAsync({ ...trialDSU, ...trialNewDetails });
+    return await Promise.allSettled([updateTrialDB, updatedTrialDSU]);
+  }
 }

@@ -48,14 +48,6 @@ export const trialTableHeaders = [
     desc: null,
   },
   {
-    column: 'stage',
-    label: 'Stage',
-    notSortable: false,
-    type: 'string',
-    asc: null,
-    desc: null,
-  },
-  {
     column: null,
     label: 'Options',
     notSortable: true,
