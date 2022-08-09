@@ -1,21 +1,27 @@
-<webc-container controller="TableTemplateController" data-view-model="@" class="data-table">
-  <webc-datatable datasource="@dataSource" class="trials-list-table common-datatable dt-5-col">
-    <div slot="header" class="table-header" data-for="@headerItems" style="display: contents">
-      <span class="py-2">{{ @name }}</span>
-    </div>
+<webc-container class="common-datatable dt-5-col" controller="TableTemplateController" data-view-model="@">
+    <webc-datatable datasource="@dataSource">
+        <div slot="header">Trial Number / ID</div>
+        <div slot="header">Trial Name</div>
+        <div slot="header">Created</div>
+        <div slot="header">Status</div>
+        <div slot="header">Options</div>
 
-    <div class="">{{@id}}</div>
-    <div class="">{{@name}}</div>
-    <div class="">{{@created}}</div>
-    <div class="">{{@status}}</div>
-    <div class="">
-      <button data-tag="view-trial-status" class="btn btn-bare btn-link">Status</button> |
-      <button data-tag="view-trial-consents" class="btn btn-bare btn-link">Consents</button> |
-      <button data-tag="view-trial-visits" class="btn btn-bare btn-link">Visits</button> |
-      <button data-tag="view-trial-sites" class="btn btn-bare btn-link">Sites</button> |
-      <button data-tag="set-recruitment-period" class="btn btn-bare btn-link">Recruitment Period</button>
-    </div>
+        <div class="cell">{{@id}}</div>
+        <div class="cell">{{@name}}</div>
+        <div class="cell">{{@created}}</div>
+        <div class="cell">{{@status}}</div>
+        <div class="cell">
+            <button class="btn btn-bare btn-link" data-tag="view-trial-status">Status</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-trial-consents">Consents</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-trial-visits">Visits</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="set-recruitment-period">Recruitment Period</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-trial-sites">Sites</button>
+        </div>
 
-    <div slot="no-data">There are no items to display</div>
-  </webc-datatable>
+        <div slot="no-data">There are no items to display</div>
+    </webc-datatable>
 </webc-container>

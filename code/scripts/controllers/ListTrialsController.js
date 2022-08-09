@@ -81,6 +81,11 @@ export default class ListTrialsController extends WebcController {
       clearButtonDisabled: true,
       type: 'trials',
       tableLength: 7,
+      breadcrumb: [{
+        label: "Trials",
+        tag: "trials",
+        state: {}
+      }]
     };
 
     this.listenForMessages();
@@ -246,6 +251,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -254,6 +260,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -262,6 +269,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 

@@ -1,21 +1,27 @@
-<webc-container controller="TableTemplateController" data-view-model="@" class="sites-data-table data-table">
-  <webc-datatable datasource="@dataSource" class="table-cell-web align-items-center justify-content-center">
-    <div slot="header" class="table-header" data-for="@headerItems" style="display: contents">
-      <span class="py-2">{{ @name }}</span>
-    </div>
+<webc-container class="common-datatable dt-7-col" controller="TableTemplateController" data-view-model="@">
+    <webc-datatable datasource="@dataSource">
+        <div slot="header">Site Name</div>
+        <div slot="header">Site Number / ID</div>
+        <div slot="header">Country</div>
+        <div slot="header">Status</div>
+        <div slot="header">Stage</div>
+        <div slot="header">Contact Data</div>
+        <div slot="header">Options</div>
 
-    <div class="">{{@siteName}}</div>
-    <div class="">{{@id}}</div>
-    <div class="">{{@country}}</div>
-    <div class="">{{@status}}</div>
-    <div class="">{{@stage}}</div>
-    <div class="">{{@name}}</div>
-    <div class="">
-      <button data-tag="view-site-consents" class="btn btn-bare btn-link">Consents</button> |
-      <button data-tag="view-site-subjects" class="btn btn-bare btn-link">Subjects</button> |
-      <button data-tag="edit-site-contact" class="btn btn-bare btn-link">Edit Contact</button>
-    </div>
+        <div class="cell">{{@siteName}}</div>
+        <div class="cell">{{@id}}</div>
+        <div class="cell">{{@country}}</div>
+        <div class="cell">{{@status}}</div>
+        <div class="cell">{{@stage}}</div>
+        <div class="cell">{{@name}}</div>
+        <div class="cell">
+            <button class="btn btn-bare btn-link" data-tag="view-site-consents">Consents</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-site-subjects">Subjects</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="edit-site-contact">Edit Contact</button>
+        </div>
 
-    <div slot="no-data">There are no items to display</div>
-  </webc-datatable>
+        <div slot="no-data">There are no items to display</div>
+    </webc-datatable>
 </webc-container>

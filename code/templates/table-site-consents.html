@@ -1,19 +1,23 @@
-<webc-container controller="TableTemplateController" data-view-model="@" class="sites-consents-data-table data-table">
-  <webc-datatable datasource="@dataSource" class="table-cell-web align-items-center justify-content-center">
-    <div slot="header" class="table-header" data-for="@headerItems" style="display: contents">
-      <span class="py-2">{{ @name }}</span>
-    </div>
+<webc-container class="common-datatable dt-5-col" controller="TableTemplateController" data-view-model="@">
+    <webc-datatable datasource="@dataSource">
+        <div slot="header">Site Cons. Name</div>
+        <div slot="header">Ongoing Main Cons.</div>
+        <div slot="header">Date</div>
+        <div slot="header">Type</div>
+        <div slot="header">Options</div>
 
-    <div class="">{{@siteConsentNameVer}}</div>
-    <div class="">{{@trialConsentNameVer}}</div>
-    <div class="">{{@versionDate}}</div>
-    <div class="">{{@type}}</div>
-    <div class="">
-      <button data-tag="view-attachment" class="btn btn-bare btn-link">Preview</button> |
-      <button data-tag="view-site-consent-history" class="btn btn-bare btn-link">Consent History</button> |
-      <button data-tag="add-site-consent" class="btn btn-bare btn-link">Add Version</button>
-    </div>
+        <div class="cell">{{@siteConsentNameVer}}</div>
+        <div class="cell">{{@trialConsentNameVer}}</div>
+        <div class="cell">{{@versionDate}}</div>
+        <div class="cell">{{@type}}</div>
+        <div class="cell">
+            <button class="btn btn-bare btn-link" data-tag="view-attachment">Preview</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-site-consent-history">Consent History</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="add-site-consent">Add Version</button>
+        </div>
 
-    <div slot="no-data">There are no items to display</div>
-  </webc-datatable>
+        <div slot="no-data">There are no items to display</div>
+    </webc-datatable>
 </webc-container>

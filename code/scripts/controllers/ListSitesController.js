@@ -3,16 +3,14 @@ const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { siteStatusesEnum, getActivatedSiteStagesEnum, siteTableHeaders } from '../constants/site.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 const Constants = commonServices.Constants;
 import SitesService from '../services/SitesService.js';
 
 import eventBusService from '../services/EventBusService.js';
 import { Topics } from '../constants/topics.js';
 
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListSitesController extends WebcController {
+export default class ListSitesController extends BreadCrumbManager {
   statusesArray = Object.entries(siteStatusesEnum).map(([_k, v]) => v);
   stagesArray = Object.entries(getActivatedSiteStagesEnum()).map(([_k, v]) => v);
   itemsPerPageArray = [5, 10, 15, 20, 30];
@@ -97,6 +95,11 @@ export default class ListSitesController extends WebcController {
       type: 'sites',
       tableLength: 7,
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: "Sites",
+      tag: "sites"
+    });
 
     this.attachEvents();
 

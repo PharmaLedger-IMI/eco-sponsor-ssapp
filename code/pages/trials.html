@@ -1,60 +1,58 @@
-<div class="main-container">
-    <div class="trial-header">
-        <h1 class="trial-title"><label>Trials</label></h1>
-    </div>
-    <div class="page-content">
-        <div class="container">
-            <link rel="stylesheet" href="assets/css/trials.css"/>
-            <webc-container controller="ListTrialsController">
-                <div data-if="@publicDidReady">
+<webc-container controller="ListTrialsController">
+    <div class="container main-container common-2-rows-grid">
+        <div class="container flex-container">
+            <breadcrumb-navigator></breadcrumb-navigator>
+            <h5 class="generic-title">Trials</h5>
+            <webc-template template="alert" data-view-model="@" class="w-100"></webc-template>
+        </div>
 
-                  <div slot="true" class="d-flex flex-wrap justify-content-between align-items-center py-3 mb-5">
-                        <div class="d-flex flex-column">
-                            <label>{{ @statuses.label }}</label>
-                            <select class="form-control" data-for="@statuses.options" value="@statuses.value">
-                                <option value="@value">{{@label}}</option>
-                            </select>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <label>{{ @search.label }}</label>
-                            <input class="form-control" id="search-field" data-view-model="@search"
-                                   event-name="filters-changed"/>
-                        </div>
-                        <div class="align-self-end">
-                            <button class="btn btn-primary" disabled="@clearButtonDisabled" data-tag="filters-cleared">
-                                Clear filters
-                            </button>
-                        </div>
-                        <div class="align-self-end">
-                            <button class="btn btn-primary" data-tag="add-trial">Add Trial</button>
-                        </div>
-                  </div>
-
-                  <div slot="true" data-if="@trialArrayNotEmpty" >
-                    <div slot="true">
-                      <webc-template template="table-template" data-view-model="@"></webc-template>
+        <main data-if="@publicDidReady">
+            <div slot="false"
+                 class="d-flex flex-column align-items-center justify-content-center wallet-initializing-info">
+                <div class="row">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
-                    <div slot="false"
-                             style="font-size: 20px; display: flex; flex-direction: row; justify-content: center;">
-                      <div>No trials available.</div>
-                    </div>
-                  </div>
+                </div>
+                <div class="row">
+                    <strong>Wallet is initializing...</strong>
+                </div>
+            </div>
 
-                  <div slot="false"
-                         class="d-flex flex-column align-items-center justify-content-center wallet-initializing-info">
-                        <div class="row">
-                            <div class="spinner-border text-info" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <strong>Wallet is initializing...</strong>
-                        </div>
+            <div class="d-flex flex-column w-100 h-100" slot="true">
+                <div class="table-filter-wrapper actions-no-4">
+                    <div>
+                        <label>{{ @search.label }}</label>
+                        <input class="form-control" id="search-field" data-view-model="@search"
+                               event-name="filters-changed"/>
                     </div>
-
+                    <div>
+                        <label>{{ @statuses.label }}</label>
+                        <select class="form-control" data-for="@statuses.options" value="@statuses.value">
+                            <option value="@value">{{@label}}</option>
+                        </select>
+                    </div>
+                    <div class="option-button">
+                        <button class="btn btn-primary" disabled="@clearButtonDisabled" data-tag="filters-cleared">
+                            Clear filters
+                        </button>
+                    </div>
+                    <div class="option-button">
+                        <button class="btn btn-primary" data-tag="add-trial">Add Trial</button>
+                    </div>
                 </div>
 
-            </webc-container>
-        </div>
+                <div class="w-100 h-100" data-if="@trialArrayNotEmpty">
+                    <div slot="true">
+                        <webc-template template="table-template" data-view-model="@"></webc-template>
+                    </div>
+
+                    <webc-spinner slot="loading"></webc-spinner>
+                    <div slot="false" class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">No trials available yet!</h4>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-</div>
+</webc-container>

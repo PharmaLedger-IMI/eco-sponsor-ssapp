@@ -1,18 +1,21 @@
-<webc-container controller="TableTemplateController" data-view-model="@" class="participants-data-table data-table">
-  <webc-datatable datasource="@dataSource" class="table-cell-web align-items-center justify-content-center">
-    <div slot="header" class="table-header" data-for="@headerItems" style="display: contents">
-      <span class="py-2">{{ @name }}</span>
-    </div>
+<webc-container class="common-datatable dt-4-col" controller="TableTemplateController" data-view-model="@">
+    <webc-datatable datasource="@dataSource">
+        <div slot="header">Participant ID</div>
+        <div slot="header">Status</div>
+        <div slot="header">Enrolled Date</div>
+        <div slot="header">Options</div>
 
-    <div class="">{{@number}}</div>
-    <div class="">{{@status}}</div>
-    <div class="">{{@enrolledDate}}</div>
-    <div class="">
-      <button data-tag="view-participant-status" class="btn btn-bare btn-link">Status</button> |
-      <button data-tag="view-participant-consents" class="btn btn-bare btn-link">Consents</button> |
-      <button data-tag="view-participant-devices" class="btn btn-bare btn-link">Devices</button>
-    </div>
+        <div class="cell">{{@number}}</div>
+        <div class="cell">{{@status}}</div>
+        <div class="cell">{{@enrolledDate}}</div>
+        <div class="cell">
+            <button class="btn btn-bare btn-link" data-tag="view-participant-status">Status</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-participant-consents">Consents</button>
+            |
+            <button class="btn btn-bare btn-link" data-tag="view-participant-devices">Devices</button>
+        </div>
 
-    <div slot="no-data">There are no items to display</div>
-  </webc-datatable>
+        <div slot="no-data">There are no items to display</div>
+    </webc-datatable>
 </webc-container>
