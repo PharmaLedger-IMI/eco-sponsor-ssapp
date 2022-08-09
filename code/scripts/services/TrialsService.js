@@ -3,7 +3,6 @@ const commonServices = require('common-services');
 const SharedStorage = commonServices.SharedStorage;
 const DSUService = commonServices.DSUService;
 import { trialStatusesEnum } from '../constants/trial.js';
-import { trialStagesEnum } from '../constants/trial.js';
 import VisitsService from './VisitsService.js';
 
 export default class TrialsService extends DSUService {
@@ -40,7 +39,6 @@ export default class TrialsService extends DSUService {
 
     const trial = await this.saveEntityAsync({
       ...data,
-      stage: trialStagesEnum.Created,
       status: trialStatusesEnum.Active,
       created: new Date().toISOString(),
     });

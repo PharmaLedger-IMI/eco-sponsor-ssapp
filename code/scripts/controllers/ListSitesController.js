@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
-import { siteStatusesEnum, siteStagesEnum, siteTableHeaders } from '../constants/site.js';
+import { siteStatusesEnum, getActivatedSiteStagesEnum, siteTableHeaders } from '../constants/site.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const Constants = commonServices.Constants;
 import SitesService from '../services/SitesService.js';
@@ -14,7 +14,7 @@ const { WebcController } = WebCardinal.controllers;
 
 export default class ListSitesController extends WebcController {
   statusesArray = Object.entries(siteStatusesEnum).map(([_k, v]) => v);
-  stagesArray = Object.entries(siteStagesEnum).map(([_k, v]) => v);
+  stagesArray = Object.entries(getActivatedSiteStagesEnum()).map(([_k, v]) => v);
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = siteTableHeaders;
@@ -30,20 +30,23 @@ export default class ListSitesController extends WebcController {
     label: 'Select a status',
     placeholder: 'Please select an option',
     required: false,
-    options: this.statusesArray.map((x) => ({
+    options: [{label: "All statuses", value: ""}].concat(this.statusesArray.map((x) => ({
       label: x,
       value: x,
-    })),
+    }))),
+    value:""
   };
 
   stages = {
     label: 'Select a stage',
     placeholder: 'Please select an option',
     required: false,
-    options: this.stagesArray.map((x) => ({
-      label: x,
-      value: x,
-    })),
+    options: [{label: "All Stages", value: "", disabled: false}].concat(this.stagesArray.map((x) => ({
+      label: x.value,
+      value: x.value,
+      disabled: x.disabled
+    }))),
+    value:""
   };
 
   search = {

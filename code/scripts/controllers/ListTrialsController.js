@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
-import { trialStatusesEnum, trialTableHeaders, trialStagesEnum } from '../constants/trial.js';
+import { trialStatusesEnum, trialTableHeaders } from '../constants/trial.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const MessageHandlerService = commonServices.MessageHandlerService;
 const Constants = commonServices.Constants;
@@ -13,7 +13,7 @@ const { WebcController } = WebCardinal.controllers;
 
 export default class ListTrialsController extends WebcController {
   statusesArray = Object.entries(trialStatusesEnum).map(([_k, v]) => v);
-  stagesArray = Object.entries(trialStagesEnum).map(([_k, v]) => v);
+
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = trialTableHeaders;
@@ -22,20 +22,11 @@ export default class ListTrialsController extends WebcController {
     label: 'Select a status',
     placeholder: 'Please select an option',
     required: false,
-    options: this.statusesArray.map((x) => ({
+    options: [{label: "All statuses", value: ""}].concat(this.statusesArray.map((x) => ({
       label: x,
       value: x,
-    })),
-  };
-
-  stages = {
-    label: 'Select a stage',
-    placeholder: 'Please select an option',
-    required: false,
-    options: this.stagesArray.map((x) => ({
-      label: x,
-      value: x,
-    })),
+    }))),
+    value:""
   };
 
   search = {
@@ -83,7 +74,6 @@ export default class ListTrialsController extends WebcController {
 
     this.model = {
       statuses: this.statuses,
-      stages: this.stages,
       search: this.search,
       trials: [],
       pagination: this.pagination,
@@ -185,9 +175,6 @@ export default class ListTrialsController extends WebcController {
     if (this.model.statuses.value) {
       result = result.filter((x) => x.status === this.model.statuses.value);
     }
-    if (this.model.stages.value) {
-      result = result.filter((x) => x.stage === this.model.stages.value);
-    }
     if (this.model.search.value && this.model.search.value !== '') {
       result = result.filter((x) => x.name.toUpperCase().search(this.model.search.value.toUpperCase()) !== -1);
     }
@@ -210,11 +197,6 @@ export default class ListTrialsController extends WebcController {
 
   attachEvents() {
     this.model.onChange('statuses.value', () => {
-      this.model.clearButtonDisabled = false;
-      this.filterData();
-    });
-
-    this.model.onChange('stages.value', () => {
       this.model.clearButtonDisabled = false;
       this.filterData();
     });
@@ -336,7 +318,6 @@ export default class ListTrialsController extends WebcController {
     this.onTagClick('filters-cleared', async () => {
       this.model.clearButtonDisabled = true;
       this.model.statuses.value = null;
-      this.model.stages.value = null;
       this.model.search.value = null;
       this.filterData();
     });

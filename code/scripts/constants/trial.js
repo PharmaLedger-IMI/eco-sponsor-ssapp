@@ -4,15 +4,6 @@ export const trialStatusesEnum = {
   Cancelled: 'Cancelled',
 };
 
-export const trialStagesEnum = {
-  Created: 'Created',
-  Submission: 'Submission',
-  Initiated: 'Initiated',
-  Recruiting: 'Recruiting',
-  Enrolling: 'Enrolling',
-  Completed: 'Completed',
-};
-
 export const trialTableHeaders = [
   {
     column: 'id',

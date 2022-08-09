@@ -13,6 +13,21 @@ export const siteStagesEnum = {
   Completed: 'Completed',
 };
 
+export const getActivatedSiteStagesEnum = ()=>{
+  const {Submission,Initiated} = siteStagesEnum;
+  const disabledStatuses =  [Submission,Initiated];
+  const activeSiteStagesEnum = {};
+
+  for(let status in siteStagesEnum){
+    activeSiteStagesEnum[status] = {
+      value:siteStagesEnum[status],
+      disabled: disabledStatuses.includes(siteStagesEnum[status])
+    }
+  }
+
+  return activeSiteStagesEnum;
+}
+
 export const siteTableHeaders = [
   {
     column: 'name',

@@ -3,7 +3,6 @@ const commonServices = require('common-services');
 const SharedStorage = commonServices.SharedStorage;
 const DSUService = commonServices.DSUService;
 import { siteStagesEnum, siteStatusesEnum } from '../constants/site.js';
-import { trialStagesEnum } from '../constants/trial.js';
 import VisitsService from './VisitsService.js';
 import TrialsService from './TrialsService.js';
 export default class SitesService extends DSUService {
@@ -166,10 +165,6 @@ export default class SitesService extends DSUService {
       ...site,
       stage: statusDSU.stage,
     });
-
-    if (trialDB.stage === trialStagesEnum.Created) {
-      await this.trialsService.changeTrialStage(trialStagesEnum.Recruiting, trialDB);
-    }
 
     await this.storageService.commitBatch();
     return updatedSite;
