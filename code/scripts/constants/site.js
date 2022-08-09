@@ -10,7 +10,6 @@ export const siteStagesEnum = {
   Initiated: 'Initiated',
   Recruiting: 'Recruiting',
   Enrolling: 'Enrolling',
-  Conducting: 'Conducting',
   Completed: 'Completed',
 };
 
