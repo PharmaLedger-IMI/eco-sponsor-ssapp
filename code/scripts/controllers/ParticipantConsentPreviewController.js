@@ -1,24 +1,20 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 const FileDownloaderService = commonServices.FileDownloaderService;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ParticipantConsentPreviewController extends WebcController {
+export default class ParticipantConsentPreviewController extends BreadCrumbManager {
   constructor(...props) {
     super(...props);
 
-    let { participantUid, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid, consent } =
+    let { participantUid, participantId, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid, consent } =
       this.history.location.state;
     this.fileDownloaderService = new FileDownloaderService(this.DSUStorage);
 
     this.model = {
       consent,
       participantUid,
+      participantId,
       trialId,
       trialKeySSI,
       trialUid,
@@ -30,10 +26,13 @@ export default class ParticipantConsentPreviewController extends WebcController 
         pagesNo: 0,
       },
       showPageUp: false,
-      showPageDown: true,
+      showPageDown: true
     };
 
-    this.attachEvents();
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${participantId} / Site Participant's Consent Preview`,
+      tag: `site-participant-preview`
+    });
 
     this.init();
   }
@@ -46,50 +45,6 @@ export default class ParticipantConsentPreviewController extends WebcController 
       this.model.consent.version
     );
     this.downloadFile(econsentFilePath, this.model.consent.attachment);
-  }
-
-  attachEvents() {
-    this.onTagClick('navigate-to-participant-consents', async (model) => {
-      this.navigateToPageTag('site-participants-consents', {
-        participantUid: this.model.participantUid,
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
-      });
-    });
-
-    this.onTagClick('view-participant-consent-preview', async (model) => {
-      this.navigateToPageTag('site-participant-preview', {
-        participantUid: this.model.participantUid,
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
-        data: model.versions.map((x) => ({ ...model, ...x })),
-      });
-    });
-    this.onTagClick('navigate-to-sites', async () => {
-      this.navigateToPageTag('sites', {
-        id: this.model.trialId,
-        keySSI: this.model.trialKeySSI,
-        uid: this.model.trialUid,
-      });
-    });
-    this.onTagClick('navigate-to-subjects', async (model) => {
-      this.navigateToPageTag('site-participants', {
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
-      });
-    });
   }
 
   downloadFile = async (filePath, fileName) => {

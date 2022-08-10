@@ -2,7 +2,6 @@
 const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { participantTableHeaders } from '../constants/participant.js';
-const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ParticipantsService from '../services/ParticipantsService.js';
@@ -124,6 +123,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
     this.onTagClick('view-participant-consents', async (model) => {
       this.navigateToPageTag('site-participants-consents', {
         participantUid: model.uid,
+        participantId: model.number,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
         trialUid: this.model.trialUid,
@@ -137,6 +137,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
     this.onTagClick('view-participant-status', async (model) => {
       this.navigateToPageTag('site-participant-status', {
         participantUid: model.uid,
+        participantId: model.number,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
         trialUid: this.model.trialUid,
@@ -150,6 +151,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
     this.onTagClick('view-participant-devices', async (model) => {
       this.navigateToPageTag('site-participant-devices', {
         participantUid: model.uid,
+        participantId: model.number,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
         trialUid: this.model.trialUid,
@@ -158,15 +160,6 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
         siteUid: this.model.siteUid,
         breadcrumb: this.model.toObject('breadcrumb')
       });
-    });
-  }
-
-  sendMessageToHco(operation, ssi, shortMessage, receiverDid) {
-    let communicationService = getCommunicationServiceInstance();
-    communicationService.sendMessage(receiverDid, {
-      operation: operation,
-      ssi: ssi,
-      shortDescription: shortMessage,
     });
   }
 }

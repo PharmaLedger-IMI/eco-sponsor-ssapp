@@ -1,20 +1,12 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import TrialsService from '../services/TrialsService.js';
 import { participantConsentsTableHeaders } from '../constants/participant.js';
-const { getCommunicationServiceInstance } = commonServices.CommunicationService;
-const { getDidServiceInstance } = commonServices.DidService;
 import SitesService from '../services/SitesService.js';
 import ParticipantsService from '../services/ParticipantsService.js';
-const Constants = commonServices.Constants;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListParticipantsDevicesController extends WebcController {
+export default class ListParticipantsDevicesController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = participantConsentsTableHeaders;
@@ -44,10 +36,11 @@ export default class ListParticipantsDevicesController extends WebcController {
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
     this.participantsService = new ParticipantsService(this.DSUStorage);
-    let { participantUid, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid } = this.history.location.state;
+    let { participantUid, participantId, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid } = this.history.location.state;
 
     this.model = {
       participantUid,
+      participantId,
       trialId,
       trialKeySSI,
       trialUid,
@@ -63,8 +56,13 @@ export default class ListParticipantsDevicesController extends WebcController {
       clearButtonDisabled: true,
       type: 'consents',
       tableLength: 7,
-      addConsentButtonDisabled: true,
+      addConsentButtonDisabled: true
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${participantId} / Site Participant's Devices`,
+      tag: `site-participant-devices`
+    });
 
     this.attachEvents();
 
@@ -99,52 +97,11 @@ export default class ListParticipantsDevicesController extends WebcController {
     // window.WebCardinal.loader.hidden = true;
   }
 
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
-  }
-
   attachEvents() {
-    // this.model.addExpression(
-    //   'consentsArrayNotEmpty',
-    //   () => !!(this.model.data && Array.isArray(this.model.data) && this.model.data.length > 0),
-    //   'data'
-    // );
-
-    this.onTagClick('navigate-to-sites', async () => {
-      this.navigateToPageTag('sites', {
-        id: this.model.trialId,
-        keySSI: this.model.trialKeySSI,
-        uid: this.model.trialUid,
-      });
-    });
-
-    this.onTagClick('navigate-to-subjects', async (model) => {
-      this.navigateToPageTag('site-participants', {
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
-      });
-    });
-  }
-
-  sendMessageToHco(operation, ssi, shortMessage, receiverDid) {
-    let communicationService = getCommunicationServiceInstance();
-    communicationService.sendMessage(receiverDid, {
-      operation: operation,
-      ssi: ssi,
-      shortDescription: shortMessage,
-    });
+    this.model.addExpression(
+      'consentsArrayNotEmpty',
+      () => !!(this.model.data && Array.isArray(this.model.data) && this.model.data.length > 0),
+      'data'
+    );
   }
 }
