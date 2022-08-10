@@ -3,18 +3,11 @@ const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { siteConsentTableHeaders, consentTypeEnum } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
-const { getDidServiceInstance } = commonServices.DidService;
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ConsentService from '../services/ConsentService.js';
-const Constants = commonServices.Constants;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListSiteConsentsController extends WebcController {
+export default class ListSiteConsentsController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = siteConsentTableHeaders;
@@ -65,6 +58,11 @@ export default class ListSiteConsentsController extends WebcController {
       addConsentButtonDisabled: true,
       mandatoryExists: null,
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${siteId} / Site Consents`,
+      tag: `site-consents`
+    });
 
     this.attachEvents();
 
@@ -227,6 +225,7 @@ export default class ListSiteConsentsController extends WebcController {
         siteKeySSI: this.model.siteKeySSI,
         siteUid: this.model.siteUid,
         data: JSON.parse(JSON.stringify(data)),
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -240,14 +239,7 @@ export default class ListSiteConsentsController extends WebcController {
         siteUid: this.model.siteUid,
         data: model,
         history: null,
-      });
-    });
-
-    this.onTagClick('navigate-to-sites', async () => {
-      this.navigateToPageTag('sites', {
-        id: this.model.trialId,
-        keySSI: this.model.trialKeySSI,
-        uid: this.model.trialUid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
   }
