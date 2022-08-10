@@ -1,5 +1,5 @@
-import { consentTypeEnum } from '../constants/consent.js';
-import ConsentService from '../services/ConsentService.js';
+import { consentTypeEnum } from '../../constants/consent.js';
+import ConsentService from '../../services/ConsentService.js';
 
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;

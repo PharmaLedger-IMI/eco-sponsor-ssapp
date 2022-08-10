@@ -1,4 +1,4 @@
-import SitesService from '../services/SitesService.js';
+import SitesService from '../../services/SitesService.js';
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
 

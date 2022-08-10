@@ -177,6 +177,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         keySSI: this.model.keySSI,
         uid: this.model.uid,
         data: JSON.parse(JSON.stringify(data)),
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -187,6 +188,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         uid: this.model.uid,
         data: model,
         history: null,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
   }

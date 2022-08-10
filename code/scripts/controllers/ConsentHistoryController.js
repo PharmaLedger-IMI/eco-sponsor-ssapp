@@ -1,14 +1,9 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import { consentTableHeaders } from '../constants/consent.js';
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ConsentHistoryController extends WebcController {
+export default class ConsentHistoryController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = consentTableHeaders;
@@ -45,8 +40,13 @@ export default class ConsentHistoryController extends WebcController {
       headers: this.headers,
       clearButtonDisabled: true,
       type: 'consents',
-      tableLength: 7,
+      tableLength: 7
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${data[0].name} / Consent History`,
+      tag: `consent-history`
+    });
 
     this.attachEvents();
 
@@ -56,14 +56,6 @@ export default class ConsentHistoryController extends WebcController {
   async init() {}
 
   attachEvents() {
-    this.onTagClick('navigate-to-consents', async () => {
-      this.navigateToPageTag('trial-consents', {
-        id: this.model.id,
-        keySSI: this.model.keySSI,
-        uid: this.model.uid,
-      });
-    });
-
     this.onTagClick('view-attachment', async (model) => {
       this.navigateToPageTag('preview-consent', {
         id: this.model.id,
@@ -71,6 +63,7 @@ export default class ConsentHistoryController extends WebcController {
         uid: this.model.uid,
         data: model,
         history: JSON.parse(JSON.stringify(this.model.data)),
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
   }

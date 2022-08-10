@@ -1,13 +1,9 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 const FileDownloaderService = commonServices.FileDownloaderService;
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
 
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class PreviewConsentController extends WebcController {
+export default class PreviewConsentController extends BreadCrumbManager {
   constructor(...props) {
     super(...props);
     let { id, keySSI, uid, data, history } = this.history.location.state;
@@ -26,9 +22,12 @@ export default class PreviewConsentController extends WebcController {
       showPageDown: true,
     };
 
-    this.fileDownloaderService = new FileDownloaderService(this.DSUStorage);
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${data.name} / Preview Consent`,
+      tag: `preview-consent`
+    });
 
-    this.attachEvents();
+    this.fileDownloaderService = new FileDownloaderService(this.DSUStorage);
 
     this.init();
   }
@@ -41,25 +40,6 @@ export default class PreviewConsentController extends WebcController {
       this.model.consent.version
     );
     this.downloadFile(econsentFilePath, this.model.consent.attachment);
-  }
-
-  attachEvents() {
-    this.onTagClick('navigate-to-consents', async () => {
-      this.navigateToPageTag('trial-consents', {
-        id: this.model.id,
-        keySSI: this.model.keySSI,
-        uid: this.model.uid,
-      });
-    });
-
-    this.onTagClick('navigate-to-history', async () => {
-      this.navigateToPageTag('consent-history', {
-        id: this.model.id,
-        keySSI: this.model.keySSI,
-        uid: this.model.uid,
-        data: JSON.parse(JSON.stringify(this.model.history)),
-      });
-    });
   }
 
   downloadFile = async (filePath, fileName) => {

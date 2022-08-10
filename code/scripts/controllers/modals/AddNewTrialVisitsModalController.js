@@ -1,5 +1,5 @@
-import ConsentService from '../services/ConsentService.js';
-import VisitsService from '../services/VisitsService.js';
+import ConsentService from '../../services/ConsentService.js';
+import VisitsService from '../../services/VisitsService.js';
 
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;

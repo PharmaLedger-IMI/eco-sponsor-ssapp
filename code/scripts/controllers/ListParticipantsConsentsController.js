@@ -3,18 +3,11 @@ const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { participantConsentsTableHeaders } from '../constants/participant.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
-const { getDidServiceInstance } = commonServices.DidService;
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ParticipantsService from '../services/ParticipantsService.js';
-const Constants = commonServices.Constants;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListParticipantsConsentsController extends WebcController {
+export default class ListParticipantsConsentsController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = participantConsentsTableHeaders;
@@ -65,6 +58,11 @@ export default class ListParticipantsConsentsController extends WebcController {
       tableLength: 7,
       addConsentButtonDisabled: true,
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `Site Participant's Consents`,
+      tag: `site-participants-consents`
+    });
 
     this.attachEvents();
 
@@ -130,6 +128,7 @@ export default class ListParticipantsConsentsController extends WebcController {
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
         data: model.versions.map((x) => ({ ...model, ...x })),
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -143,25 +142,7 @@ export default class ListParticipantsConsentsController extends WebcController {
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
         consent: model,
-      });
-    });
-
-    this.onTagClick('navigate-to-sites', async () => {
-      this.navigateToPageTag('sites', {
-        id: this.model.trialId,
-        keySSI: this.model.trialKeySSI,
-        uid: this.model.trialUid,
-      });
-    });
-
-    this.onTagClick('navigate-to-subjects', async (model) => {
-      this.navigateToPageTag('site-participants', {
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
   }

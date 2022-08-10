@@ -1,5 +1,5 @@
-import ConsentService from '../services/ConsentService.js';
-import { consentTypeEnum } from '../constants/consent.js';
+import ConsentService from '../../services/ConsentService.js';
+import { consentTypeEnum } from '../../constants/consent.js';
 const commonServices = require('common-services');
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const Constants = commonServices.Constants;

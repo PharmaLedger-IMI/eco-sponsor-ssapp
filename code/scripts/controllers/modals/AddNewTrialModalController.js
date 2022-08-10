@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
-import TrialsService from '../services/TrialsService.js';
+import TrialsService from '../../services/TrialsService.js';
 const DidService = commonServices.DidService;
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;

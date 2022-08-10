@@ -1,5 +1,5 @@
-import { countryListAlpha2 } from '../constants/countries.js';
-import SitesService from '../services/SitesService.js';
+import { countryListAlpha2 } from '../../constants/countries.js';
+import SitesService from '../../services/SitesService.js';
 const commonServices = require('common-services');
 const { getDidServiceInstance } = commonServices.DidService;
 
