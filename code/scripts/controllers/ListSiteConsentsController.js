@@ -161,7 +161,7 @@ export default class ListSiteConsentsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewSiteConsentModalController',
+          controller: 'modals/AddNewSiteConsentModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           site: JSON.parse(JSON.stringify(this.model.site)),
@@ -200,7 +200,7 @@ export default class ListSiteConsentsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewSiteConsentModalController',
+          controller: 'modals/AddNewSiteConsentModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           site: JSON.parse(JSON.stringify(this.model.site)),

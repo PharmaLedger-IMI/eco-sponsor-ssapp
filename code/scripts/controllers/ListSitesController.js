@@ -93,12 +93,12 @@ export default class ListSitesController extends BreadCrumbManager {
       headers: this.headers,
       clearButtonDisabled: true,
       type: 'sites',
-      tableLength: 7,
+      tableLength: 7
     };
 
     this.model.breadcrumb = this.setBreadCrumb({
-      label: "Sites",
-      tag: "sites"
+      label: `${id} / Sites`,
+      tag: `sites`
     });
 
     this.attachEvents();
@@ -218,7 +218,7 @@ export default class ListSitesController extends BreadCrumbManager {
           }
         },
         {
-          controller: 'AddNewSiteModalController',
+          controller: 'modals/AddNewSiteModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           existingIds: _.flatten(this.model.sites.map((y) => y.id)) || [],
@@ -246,7 +246,7 @@ export default class ListSitesController extends BreadCrumbManager {
           }
         },
         {
-          controller: 'EditSiteContactModalController',
+          controller: 'modals/EditSiteContactModalController',
           disableExpanding: true,
           disableBackdropClosing: true,
           site: model,
@@ -262,6 +262,7 @@ export default class ListSitesController extends BreadCrumbManager {
         siteKeySSI: model.keySSI,
         siteId: model.id,
         siteUid: model.uid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -273,6 +274,7 @@ export default class ListSitesController extends BreadCrumbManager {
         siteKeySSI: model.keySSI,
         siteId: model.id,
         siteUid: model.uid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 

@@ -3,17 +3,12 @@ const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { consentTableHeaders } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ConsentService from '../services/ConsentService.js';
 import { consentTypeEnum } from '../constants/consent.js';
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListTrialConsentsController extends WebcController {
+export default class ListTrialConsentsController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = consentTableHeaders;
@@ -55,8 +50,13 @@ export default class ListTrialConsentsController extends WebcController {
       clearButtonDisabled: true,
       type: 'consents',
       tableLength: 7,
-      mandatoryExists: null,
+      mandatoryExists: null
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${id} / Consents`,
+      tag: `trial-consents`
+    });
 
     this.attachEvents();
 
@@ -123,7 +123,7 @@ export default class ListTrialConsentsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewTrialConsentModalController',
+          controller: 'modals/AddNewTrialConsentModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           isUpdate: false,
@@ -154,7 +154,7 @@ export default class ListTrialConsentsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewTrialConsentModalController',
+          controller: 'modals/AddNewTrialConsentModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           site: null,

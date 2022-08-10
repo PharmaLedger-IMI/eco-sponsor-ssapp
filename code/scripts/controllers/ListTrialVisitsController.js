@@ -87,7 +87,7 @@ export default class ListTrialVisitsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewTrialVisitsModalController',
+          controller: 'modals/AddNewTrialVisitsModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           consents: JSON.parse(JSON.stringify(this.model.consents)),

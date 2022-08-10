@@ -238,7 +238,7 @@ export default class ListTrialsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewTrialModalController',
+          controller: 'modals/AddNewTrialModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
           existingIds: this.trials.map((x) => x.id) || [],
@@ -289,7 +289,7 @@ export default class ListTrialsController extends WebcController {
           }
         },
         {
-          controller: 'AddNewTrialStatusModalController',
+          controller: 'modals/AddNewTrialStatusModalController',
           disableExpanding: true,
           disableBackdropClosing: true,
           trial: model,
