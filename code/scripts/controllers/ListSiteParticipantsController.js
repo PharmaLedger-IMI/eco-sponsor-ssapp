@@ -3,18 +3,12 @@ const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { participantTableHeaders } from '../constants/participant.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
-const { getDidServiceInstance } = commonServices.DidService;
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ParticipantsService from '../services/ParticipantsService.js';
 const Constants = commonServices.Constants;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListSiteParticipantsController extends WebcController {
+export default class ListSiteParticipantsController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = participantTableHeaders;
@@ -64,6 +58,11 @@ export default class ListSiteParticipantsController extends WebcController {
       tableLength: 7,
       addConsentButtonDisabled: true,
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `${siteId} / Participants`,
+      tag: `site-participants`
+    });
 
     this.attachEvents();
 
@@ -115,19 +114,6 @@ export default class ListSiteParticipantsController extends WebcController {
     }
   }
 
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
-  }
-
   attachEvents() {
     this.model.addExpression(
       'participantsArrayNotEmpty',
@@ -144,6 +130,7 @@ export default class ListSiteParticipantsController extends WebcController {
         siteKeySSI: this.model.siteKeySSI,
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -156,6 +143,7 @@ export default class ListSiteParticipantsController extends WebcController {
         siteKeySSI: this.model.siteKeySSI,
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
 
@@ -168,14 +156,7 @@ export default class ListSiteParticipantsController extends WebcController {
         siteKeySSI: this.model.siteKeySSI,
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
-      });
-    });
-
-    this.onTagClick('navigate-to-sites', async () => {
-      this.navigateToPageTag('sites', {
-        id: this.model.trialId,
-        keySSI: this.model.trialKeySSI,
-        uid: this.model.trialUid,
+        breadcrumb: this.model.toObject('breadcrumb')
       });
     });
   }

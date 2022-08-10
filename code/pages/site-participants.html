@@ -1,60 +1,48 @@
 <webc-container controller="ListSiteParticipantsController">
-  <link rel="stylesheet" href="assets/css/trials.css" />
-  <div class="main-container">
-    <div class="trial-header">
-      <h1 class="trial-title">
-        <webc-link tag="trials">Trials</webc-link>
-        <span> / </span>
-        <label>{{ @trialId }}</label>
-        <span> / </span>
-        <button
-          data-tag="navigate-to-sites"
-          class="btn btn-bare btn-link"
-          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
-        >
-          SITES
-        </button>
-        <span> / </span>
-        <label>{{ @siteId }}</label>
-        <span> / </span>
-        <label>Participants</label>
-      </h1>
-    </div>
-    <div class="page-content">
-      <div class="container">
-        <div data-if="@participantsArrayNotEmpty">
-          <div slot="true">
-            <div class="row statistics">
-              <div class="col-md-1">Planned</div>
-              <div class="col-md-1">Screened</div>
-              <div class="col-md-1">Enrolled</div>
-              <div class="col-md-2">Enrollment Percentage</div>
-              <div class="col-md-1">Withdrawn</div>
-              <div class="col-md-1">Declined</div>
-              <div class="col-md-2">End of treatment</div>
-              <div class="col-md-1">Completed</div>
-              <div class="col-md-1">Discontinued</div>
-              <div class="col-md-1">Scr. failed</div>
-            </div>
-            <div class="row statistics">
-              <div class="col-md-1">{{@statistics.planned}}</div>
-              <div class="col-md-1">{{@statistics.screened}}</div>
-              <div class="col-md-1">{{@statistics.enrolled}}</div>
-              <div class="col-md-2">{{@statistics.percentageEnrolled}} %</div>
-              <div class="col-md-1">{{@statistics.withdrew}}</div>
-              <div class="col-md-1">{{@statistics.declined}}</div>
-              <div class="col-md-2">{{@statistics.endOfTreatment}}</div>
-              <div class="col-md-1">{{@statistics.completed}}</div>
-              <div class="col-md-1">{{@statistics.discontinued}}</div>
-              <div class="col-md-1">{{@statistics.screenFailed}}</div>
-            </div>
-            <webc-template template="table-site-participants" data-view-model="@"></webc-template>
-          </div>
-          <div slot="false" style="font-size: 20px; display: flex; flex-direction: row; justify-content: center;">
-            <div>No participants added yet.</div>
-          </div>
+    <div class="container main-container common-2-rows-grid">
+        <div class="container flex-container">
+            <breadcrumb-navigator></breadcrumb-navigator>
+            <h5 class="generic-title">Site: {{@siteId}} - Participants</h5>
+            <webc-template class="w-100" data-view-model="@" template="alert"></webc-template>
         </div>
-      </div>
+
+        <main>
+            <div class="d-flex flex-column w-100 h-100">
+                <div class="w-100 h-100" data-if="@participantsArrayNotEmpty">
+                    <div slot="true">
+                        <div class="row statistics">
+                            <div class="col-md-1">Planned</div>
+                            <div class="col-md-1">Screened</div>
+                            <div class="col-md-1">Enrolled</div>
+                            <div class="col-md-2">Enrollment Percentage</div>
+                            <div class="col-md-1">Withdrawn</div>
+                            <div class="col-md-1">Declined</div>
+                            <div class="col-md-2">End of treatment</div>
+                            <div class="col-md-1">Completed</div>
+                            <div class="col-md-1">Discontinued</div>
+                            <div class="col-md-1">Scr. failed</div>
+                        </div>
+                        <div class="row statistics">
+                            <div class="col-md-1">{{@statistics.planned}}</div>
+                            <div class="col-md-1">{{@statistics.screened}}</div>
+                            <div class="col-md-1">{{@statistics.enrolled}}</div>
+                            <div class="col-md-2">{{@statistics.percentageEnrolled}} %</div>
+                            <div class="col-md-1">{{@statistics.withdrew}}</div>
+                            <div class="col-md-1">{{@statistics.declined}}</div>
+                            <div class="col-md-2">{{@statistics.endOfTreatment}}</div>
+                            <div class="col-md-1">{{@statistics.completed}}</div>
+                            <div class="col-md-1">{{@statistics.discontinued}}</div>
+                            <div class="col-md-1">{{@statistics.screenFailed}}</div>
+                        </div>
+                        <webc-template data-view-model="@" template="table-site-participants"></webc-template>
+                    </div>
+
+                    <webc-spinner slot="loading"></webc-spinner>
+                    <div class="alert alert-warning" role="alert" slot="false">
+                        <h4 class="alert-heading">No participants added yet!</h4>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </div>
 </webc-container>
