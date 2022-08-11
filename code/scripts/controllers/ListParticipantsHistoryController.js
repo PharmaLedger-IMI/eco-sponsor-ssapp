@@ -1,20 +1,12 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import TrialsService from '../services/TrialsService.js';
 import { participantConsentsTableHeaders } from '../constants/participant.js';
-const { getCommunicationServiceInstance } = commonServices.CommunicationService;
-const { getDidServiceInstance } = commonServices.DidService;
 import SitesService from '../services/SitesService.js';
 import ParticipantsService from '../services/ParticipantsService.js';
-const Constants = commonServices.Constants;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
-const { WebcController } = WebCardinal.controllers;
-
-export default class ListParticipantsHistoryController extends WebcController {
+export default class ListParticipantsHistoryController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
 
   headers = participantConsentsTableHeaders;
@@ -64,28 +56,20 @@ export default class ListParticipantsHistoryController extends WebcController {
       clearButtonDisabled: true,
       type: 'consents',
       tableLength: 7,
-      addConsentButtonDisabled: true,
+      addConsentButtonDisabled: true
     };
+
+    this.model.breadcrumb = this.setBreadCrumb({
+      label: `Consent History`,
+      tag: `site-participants-history`
+    });
 
     this.attachEvents();
 
     this.init();
   }
 
-  async init() {}
-
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
-  }
+  init() {}
 
   attachEvents() {
     this.model.addExpression(
@@ -93,37 +77,6 @@ export default class ListParticipantsHistoryController extends WebcController {
       () => !!(this.model.data && Array.isArray(this.model.data) && this.model.data.length > 0),
       'data'
     );
-
-    this.onTagClick('navigate-to-sites', async () => {
-      this.navigateToPageTag('sites', {
-        id: this.model.trialId,
-        keySSI: this.model.trialKeySSI,
-        uid: this.model.trialUid,
-      });
-    });
-
-    this.onTagClick('navigate-to-subjects', async (model) => {
-      this.navigateToPageTag('site-participants', {
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
-      });
-    });
-
-    this.onTagClick('navigate-to-participant-consents', async (model) => {
-      this.navigateToPageTag('site-participants-consents', {
-        participantUid: this.model.participantUid,
-        trialId: this.model.trialId,
-        trialKeySSI: this.model.trialKeySSI,
-        trialUid: this.model.trialUid,
-        siteKeySSI: this.model.siteKeySSI,
-        siteId: this.model.siteId,
-        siteUid: this.model.siteUid,
-      });
-    });
 
     this.onTagClick('view-participant-consent-preview', async (model) => {
       this.navigateToPageTag('site-participant-preview', {
@@ -136,15 +89,6 @@ export default class ListParticipantsHistoryController extends WebcController {
         siteUid: this.model.siteUid,
         consent: model,
       });
-    });
-  }
-
-  sendMessageToHco(operation, ssi, shortMessage, receiverDid) {
-    let communicationService = getCommunicationServiceInstance();
-    communicationService.sendMessage(receiverDid, {
-      operation: operation,
-      ssi: ssi,
-      shortDescription: shortMessage,
     });
   }
 }

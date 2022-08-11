@@ -1,54 +1,24 @@
 <webc-container controller="ListParticipantsHistoryController">
-  <link rel="stylesheet" href="assets/css/trials.css" />
-  <div class="main-container">
-    <div class="trial-header">
-      <h1 class="trial-title">
-        <webc-link tag="trials">Trials</webc-link>
-        <span> / </span>
-        <label>{{ @trialId }}</label>
-        <span> / </span>
-        <button
-          data-tag="navigate-to-sites"
-          class="btn btn-bare btn-link"
-          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
-        >
-          SITES
-        </button>
-        <span> / </span>
-        <label>{{ @siteId }}</label>
-        <span> / </span>
-        <button
-          data-tag="navigate-to-subjects"
-          class="btn btn-bare btn-link"
-          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
-        >
-          PARTICIPANTS
-        </button>
-        <span> / </span>
-        <label>Participant</label>
-        <span> / </span>
-        <button
-          data-tag="navigate-to-participant-consents"
-          class="btn btn-bare btn-link"
-          style="margin: 0 0 2px 0 !important; padding: 0 !important; font-size: 20px !important"
-        >
-          CONSENTS
-        </button>
-        <span> / </span>
-        <label>History</label>
-      </h1>
-    </div>
-    <div class="page-content">
-      <div class="container">
-        <div data-if="@historyArrayNotEmpty">
-          <div slot="true">
-            <webc-template template="table-site-participants-history" data-view-model="@"></webc-template>
-          </div>
-          <div slot="false" style="font-size: 20px; display: flex; flex-direction: row; justify-content: center;">
-            <div>No consent history data exist yet.</div>
-          </div>
+    <div class="container main-container common-2-rows-grid">
+        <div class="container flex-container">
+            <breadcrumb-navigator></breadcrumb-navigator>
+            <h5 class="generic-title">Consent History</h5>
+            <webc-template class="w-100" data-view-model="@" template="alert"></webc-template>
         </div>
-      </div>
+
+        <main>
+            <div class="d-flex flex-column w-100 h-100">
+                <div class="w-100 h-100" data-if="@historyArrayNotEmpty">
+                    <div slot="true">
+                        <webc-template data-view-model="@" template="table-site-participants-history"></webc-template>
+                    </div>
+
+                    <webc-spinner slot="loading"></webc-spinner>
+                    <div class="alert alert-warning" role="alert" slot="false">
+                        <h4 class="alert-heading">No consent history data exists yet!</h4>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </div>
 </webc-container>

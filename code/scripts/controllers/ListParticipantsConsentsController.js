@@ -2,7 +2,6 @@
 const commonServices = require('common-services');
 import TrialsService from '../services/TrialsService.js';
 import { participantConsentsTableHeaders } from '../constants/participant.js';
-const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ParticipantsService from '../services/ParticipantsService.js';
@@ -98,19 +97,6 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
     window.WebCardinal.loader.hidden = true;
   }
 
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
-  }
-
   attachEvents() {
     this.model.addExpression(
       'consentsArrayNotEmpty',
@@ -144,15 +130,6 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
         consent: model,
         breadcrumb: this.model.toObject('breadcrumb')
       });
-    });
-  }
-
-  sendMessageToHco(operation, ssi, shortMessage, receiverDid) {
-    let communicationService = getCommunicationServiceInstance();
-    communicationService.sendMessage(receiverDid, {
-      operation: operation,
-      ssi: ssi,
-      shortDescription: shortMessage,
     });
   }
 }
