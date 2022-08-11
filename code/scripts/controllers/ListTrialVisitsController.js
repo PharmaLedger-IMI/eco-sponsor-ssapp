@@ -6,10 +6,6 @@ import SitesService from '../services/SitesService.js';
 const Constants = commonServices.Constants;
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 
-// import eventBusService from '../services/EventBusService.js';
-// import { Topics } from '../constants/topics.js';
-
-// eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
 
 export default class ListTrialVisitsController extends WebcController {
