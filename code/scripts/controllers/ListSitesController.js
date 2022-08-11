@@ -221,8 +221,8 @@ export default class ListSitesController extends BreadCrumbManager {
           controller: 'modals/AddNewSiteModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
-          existingIds: _.flatten(this.model.sites.map((y) => y.id)) || [],
-          existingDids: _.flatten(this.model.sites.map((y) => y.did)) || [],
+          existingIds: this.model.sites.map((y) => y.id) || [],
+          existingDids: this.model.sites.map((y) => y.did) || [],
           trialKeySSI: this.model.trial.keySSI,
         }
       );
