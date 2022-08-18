@@ -154,7 +154,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
-            console.log(error);
+            console.error(error);
             this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
@@ -193,7 +193,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
-            console.log(error);
+            console.error(error);
             this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },

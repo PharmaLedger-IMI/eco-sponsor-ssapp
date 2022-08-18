@@ -156,7 +156,7 @@ export default class ListTrialsController extends WebcController {
       window.WebCardinal.loader.hidden = true;
     } catch (error) {
       window.WebCardinal.loader.hidden = true;
-      console.log(error);
+      console.error(error);
       this.showInformationModal('ERROR', 'There was an issue accessing trials object', 'toast');
     }
   }
@@ -233,7 +233,7 @@ export default class ListTrialsController extends WebcController {
           window.WebCardinal.loader.hidden = true;
           const error = event.detail || null;
           if (error instanceof Error) {
-            console.log(error);
+            console.error(error);
             this.showInformationModal('Result', 'ERROR: There was an issue creating the new trial', 'toast');
           }
         },
@@ -248,15 +248,6 @@ export default class ListTrialsController extends WebcController {
 
     this.onTagClick('view-trial-sites', async (model) => {
       this.navigateToPageTag('sites', {
-        id: model.id,
-        keySSI: model.keySSI,
-        uid: model.uid,
-        breadcrumb: this.model.toObject('breadcrumb')
-      });
-    });
-
-    this.onTagClick('view-trial-visits', async (model) => {
-      this.navigateToPageTag('trial-visits', {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
@@ -284,7 +275,7 @@ export default class ListTrialsController extends WebcController {
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
-            console.log(error);
+            console.error(error);
             this.showInformationModal('Result', 'ERROR: There was an issue creating the new trial', 'toast');
           }
         },

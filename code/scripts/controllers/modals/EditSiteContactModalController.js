@@ -45,7 +45,7 @@ export default class EditSiteContactModalController extends WebcController {
       } catch (error) {
         window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an updating the site'));
-        console.log(error);
+        console.error(error);
       }
     });
   }

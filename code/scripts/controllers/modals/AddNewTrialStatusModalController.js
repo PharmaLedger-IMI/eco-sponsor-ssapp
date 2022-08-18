@@ -38,7 +38,7 @@ export default class AddNewTrialStatusModalController extends WebcController {
       } catch (error) {
         window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue updating the status/stage'));
-        console.log(error);
+        console.error(error);
       }
     });
   }

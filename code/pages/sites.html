@@ -1,52 +1,52 @@
 <webc-container controller="ListSitesController">
-  <div class="container main-container common-2-rows-grid">
-    <div class="container flex-container">
-      <breadcrumb-navigator></breadcrumb-navigator>
-      <h5 class="generic-title">Trial ID: {{@id}} - Sites</h5>
-      <webc-template template="alert" data-view-model="@" class="w-100"></webc-template>
+    <div class="container main-container common-2-rows-grid">
+        <div class="container flex-container">
+            <breadcrumb-navigator></breadcrumb-navigator>
+            <h5 class="generic-title">Trial ID: {{@id}} - Sites</h5>
+            <webc-template class="w-100" data-view-model="@" template="alert"></webc-template>
+        </div>
+
+        <main>
+            <div class="d-flex flex-column w-100 h-100">
+                <div class="table-filter-wrapper actions-no-5">
+                    <div>
+                        <label>{{ @search.label }}</label>
+                        <input class="form-control" data-view-model="@search" event-name="filters-changed"
+                               id="search-field"/>
+                    </div>
+                    <div>
+                        <label>{{ @statuses.label }}</label>
+                        <select class="form-control" data-for="@statuses.options" value="@statuses.value">
+                            <option value="@value">{{@label}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>{{ @stages.label }}</label>
+                        <select class="form-control" data-for="@stages.options" value="@stages.value">
+                            <option disabled="@disabled" value="@value">{{@label}}</option>
+                        </select>
+                    </div>
+                    <div class="option-button">
+                        <button class="btn btn-primary" data-tag="filters-cleared" disabled="@clearButtonDisabled">
+                            Clear filters
+                        </button>
+                    </div>
+                    <div class="option-button">
+                        <button class="btn btn-primary" data-tag="add-site">Add Site</button>
+                    </div>
+                </div>
+
+                <div class="w-100 h-100" data-if="@sitesArrayNotEmpty">
+                    <div slot="true">
+                        <webc-template data-view-model="@" template="table-sites"></webc-template>
+                    </div>
+
+                    <webc-spinner slot="loading"></webc-spinner>
+                    <div class="alert alert-warning" role="alert" slot="false">
+                        <h4 class="alert-heading">No sites available yet!</h4>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-
-    <main>
-      <div class="d-flex flex-column w-100 h-100">
-        <div class="table-filter-wrapper actions-no-5">
-          <div>
-            <label>{{ @search.label }}</label>
-            <input class="form-control" id="search-field" data-view-model="@search"
-                   event-name="filters-changed"/>
-          </div>
-          <div>
-            <label>{{ @statuses.label }}</label>
-            <select class="form-control" data-for="@statuses.options" value="@statuses.value">
-              <option value="@value">{{@label}}</option>
-            </select>
-          </div>
-          <div>
-            <label>{{ @stages.label }}</label>
-            <select class="form-control" data-for="@stages.options" value="@stages.value">
-              <option value="@value" disabled="@disabled">{{@label}}</option>
-            </select>
-          </div>
-          <div class="option-button">
-            <button class="btn btn-primary" disabled="@clearButtonDisabled" data-tag="filters-cleared">
-              Clear filters
-            </button>
-          </div>
-          <div class="option-button">
-            <button class="btn btn-primary" data-tag="add-site">Add Site</button>
-          </div>
-        </div>
-
-        <div class="w-100 h-100" data-if="@sitesArrayNotEmpty">
-          <div slot="true">
-            <webc-template template="table-sites" data-view-model="@"></webc-template>
-          </div>
-
-          <webc-spinner slot="loading"></webc-spinner>
-          <div slot="false" class="alert alert-warning" role="alert">
-            <h4 class="alert-heading">No sites available yet!</h4>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
 </webc-container>

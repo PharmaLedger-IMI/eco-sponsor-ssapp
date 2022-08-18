@@ -34,15 +34,15 @@ export default class TrialsService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
-    const trial = await this.saveEntityAsync({
+    let trial = await this.saveEntityAsync({
       ...data,
       status: trialStatusesEnum.Active,
       created: new Date().toISOString(),
     });
-    const visits = await this.visitsService.createTrialVisits(trial.keySSI, {});
+
     await this.addTrialToDB({
       id: trial.id,
       keySSI: trial.keySSI,
@@ -54,11 +54,16 @@ export default class TrialsService extends DSUService {
       did: trial.did,
       stage: trial.stage,
       created: trial.created,
-      visitsKeySSI: visits.keySSI,
-      visitsUid: visits.uid,
-      visitsSReadSSI: visits.sReadSSI,
-      consents: [],
+      consents: []
     });
+
+    const visitDSU = await this.visitsService.createConsentVisits(trial.keySSI);
+    const visitDSUDetails = {
+      visitsKeySSI: visitDSU.keySSI,
+      visitsUid: visitDSU.uid,
+      visitsSReadSSI: visitDSU.sReadSSI,
+    };
+    trial = await this.updateTrialDetails(trial, visitDSUDetails);
 
     await this.storageService.commitBatch();
 
@@ -76,7 +81,6 @@ export default class TrialsService extends DSUService {
     const existingConsent = trial.consents && trial.consents.find((x) => x.id === data.id);
     if (existingConsent) {
       existingConsent.versions = data.versions;
-      existingConsent.visits = data.visits || [];
     } else {
       trial.consents = [...trial.consents, data];
     }
@@ -92,7 +96,7 @@ export default class TrialsService extends DSUService {
     try {
       this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const trialDb = await this.getTrialFromDB(trial.id);

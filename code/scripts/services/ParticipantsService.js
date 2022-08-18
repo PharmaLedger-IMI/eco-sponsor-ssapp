@@ -32,7 +32,7 @@ export default class ParticipantsService extends DSUService {
         return result.filter((x) => !x.deleted);
       } else return [];
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   }
 
@@ -40,7 +40,7 @@ export default class ParticipantsService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const participantPromise = this.getParticipantFromDb(participantUid, trialKeySSI, siteKeySSI);
@@ -96,7 +96,7 @@ export default class ParticipantsService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     try {

@@ -104,7 +104,7 @@ export default class AddNewTrialModalController extends WebcController {
       } catch (error) {
         window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the trial'));
-        console.log(error);
+        console.error(error);
       }
     });
   }

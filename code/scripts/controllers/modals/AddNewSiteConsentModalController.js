@@ -243,7 +243,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
       } catch (error) {
         window.WebCardinal.loader.hidden = true;
         this.send('closed', new Error('There was an issue creating the site consent'));
-        console.log(error);
+        console.error(error);
       }
     });
   }

@@ -4,67 +4,80 @@ const SharedStorage = commonServices.SharedStorage;
 const DSUService = commonServices.DSUService;
 
 export default class VisitsService extends DSUService {
-  VISITS_TABLE = 'visits';
+    VISITS_TABLE = 'visits';
 
-  constructor(DSUStorage) {
-    super('/visits');
-    this.storageService = SharedStorage.getSharedStorage(DSUStorage);
-  }
-
-  async getTrialVisits(trialKeySSI) {
-    const result = await this.storageService.getRecordAsync(this.VISITS_TABLE, trialKeySSI);
-    if (result) {
-      return result;
-    } else return {};
-  }
-
-  async createTrialVisits(trialKeySSI) {
-    const visits = await this.saveEntityAsync({
-      visits: [],
-    });
-    await this.addVisitsToDB(trialKeySSI, {
-      keySSI: visits.keySSI,
-      uid: visits.uid,
-      sReadSSI: visits.sReadSSI,
-      visits: [],
-    });
-
-    return visits;
-  }
-
-  async updateTrialVisits(trialKeySSI, data, consentId) {
-    try {
-      await this.storageService.beginBatchAsync();
-    } catch (e) {
-      console.log(e);
+    constructor(DSUStorage) {
+        super('/visits');
+        this.storageService = SharedStorage.getSharedStorage(DSUStorage);
     }
 
-    const visitsDb = await this.getTrialVisits(trialKeySSI);
-    const visitsDSU = await this.getEntityAsync(visitsDb.uid);
-    let exists = visitsDb.visits.findIndex((x) => x.consentId === consentId);
-    if (exists > -1) {
-      visitsDb.visits[exists] = { ...visitsDb.visits[exists], data };
-    } else {
-      visitsDb.visits.push({
-        consentId,
-        data,
-      });
+    async getConsentVisits(trialSSI, filterObj) {
+        const result = await this.storageService.getRecordAsync(this.VISITS_TABLE, trialSSI) || {};
+
+        if (!filterObj) {
+            return result;
+        }
+
+        const visits = result.visits;
+        const filteredVisits = visits.filter(visit => {
+            let isGoodValue = true;
+            Object.keys(filterObj).forEach(key => {
+                if (visit[key] !== filterObj[key]) {
+                    isGoodValue = false;
+                }
+            });
+
+            return isGoodValue;
+        });
+
+        if (filteredVisits.length === 1) {
+            return filteredVisits[0];
+        }
+
+        return filteredVisits;
     }
 
-    const updatedVisitsDSU = this.updateEntityAsync({ ...visitsDSU, visits: visitsDb.visits });
-    const updatedVisitsDB = this.storageService.updateRecordAsync(this.VISITS_TABLE, trialKeySSI, {
-      ...visitsDb,
-    });
+    async createConsentVisits(trialSSI, visitsAndProcedures = []) {
+        const visits = await this.saveEntityAsync({
+            visits: visitsAndProcedures,
+        });
+        await this.addVisitsToDB(trialSSI, {
+            keySSI: visits.keySSI,
+            uid: visits.uid,
+            sReadSSI: visits.sReadSSI,
+            visits: visitsAndProcedures,
+        });
 
-    const result = await Promise.allSettled([updatedVisitsDSU, updatedVisitsDB]);
+        return visits;
+    }
 
-    await this.storageService.commitBatch();
+    async updateConsentVisits(trialSSI, trialId, consentId, consentVersion, visitsAndProcedures) {
+        const visitsDb = await this.getConsentVisits(trialSSI);
+        const visitsDSU = await this.getEntityAsync(visitsDb.uid);
 
-    return result[0].status === 'fulfilled' ? result[0].value : null;
-  }
+        const existingVisitInDBIndex = visitsDb.visits.findIndex(visit => {
+            return visit.trialId === visit.trialId
+                && visit.consentId === consentId
+                && visit.consentVersion === consentVersion;
+        });
 
-  async addVisitsToDB(trialKeySSI, data) {
-    const newRecord = await this.storageService.insertRecordAsync(this.VISITS_TABLE, trialKeySSI, data);
-    return newRecord;
-  }
+        if (existingVisitInDBIndex === -1) {
+            visitsDb.visits.push({trialId, consentId, consentVersion, visits: visitsAndProcedures});
+        } else {
+            visitsDb.visits[existingVisitInDBIndex] = {trialId, consentId, consentVersion, visits: visitsAndProcedures};
+        }
+
+        const updatedVisitsDSU = this.updateEntityAsync({...visitsDSU, visits: visitsDb.visits});
+        const updatedVisitsDB = this.storageService.updateRecordAsync(this.VISITS_TABLE, trialSSI, {
+            ...visitsDb,
+        });
+
+        const result = await Promise.allSettled([updatedVisitsDSU, updatedVisitsDB]);
+        return result[0].status === 'fulfilled' ? result[0].value : null;
+    }
+
+    async addVisitsToDB(trialSSI, data) {
+        const newRecord = await this.storageService.insertRecordAsync(this.VISITS_TABLE, trialSSI, data);
+        return newRecord;
+    }
 }

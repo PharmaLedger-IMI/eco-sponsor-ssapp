@@ -51,11 +51,11 @@ export default class SitesService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const trial = await this.trialsService.getTrialFromDB(id);
-    const visits = await this.visitsService.getTrialVisits(trial.keySSI);
+    const visits = await this.visitsService.getConsentVisits(trial.keySSI);
 
     const status = await this.saveEntityAsync(
       {
@@ -111,7 +111,7 @@ export default class SitesService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const site = await this.getSiteFromDB(did, trialKeySSI);
@@ -134,7 +134,7 @@ export default class SitesService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const siteDSU = await this.getSite(model.uid);
@@ -154,7 +154,7 @@ export default class SitesService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const siteDSU = await this.getSite(siteKeySSI);
@@ -174,7 +174,7 @@ export default class SitesService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const site = await this.getSiteFromDB(did, trialKeySSI);
@@ -195,7 +195,6 @@ export default class SitesService extends DSUService {
     const existingConsent = site.consents.find((x) => x.trialConsentId === data.trialConsentId);
     if (existingConsent) {
       existingConsent.versions.push(data.versions[data.versions.length - 1]);
-      // existingConsent.visits = data.visits || [];
     } else {
       site.consents = [...site.consents, data];
     }

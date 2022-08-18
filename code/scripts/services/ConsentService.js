@@ -2,7 +2,6 @@ const commonServices = require('common-services');
 const SharedStorage = commonServices.SharedStorage;
 const DSUService = commonServices.DSUService;
 import SitesService from './SitesService.js';
-import VisitsService from './VisitsService.js';
 import TrialsService from './TrialsService.js';
 
 export default class ConsentService extends DSUService {
@@ -15,7 +14,6 @@ export default class ConsentService extends DSUService {
     this.storageService = SharedStorage.getSharedStorage(DSUStorage);
     this.siteService = new SitesService(DSUStorage);
     this.trialsService = new TrialsService(DSUStorage);
-    this.visitsService = new VisitsService(DSUStorage);
     this.DSUStorage = DSUStorage;
   }
 
@@ -36,7 +34,7 @@ export default class ConsentService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     const site = await this.siteService.getSiteFromDB(siteDSU.did, trialKeySSI);
     const path = this.getConsentPath(site.uid);
@@ -83,7 +81,7 @@ export default class ConsentService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const site = await this.siteService.getSiteFromDB(siteDSU.did, trialKeySSI);
@@ -151,7 +149,7 @@ export default class ConsentService extends DSUService {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     const trial = await this.trialsService.getTrialFromDB(trialId);
     const path = this.getTrialConsentPath(trial.uid);
@@ -178,7 +176,7 @@ export default class ConsentService extends DSUService {
             versionDate: data.versions[0].versionDate,
             attachment: data.versions[0].file.name,
           },
-        ],
+        ]
       },
       trial.keySSI
     );
@@ -192,11 +190,11 @@ export default class ConsentService extends DSUService {
     return consent;
   }
 
-  async updateTrialConsent(data, trialId, site, consent) {
+  async updateTrialConsent(data, trialId, consent) {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
     const trial = await this.trialsService.getTrialFromDB(trialId);

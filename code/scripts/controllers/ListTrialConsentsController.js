@@ -118,7 +118,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
-            console.log(error);
+            console.error(error);
             this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
@@ -126,9 +126,11 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
           controller: 'modals/AddNewTrialConsentModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
-          isUpdate: false,
-          existingIds: this.model.consents.map((x) => x.id) || [],
-          mandatoryExists: this.model.mandatoryExists,
+          model: {
+            isUpdate: false,
+            existingIds: this.model.consents.map((x) => x.id) || [],
+            mandatoryExists: this.model.mandatoryExists
+          }
         }
       );
     });
@@ -149,7 +151,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
-            console.log(error);
+            console.error(error);
             this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
           }
         },
@@ -157,10 +159,11 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
           controller: 'modals/AddNewTrialConsentModalController',
           disableExpanding: false,
           disableBackdropClosing: true,
-          site: null,
-          isUpdate: selectedConsent,
-          existingVersions: existingVersions || [],
-          mandatoryExists: this.model.mandatoryExists,
+          model: {
+            isUpdate: selectedConsent,
+            existingVersions: existingVersions || [],
+            mandatoryExists: this.model.mandatoryExists
+          }
         }
       );
     });
@@ -172,11 +175,21 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         ...x,
         versionDate: new Date(x.versionDate).toLocaleDateString('en-UK'),
       }));
+
       this.navigateToPageTag('consent-history', {
         id: this.model.id,
         keySSI: this.model.keySSI,
         uid: this.model.uid,
         data: JSON.parse(JSON.stringify(data)),
+        breadcrumb: this.model.toObject('breadcrumb')
+      });
+    });
+
+    this.onTagClick('view-visits', async (model) => {
+      this.navigateToPageTag('visits', {
+        trialKeySSI: this.model.keySSI,
+        trialId: this.model.id,
+        consentData: model,
         breadcrumb: this.model.toObject('breadcrumb')
       });
     });
