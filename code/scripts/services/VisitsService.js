@@ -55,16 +55,33 @@ export default class VisitsService extends DSUService {
         const visitsDb = await this.getConsentVisits(trialSSI);
         const visitsDSU = await this.getEntityAsync(visitsDb.uid);
 
-        const existingVisitInDBIndex = visitsDb.visits.findIndex(visit => {
-            return visit.trialId === visit.trialId
-                && visit.consentId === consentId
-                && visit.consentVersion === consentVersion;
-        });
+        if (!visitsAndProcedures) {
+            // Available only on add trial consent version
+            // If no new visits are provided, the previous visits are also applied for this version of consent
+            const previousVisits = visitsDb.visits.find(visit => {
+                return visit.trialId === visit.trialId
+                    && visit.consentId === consentId
+                    && visit.consentVersion === consentVersion - 1;
+            });
 
-        if (existingVisitInDBIndex === -1) {
-            visitsDb.visits.push({trialId, consentId, consentVersion, visits: visitsAndProcedures});
+            visitsDb.visits.push({trialId, consentId, consentVersion, visits: {...previousVisits.visits}});
         } else {
-            visitsDb.visits[existingVisitInDBIndex] = {trialId, consentId, consentVersion, visits: visitsAndProcedures};
+            const existingVisitInDBIndex = visitsDb.visits.findIndex(visit => {
+                return visit.trialId === visit.trialId
+                    && visit.consentId === consentId
+                    && visit.consentVersion === consentVersion;
+            });
+
+            if (existingVisitInDBIndex === -1) {
+                visitsDb.visits.push({trialId, consentId, consentVersion, visits: visitsAndProcedures});
+            } else {
+                visitsDb.visits[existingVisitInDBIndex] = {
+                    trialId,
+                    consentId,
+                    consentVersion,
+                    visits: visitsAndProcedures
+                };
+            }
         }
 
         const updatedVisitsDSU = this.updateEntityAsync({...visitsDSU, visits: visitsDb.visits});
