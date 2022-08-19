@@ -105,13 +105,6 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
   };
 
   displayFile = () => {
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      const file = new File([this.rawBlob], this.fileName);
-      window.navigator.msSaveOrOpenBlob(file);
-      this.feedbackController.setLoadingState(true);
-      return;
-    }
-
     window.URL = window.URL || window.webkitURL;
     const fileType = this.mimeType.split('/')[0];
     switch (fileType) {
