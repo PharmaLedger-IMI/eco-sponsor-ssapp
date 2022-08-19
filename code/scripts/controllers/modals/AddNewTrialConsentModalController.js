@@ -31,6 +31,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
         ['consentDocument', 'visitsAndProceduresDocument'].forEach(field => {
             this.model.onChange(`consent.${field}.file`, this.consentFileInputHandler.bind(this));
         });
+        this.model.onChange('canDisplayVisitAndProceduresUpload', this.validateFormIntegrity.bind(this));
 
         this.on('add-consent-file', (event) => {
             const files = event.data;
