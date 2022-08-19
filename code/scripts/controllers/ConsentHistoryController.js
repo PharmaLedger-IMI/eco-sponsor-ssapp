@@ -66,5 +66,14 @@ export default class ConsentHistoryController extends BreadCrumbManager {
         breadcrumb: this.model.toObject('breadcrumb')
       });
     });
+
+    this.onTagClick('view-visits', async (model) => {
+      this.navigateToPageTag('visits', {
+        trialId: this.model.id,
+        trialKeySSI: this.model.keySSI,
+        consentData: model,
+        breadcrumb: this.model.toObject('breadcrumb')
+      });
+    });
   }
 }
