@@ -168,6 +168,9 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
           trialUid: this.model.trialUid,
           mandatoryExists: this.model.mandatoryExists,
+          model: {
+            modalTitle: "Add New Site Consent"
+          }
         }
       );
     });
@@ -206,6 +209,9 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
           siteConsent: model,
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
           trialUid: this.model.trialUid,
+          model: {
+            modalTitle: "Add Site Consent Version"
+          }
         }
       );
     });

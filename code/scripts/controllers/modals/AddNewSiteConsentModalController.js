@@ -9,7 +9,7 @@ const { WebcController } = WebCardinal.controllers;
 export default class AddNewSiteConsentModalController extends WebcController {
   name = {
     readOnly: false,
-    label: 'Name',
+    label: 'Site Consent Name',
     name: 'name',
     required: true,
     placeholder: 'Please insert a name...',
@@ -17,7 +17,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
   };
 
   version = {
-    label: 'Version',
+    label: 'Site Consent Version',
     name: 'version',
     required: true,
     placeholder: 'Please insert version number...',
@@ -33,10 +33,10 @@ export default class AddNewSiteConsentModalController extends WebcController {
   };
 
   file = {
-    label: 'Consent FIle',
+    label: 'Site Consent File',
     name: 'file',
     required: true,
-    placeholder: 'Please select a file...',
+    placeholder: 'Please select a consent file',
     value: null,
     invalidValue: false,
   };
