@@ -166,6 +166,7 @@ export default class ListTrialsController extends WebcController {
       .map((trial) => ({
         ...trial,
         created: new Date(trial.created).toLocaleDateString('en-UK'),
+        recruitmentPeriod: trial.recruitmentPeriod ? trial.recruitmentPeriod.toShowDate : "-"
       }))
       .sort((a, b) => a.id - b.id);
 

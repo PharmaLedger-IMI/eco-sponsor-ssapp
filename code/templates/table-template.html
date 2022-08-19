@@ -1,21 +1,25 @@
-<webc-container class="common-datatable dt-5-col" controller="template-controllers/TableTemplateController" data-view-model="@">
+<webc-container class="common-datatable dt-6-col trial-list-table" controller="template-controllers/TableTemplateController"
+                data-view-model="@">
     <webc-datatable datasource="@dataSource">
-        <div slot="header">Trial Number / ID</div>
         <div slot="header">Trial Name</div>
+        <div slot="header">Trial Number / ID</div>
         <div slot="header">Created</div>
         <div slot="header">Status</div>
+        <div slot="header">Recruitment Period</div>
         <div slot="header">Options</div>
 
-        <div class="cell">{{@id}}</div>
         <div class="cell">{{@name}}</div>
+        <div class="cell">{{@id}}</div>
         <div class="cell">{{@created}}</div>
+        <div class="cell d-flex flex-column">
+            <span>{{@recruitmentPeriod}}</span>
+            <button class="btn btn-bare btn-link" data-tag="set-recruitment-period">Edit Recruitment Period</button>
+        </div>
         <div class="cell">{{@status}}</div>
         <div class="cell">
             <button class="btn btn-bare btn-link" data-tag="view-trial-status">Status</button>
             |
             <button class="btn btn-bare btn-link" data-tag="view-trial-consents">Consents</button>
-            |
-            <button class="btn btn-bare btn-link" data-tag="set-recruitment-period">Recruitment Period</button>
             |
             <button class="btn btn-bare btn-link" data-tag="view-trial-sites">Sites</button>
         </div>
