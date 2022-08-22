@@ -6,7 +6,9 @@ const {WebcController} = WebCardinal.controllers;
 export default class EditRecruitmentPeriodController extends WebcController {
     constructor(...props) {
         super(...props);
-        this.setModel(this.getInitModel(props[0]));
+        this.model = {
+            ...this.getInitModel(props[0])
+        };
         this.initHandlers();
     }
 
