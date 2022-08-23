@@ -1,75 +1,96 @@
 <h2 slot="header">New Consent</h2>
 
-<div class="d-flex flex-column justify-content-between" style="row-gap: 0.5rem;">
-    <div>
-        <label>{{ @consent.name.label }}</label>
-        <input class="form-control" data-view-model="@consent.name"/>
-        <span class="d-flex flex-row" data-if="@consent.name.invalidValue">
-			<i class="red-invalid fas fa-times mr-2"></i>
-			<small class="form-text text-danger">A consent with this name already exits</small>
-		</span>
+<div class="d-flex flex-column justify-content-between" style="row-gap: 0.5rem">
+  <div class="form-group">
+    <label>{{ @consent.name.label }}</label>
+    <input class="form-control" data-view-model="@consent.name" />
+    <span class="d-flex flex-row" data-if="@consent.name.invalidValue">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">A consent with this name already exits</small>
+    </span>
+  </div>
+  <div class="form-group">
+    <label>{{ @consent.id.label }}</label>
+    <input class="form-control" data-view-model="@consent.id" id="id-field" />
+    <span class="d-flex flex-row" data-if="@consent.id.invalidValue">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">A consent with this ID already exits</small>
+    </span>
+  </div>
+  <div class="form-group">
+    <label>{{ @consent.type.label }}</label>
+    <select
+      class="form-control"
+      data-for="@consent.type.selectOptions"
+      disabled="@consent.type.disabled"
+      required="required"
+      value="@consent.type.value"
+    >
+      <option value="@value">{{@label}}</option>
+    </select>
+    <div class="d-flex flex-row" data-if="@consent.type.invalidValue">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">Please select a consent type</small>
     </div>
-    <div>
-        <label>{{ @consent.id.label }}</label>
-        <input class="form-control" data-view-model="@consent.id" id="id-field"/>
-        <span class="d-flex flex-row" data-if="@consent.id.invalidValue">
-			<i class="red-invalid fas fa-times mr-2"></i>
-			<small class="form-text text-danger">A consent with this ID already exits</small>
-		</span>
+  </div>
+  <div class="form-group">
+    <label>{{ @consent.version.label }}</label>
+    <input class="form-control" data-view-model="@consent.version" id="version-field" />
+    <span class="d-flex flex-row" data-if="@consent.version.invalidValue">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">This version already exists, or version number is too small</small>
+    </span>
+  </div>
+  <div class="form-group">
+    <label>{{ @consent.consentDocument.displayLabel }}</label>
+    <div class="modal-input-file-wrapper">
+      <input class="form-control" disabled placeholder="Select a consent file" value="@consent.consentDocument.name" />
+      <psk-files-chooser
+        accept=".pdf"
+        class="classic-file-chooser"
+        data-view-model="@consent.consentDocument"
+        event-name="add-consent-file"
+      ></psk-files-chooser>
     </div>
-    <div>
-        <label>{{ @consent.type.label }}</label>
-        <select class="form-control" data-for="@consent.type.selectOptions" disabled="@consent.type.disabled"
-                required="required" value="@consent.type.value">
-            <option value="@value">{{@label}}</option>
-        </select>
-        <div class="d-flex flex-row" data-if="@consent.type.invalidValue">
-            <i class="red-invalid fas fa-times mr-2"></i>
-            <small class="form-text text-danger">Please select a consent type</small>
-        </div>
+    <span class="d-flex flex-row" data-if="@consent.consentDocument.invalidValue">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">No file selected</small>
+    </span>
+  </div>
+  <div class="form-group" data-if="@isUpdate">
+    <div class="form-check p-0">
+      <input
+        checked="@canDisplayVisitAndProceduresUpload"
+        id="addVisitsAndProcedures"
+        type="checkbox"
+        value="@canDisplayVisitAndProceduresUpload"
+      />
+      <label for="addVisitsAndProcedures">Update Visits and Procedures</label>
     </div>
-    <div>
-        <label>{{ @consent.version.label }}</label>
-        <input class="form-control" data-view-model="@consent.version" id="version-field"/>
-        <span class="d-flex flex-row" data-if="@consent.version.invalidValue">
-			<i class="red-invalid fas fa-times mr-2"></i>
-			<small class="form-text text-danger">This version already exists, or version number is too small</small>
-		</span>
+  </div>
+  <div class="form-group" data-if="@canDisplayVisitAndProceduresUpload">
+    <label>{{ @consent.visitsAndProceduresDocument.displayLabel }}</label>
+    <div class="modal-input-file-wrapper">
+      <input
+        class="form-control"
+        disabled
+        placeholder="Select visits and procedures file"
+        value="@consent.visitsAndProceduresDocument.name"
+      />
+      <psk-files-chooser
+        accept=".csv"
+        class="classic-file-chooser"
+        data-view-model="@consent.visitsAndProceduresDocument"
+        event-name="add-visits-file"
+      ></psk-files-chooser>
     </div>
-    <div>
-        <label>{{ @consent.consentDocument.displayLabel }}</label>
-        <div class='modal-input-file-wrapper'>
-            <input class='form-control' disabled placeholder="Select a consent file"
-                   value='@consent.consentDocument.name'/>
-            <psk-files-chooser accept=".pdf" class="classic-file-chooser" data-view-model="@consent.consentDocument"
-                               event-name="add-consent-file"></psk-files-chooser>
-        </div>
-        <span class="d-flex flex-row" data-if="@consent.consentDocument.invalidValue">
-			<i class="red-invalid fas fa-times mr-2"></i>
-			<small class="form-text text-danger">No file selected</small>
-		</span>
-    </div>
-    <div data-if="@isUpdate">
-        <div class="form-check p-0">
-            <input checked="@canDisplayVisitAndProceduresUpload" id="addVisitsAndProcedures" type="checkbox"
-                   value="@canDisplayVisitAndProceduresUpload">
-            <label for="addVisitsAndProcedures">Update Visits and Procedures</label>
-        </div>
-    </div>
-    <div data-if="@canDisplayVisitAndProceduresUpload">
-        <label>{{ @consent.visitsAndProceduresDocument.displayLabel }}</label>
-        <div class='modal-input-file-wrapper'>
-            <input class='form-control' disabled placeholder="Select visits and procedures file"
-                   value='@consent.visitsAndProceduresDocument.name'/>
-            <psk-files-chooser accept=".csv" class="classic-file-chooser"
-                               data-view-model="@consent.visitsAndProceduresDocument"
-                               event-name="add-visits-file"></psk-files-chooser>
-        </div>
-        <span class="d-flex flex-row" data-if="@consent.visitsAndProceduresDocument.invalidValue">
-			<i class="red-invalid fas fa-times mr-2"></i>
-			<small class="form-text text-danger">No file selected</small>
-		</span>
-    </div>
+    <span class="d-flex flex-row" data-if="@consent.visitsAndProceduresDocument.invalidValue">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">No file selected</small>
+    </span>
+  </div>
 </div>
 
-<button class="btn btn-primary" data-tag="create-consent" slot="footer" disabled="@submitButtonDisabled">Submit</button>
+<button class="btn btn-primary mt-2" slot="footer" data-tag="create-consent" disabled="@submitButtonDisabled">
+  Submit
+</button>

@@ -2,8 +2,8 @@
 
 <form>
   <div class="d-flex flex-column justify-content-between">
-    <div class="d-flex flex-column m-2">
-      <label>Please select a country</label><br>
+    <div class="form-group">
+      <label>Please select a country</label>
       <select class="form-control" data-for="@site.countries.selectOptions" required="required" value="@site.countries.value">
         <option value="@value">{{@label}}</option>
       </select>
@@ -12,32 +12,32 @@
         <small class="form-text text-danger">Please select a country</small>
       </div>
     </div>
-    <div class="m-2">
-      <label>{{ @site.id.label }}</label><br>
+    <div class="form-group">
+      <label>{{ @site.id.label }}</label>
       <input  id="id-field" class="form-control" data-view-model="@site.id" event-name="id-changed"></input>
       <span data-if="@site.id.invalidValue" class="d-flex flex-row">
         <i class="red-invalid fas fa-times mr-2"></i>
         <small class="form-text text-danger">A site with this id already exits</small>
       </span>
     </div>
-    <div class="m-2">
-      <label>{{ @site.siteName.label }}</label><br>
+    <div class="form-group">
+      <label>{{ @site.siteName.label }}</label>
       <input  class="form-control" data-view-model="@site.siteName"></input>
       <span data-if="@site.siteName.invalidValue" class="d-flex flex-row">
         <i class="red-invalid fas fa-times mr-2"></i>
         <small class="form-text text-danger">Please provide a site name</small>
       </span>
     </div>
-    <div class="m-2">
-      <label>{{ @site.name.label }}</label><br>
+    <div class="form-group">
+      <label>{{ @site.name.label }}</label>
       <input  class="form-control" data-view-model="@site.name"></input>
       <span data-if="@site.name.invalidValue" class="d-flex flex-row">
         <i class="red-invalid fas fa-times mr-2"></i>
         <small class="form-text text-danger">A site with this name already exits</small>
       </span>
     </div>
-    <div class="m-2">
-      <label>{{ @site.did.label }}</label><br>
+    <div class="form-group">
+      <label>{{ @site.did.label }}</label>
       <input  id="did-field" class="form-control" data-view-model="@site.did" event-name="did-changed"></input>
       <span data-if="@site.did.invalidValue" class="d-flex flex-row">
         <i class="red-invalid fas fa-times mr-2"></i>
@@ -46,5 +46,5 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" slot="footer" data-tag="create-site">Submit</button>
+  <button class="btn btn-primary mt-2" slot="footer" data-tag="create-site">Submit</button>
 </form>
