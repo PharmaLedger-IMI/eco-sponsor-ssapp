@@ -50,12 +50,12 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       clearButtonDisabled: true,
       type: 'consents',
       tableLength: 7,
-      mandatoryExists: null
+      numberOfMandatoryConsents: null,
     };
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `${id} / Consents`,
-      tag: `trial-consents`
+      tag: `trial-consents`,
     });
 
     this.attachEvents();
@@ -84,7 +84,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     }));
 
     this.model.consents = model;
-    this.model.mandatoryExists = !!consents.find((x) => x.type === consentTypeEnum.Mandatory);
+    this.model.numberOfMandatoryConsents = consents.filter((x) => x.type === consentTypeEnum.Mandatory).length;
     this.model.data = model;
   }
 
@@ -129,8 +129,8 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
           model: {
             isUpdate: false,
             existingIds: this.model.consents.map((x) => x.id) || [],
-            mandatoryExists: this.model.mandatoryExists
-          }
+            numberOfMandatoryConsents: this.model.numberOfMandatoryConsents,
+          },
         }
       );
     });
@@ -162,8 +162,8 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
           model: {
             isUpdate: selectedConsent,
             existingVersions: existingVersions || [],
-            mandatoryExists: this.model.mandatoryExists
-          }
+            numberOfMandatoryConsents: this.model.numberOfMandatoryConsents,
+          },
         }
       );
     });
@@ -181,7 +181,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         keySSI: this.model.keySSI,
         uid: this.model.uid,
         data: JSON.parse(JSON.stringify(data)),
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -190,7 +190,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         trialKeySSI: this.model.keySSI,
         trialId: this.model.id,
         consentData: model,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -201,7 +201,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         uid: this.model.uid,
         data: model,
         history: null,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
   }

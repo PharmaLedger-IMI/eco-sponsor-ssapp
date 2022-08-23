@@ -46,7 +46,6 @@ export const consentTableHeaders = [
   },
 ];
 
-
 export const siteConsentHistoryTableHeaders = [
   {
     column: 'siteConsentNameVer',
@@ -81,8 +80,8 @@ export const siteConsentHistoryTableHeaders = [
     label: 'Options',
     notSortable: true,
     desc: null,
-  }
-]
+  },
+];
 
 export const siteConsentTableHeaders = [
   {
@@ -118,5 +117,7 @@ export const siteConsentTableHeaders = [
     label: 'Options',
     notSortable: true,
     desc: null,
-  }
+  },
 ];
+
+export const maxAllowedMandatoryConsents = 1;
