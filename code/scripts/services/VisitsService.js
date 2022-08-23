@@ -64,7 +64,7 @@ export default class VisitsService extends DSUService {
                     && visit.consentVersion === consentVersion - 1;
             });
 
-            visitsDb.visits.push({trialId, consentId, consentVersion, visits: {...previousVisits.visits}});
+            visitsDb.visits.push({trialId, consentId, consentVersion, visits: [...previousVisits.visits]});
         } else {
             const existingVisitInDBIndex = visitsDb.visits.findIndex(visit => {
                 return visit.trialId === visit.trialId
