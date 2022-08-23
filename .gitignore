@@ -1,6 +1,5 @@
 node_modules
 /.idea
-bundles
 package-lock.json
 .eslintrc.json
 .eslintrc.js
