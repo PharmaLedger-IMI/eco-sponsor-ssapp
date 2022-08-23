@@ -60,7 +60,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `${siteId} / Participants`,
-      tag: `site-participants`
+      tag: `site-participants`,
     });
 
     this.attachEvents();
@@ -106,7 +106,15 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
           statistics[key] = statistics[key].length;
         }
       }
-      statistics.percentageEnrolled = ((statistics.planned / numberOfParticipants) * 100).toFixed(2);
+      // TODO: define enrollment percentage. Compared to what? Sum of all patients?
+      // Only patients that went through screening? Predefined number of patients needed for the trial?
+      statistics.percentageEnrolled = (
+        (statistics.enrolled +
+          statistics.withdrew +
+          statistics.discontinued +
+          statistics.endOfTreatment / numberOfParticipants) *
+        100
+      ).toFixed(2);
       this.model.statistics = statistics;
     } else {
       this.model.statistics = null;
@@ -130,7 +138,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
         siteKeySSI: this.model.siteKeySSI,
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -144,7 +152,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
         siteKeySSI: this.model.siteKeySSI,
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -158,7 +166,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
         siteKeySSI: this.model.siteKeySSI,
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
   }
