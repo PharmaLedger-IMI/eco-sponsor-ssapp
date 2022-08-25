@@ -228,7 +228,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
   }
 
   async sendMessageToAllTrialSites(trialSSI) {
-    ``;
     const sites = await this.sitesService.getSites(trialSSI);
     for (const site of sites) {
       await this.sendMessageToHco(
@@ -255,9 +254,9 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
   getInitialViewModel() {
     let typesArray = Object.entries(consentTypeEnum).map(([_k, v]) => ({ value: v, label: v }));
-    if (this.model.numberOfMandatoryConsents >= maxAllowedMandatoryConsents) {
+    if (!this.model.isUpdate && this.model.numberOfMandatoryConsents >= maxAllowedMandatoryConsents) {
       typesArray = typesArray.filter((x) => x.value !== consentTypeEnum.Mandatory);
-    } else if (this.model.numberOfMandatoryConsents === 0) {
+    } else if (!this.model.isUpdate && this.model.numberOfMandatoryConsents === 0) {
       typesArray = typesArray.filter((x) => x.value !== consentTypeEnum.Optional);
     }
     const trialId = this.getState().id;

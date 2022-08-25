@@ -1,4 +1,7 @@
-<h2 slot="header">New Consent</h2>
+<div slot="header" style="display: contents" data-if="@isUpdate">
+  <h2 slot="false">New Consent</h2>
+  <h2 slot="true">New Consent Version</h2>
+</div>
 
 <div class="d-flex flex-column justify-content-between" style="row-gap: 0.5rem">
   <div class="form-group">
