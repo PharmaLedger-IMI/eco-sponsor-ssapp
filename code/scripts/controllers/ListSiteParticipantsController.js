@@ -109,10 +109,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
       // TODO: define enrollment percentage. Compared to what? Sum of all patients?
       // Only patients that went through screening? Predefined number of patients needed for the trial?
       statistics.percentageEnrolled = (
-        (statistics.enrolled +
-          statistics.withdrew +
-          statistics.discontinued +
-          statistics.endOfTreatment / numberOfParticipants) *
+        (statistics.enrolled + statistics.completed + statistics.endOfTreatment / numberOfParticipants) *
         100
       ).toFixed(2);
       this.model.statistics = statistics;
