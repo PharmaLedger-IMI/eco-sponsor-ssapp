@@ -50,8 +50,8 @@ export default class ParticipantsService extends DSUService {
     const allPromiseResults = await Promise.allSettled([participantPromise, consentsPromise, sitePromise]);
 
     const participant = allPromiseResults[0].status === 'fulfilled' ? allPromiseResults[0].value : null;
-    const consents = allPromiseResults[1].status === 'fulfilled' ? allPromiseResults[0].value : null;
-    const site = allPromiseResults[2].status === 'fulfilled' ? allPromiseResults[0].value : null;
+    const consents = allPromiseResults[1].status === 'fulfilled' ? allPromiseResults[1].value : null;
+    const site = allPromiseResults[2].status === 'fulfilled' ? allPromiseResults[2].value : null;
 
     const result = consents.map((x) => ({
       ...x,
