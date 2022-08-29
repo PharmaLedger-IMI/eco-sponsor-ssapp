@@ -169,7 +169,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     });
 
     this.onTagClick('view-consent-history', async (model) => {
-      const selectedConsent = this.model.consents.find((x) => x.keySSI === model.keySSI);
+      const selectedConsent = this.model.consents.find((x) => x.uid === model.uid);
       const data = selectedConsent.versions.map((x) => ({
         ...selectedConsent,
         ...x,
