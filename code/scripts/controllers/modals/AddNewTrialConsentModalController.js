@@ -56,6 +56,15 @@ export default class AddNewTrialConsentModalController extends WebcController {
 
     this.onTagClick('create-consent', () => {
       const createUpdateConsent = (err, visitsAndProcedures) => {
+        if (err) {
+          this.showModal(
+            'There was an error parsing the file, please select another file',
+            'Error',
+            () => {},
+            () => {}
+          );
+          return;
+        }
         if (this.model.isUpdate) {
           return this.updateConsentHandler(visitsAndProcedures);
         }
@@ -63,11 +72,15 @@ export default class AddNewTrialConsentModalController extends WebcController {
         this.createConsentHandler(visitsAndProcedures);
       };
 
-      if (this.model.canDisplayVisitAndProceduresUpload) {
-        return this.parseVisitsAndProceduresFile(createUpdateConsent);
-      }
+      try {
+        if (this.model.canDisplayVisitAndProceduresUpload) {
+          return this.parseVisitsAndProceduresFile(createUpdateConsent);
+        }
 
-      createUpdateConsent();
+        createUpdateConsent();
+      } catch (error) {
+        console.log(error);
+      }
     });
   }
 
@@ -160,8 +173,13 @@ export default class AddNewTrialConsentModalController extends WebcController {
             });
 
             callback(undefined, result);
+          } else {
+            callback('Could not parse file', null);
           }
         }
+      },
+      error: async (err, file, inputElem, reason) => {
+        callback(err, undefined);
       },
     });
   }
@@ -347,5 +365,18 @@ export default class AddNewTrialConsentModalController extends WebcController {
     }
 
     return initialViewModel;
+  }
+
+  showInformationModal(title, message, alertType) {
+    this.showErrorModal(
+      message,
+      title,
+      () => {},
+      () => {},
+      {
+        disableExpanding: true,
+        disableCancelButton: true,
+      }
+    );
   }
 }
