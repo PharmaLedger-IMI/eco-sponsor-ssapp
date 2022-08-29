@@ -57,12 +57,17 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.onTagClick('create-consent', () => {
       const createUpdateConsent = (err, visitsAndProcedures) => {
         if (err) {
-          this.showModal(
-            'There was an error parsing the file, please select another file',
-            'Error',
-            () => {},
-            () => {}
-          );
+          // this.showModal(
+          //   'There was an error parsing the file, please select another file',
+          //   'Error',
+          //   () => {},
+          //   () => {}
+          // );
+          this.model.message = {
+            type: 'alert',
+            content: 'There was an error parsing the file, please select another file',
+          };
+
           return;
         }
         if (this.model.isUpdate) {
