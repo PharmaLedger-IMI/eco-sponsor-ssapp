@@ -128,7 +128,7 @@ export default class ListTrialsController extends WebcController {
           }
           break;
         }
-        case Constants.MESSAGES.SPONSOR.SIGN_ECOSENT: {
+        case Constants.MESSAGES.SPONSOR.SIGN_ECONSENT: {
           if (data.ssi) {
             return await this.participantsService.hcoSignConsent(data.ssi, data.senderIdentity, data.consentUid);
           }
