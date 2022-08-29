@@ -194,6 +194,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
   }
 
   async updateConsentHandler(visitsAndProcedures) {
+    window.WebCardinal.loader.hidden = false;
     const existingVersions = this.model.existingVersions.map((o) => parseInt(o));
     const selectedValue = parseInt(this.model.consent.version.value);
     const smallerThan = selectedValue < Math.max.apply(Math, existingVersions);
