@@ -56,12 +56,12 @@ export default class ListParticipantsHistoryController extends BreadCrumbManager
       clearButtonDisabled: true,
       type: 'consents',
       tableLength: 7,
-      addConsentButtonDisabled: true
+      addConsentButtonDisabled: true,
     };
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `Consent History`,
-      tag: `site-participants-history`
+      tag: `site-participants-history`,
     });
 
     this.attachEvents();
@@ -88,6 +88,7 @@ export default class ListParticipantsHistoryController extends BreadCrumbManager
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
         consent: model,
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
   }
