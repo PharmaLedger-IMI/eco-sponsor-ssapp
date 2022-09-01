@@ -4,13 +4,14 @@ const SharedStorage = commonServices.SharedStorage;
 const DSUService = commonServices.DSUService;
 import TrialsService from '../services/TrialsService.js';
 import SitesService from '../services/SitesService.js';
+const ConsentStatusMapper = commonServices.ConsentStatusMapper;
 
 export default class ParticipantsService extends DSUService {
   PARTICIPANTS_TABLE = 'participants';
   PARTICIPANTS_PATH = '/participants';
   PARTICIPANTS_CONSENTS_PATH = '/participants-consents';
   PARTICIPANTS_CONSENTS_TABLE = 'participants-consents';
-  PARTICIPANT_LIST_FILENAME = 'participants.json';
+  PARTICIPANTS_PK_UID_TABLE = 'participants-pk-uid-table';
 
   constructor(DSUStorage) {
     super('/participants');
@@ -43,111 +44,36 @@ export default class ParticipantsService extends DSUService {
       console.error(e);
     }
 
-    const participantPromise = this.getParticipantFromDb(participantUid, trialKeySSI, siteKeySSI);
-    const consentsPromise = this.getParticipantConsents(trialKeySSI, siteKeySSI);
-    const sitePromise = this.sitesService.getSiteFromKeySSI(siteKeySSI, trialKeySSI);
-
-    const allPromiseResults = await Promise.allSettled([participantPromise, consentsPromise, sitePromise]);
-
-    const participant = allPromiseResults[0].status === 'fulfilled' ? allPromiseResults[0].value : null;
-    const consents = allPromiseResults[1].status === 'fulfilled' ? allPromiseResults[1].value : null;
-    const site = allPromiseResults[2].status === 'fulfilled' ? allPromiseResults[2].value : null;
+    const participant = await this.getParticipantFromDb(participantUid, trialKeySSI, siteKeySSI);
+    const consents = await this.getParticipantConsents(trialKeySSI, siteKeySSI, participant.tpUid);
 
     const result = consents.map((x) => ({
       ...x,
-      versions: x.versions.map((z) => ({ ...z, actions: z.actions.filter((y) => y.tpDid === participant.did) })),
-    }));
-
-    let siteConsents = site.consents;
-
-    siteConsents = siteConsents.map((x) => ({
-      ...x,
       versions: x.versions.map((y) => {
-        const participantConsent = result.find((z) => z.name === x.name);
-        if (participantConsent) {
-          const participantConsentVersion = participantConsent.versions.find((z) => z.version === y.version);
-          if (participantConsentVersion) {
-            const hcoSignedAction = participantConsentVersion.actions.find(
-              (q) => q.type === 'hco' && q.name === 'sign'
-            );
-            const participantSignedAction = participantConsentVersion.actions.find(
-              (q) => q.type === 'tp' && q.name === 'sign'
-            );
-            const participantWithdrewAction = participantConsentVersion.actions.find(
-              (q) => q.type === 'tp' && q.name === 'withdraw-intention'
-            );
-            return {
-              ...y,
-              hcoSigned: (hcoSignedAction && hcoSignedAction.toShowDate) || '-',
-              participantSigned: (participantSignedAction && participantSignedAction.toShowDate) || '-',
-              participantWithDrew: (participantWithdrewAction && participantWithdrewAction.toShowDate) || '-',
-            };
-          } else return { ...y, actions: [] };
-        } else return { ...y, actions: [] };
+        const hcoSignedAction =
+          y.actions &&
+          y.actions.find((q) => q.type === 'hco' && q.name === ConsentStatusMapper.consentStatuses.signed.name);
+        const participantSignedAction =
+          y.actions &&
+          y.actions.find((q) => q.type === 'tp' && q.name === ConsentStatusMapper.consentStatuses.signed.name);
+        const participantWithdrewAction =
+          y.actions &&
+          y.actions.find((q) => q.type === 'tp' && q.name === ConsentStatusMapper.consentStatuses.withdraw.name);
+        return {
+          ...y,
+          hcoSigned: (hcoSignedAction && hcoSignedAction.toShowDate) || '-',
+          participantSigned: (participantSignedAction && participantSignedAction.toShowDate) || '-',
+          participantWithDrew: (participantWithdrewAction && participantWithdrewAction.toShowDate) || '-',
+        };
       }),
     }));
 
     await this.storageService.commitBatch();
 
-    return siteConsents;
+    return result;
   }
 
-  async updateParticipant(data, ssi, siteDid) {
-    try {
-      await this.storageService.beginBatchAsync();
-    } catch (e) {
-      console.error(e);
-    }
-
-    try {
-      const trialUid = data.trialSSI;
-      const tpDid = data.tpDid;
-      const trialDSU = await this.trialsService.getTrial(trialUid);
-      const trial = await this.trialsService.getTrialFromDB(trialDSU.id);
-      const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
-      const participantDSU = await this.mountEntityAsync(ssi);
-      console.log(trial);
-      console.log(site);
-      console.log(participantDSU);
-      // let list = await this.getTrialParticipants(trialKeySSI);
-      // let participantExists = await this.storageService.filterAsync(
-      //   this.getTableName(trialKeySSI),
-      //   `participantId == ${data.participantId}`
-      // );
-      // if (participantExists && participantExists.length === 1) {
-      //   let participant = participantExists[0];
-      //   participant = {
-      //     ...participant,
-      //     consentName: consent.name,
-      //     consentVersion: data.version,
-      //     consentStatus: participantConsentStatusEnum.Consent,
-      //     patientSignature: data.type === senderType.Patient ? data.action.date : participant.patientSignature,
-      //     doctorSignature: data.type === senderType.HCP ? data.action.date : participant.doctorSignature,
-      //     // doctorSignature: data.type === senderType.HCP ? data.operationDate : participant.doctorSignature,
-      //   };
-      //   await this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), data.participantId, participant);
-      // } else {
-      //   const model = {
-      //     participantId: data.participantId,
-      //     consentName: consent.name,
-      //     consentVersion: data.version,
-      //     consentStatus: participantConsentStatusEnum.Consent,
-      //     patientSignature: data.type === senderType.Patient ? data.action.date : null,
-      //     doctorSignature: data.type === senderType.HCP ? data.action.date : null,
-      //     // doctorSignature: data.type === senderType.HCP ? data.operationDate : null,
-      //   };
-      //   await this.storageService.insertRecordAsync(this.getTableName(trialKeySSI), data.participantId, model);
-      // }
-      // list = await this.getTrialParticipants(trialKeySSI);
-      // return list;
-
-      await this.storageService.commitBatch();
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  async addParticipant(ssi, siteDid) {
+  async addParticipant(ssi, siteDid, tpUid, consentsKeySSIs) {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
@@ -156,13 +82,24 @@ export default class ParticipantsService extends DSUService {
 
     try {
       const participantDSU = await this.mountEntityAsync(ssi);
+
+      const participantConsentsDb = await this.createParticipantConsents(
+        participantDSU.uid,
+        tpUid,
+        siteDid,
+        consentsKeySSIs
+      );
+
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
       const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
       const newParticipant = await this.storageService.insertRecordAsync(
         this.getTableName(trial.keySSI, site.keySSI),
         participantDSU.uid,
-        participantDSU
+        { ...participantDSU, tpUid, consents: participantConsentsDb.map((x) => x.uid) }
       );
+      const newParticipantPkUid = await this.storageService.insertRecordAsync(this.PARTICIPANTS_PK_UID_TABLE, tpUid, {
+        uid: participantDSU.uid,
+      });
       await this.storageService.commitBatch();
 
       return newParticipant;
@@ -171,7 +108,25 @@ export default class ParticipantsService extends DSUService {
     }
   }
 
-  async updateParticipantConsent(participantUid, siteDid, consentSSI) {
+  async createParticipantConsents(participantUid, tpUid, siteDid, consentsKeySSIs) {
+    const participantDSU = await this.getParticipant(participantUid);
+    const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
+    const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
+
+    const participantConsentsPromises = consentsKeySSIs.map((x) => {
+      return this.mountEntityAsync(x, this.PARTICIPANTS_CONSENTS_PATH + '/' + tpUid);
+    });
+    const participantConsents = await Promise.all([...participantConsentsPromises]);
+
+    const participantConsentsDbPromises = participantConsents.map((x) => {
+      return this.storageService.insertRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x);
+    });
+    const participantConsentsDb = await Promise.all([...participantConsentsDbPromises]);
+
+    return participantConsentsDb;
+  }
+
+  async updateParticipantConsent(pk, siteDid, consentSSIs) {
     try {
       await this.storageService.beginBatchAsync();
     } catch (e) {
@@ -179,76 +134,47 @@ export default class ParticipantsService extends DSUService {
     }
 
     try {
-      const participantDSU = await this.getParticipant(participantUid);
+      const { uid } = await this.storageService.getRecordAsync(this.PARTICIPANTS_PK_UID_TABLE, pk);
+      const participantDSU = await this.getParticipant(uid);
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
       const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
+      const participantDb = await this.getParticipantFromDb(uid, trial.keySSI, site.keySSI);
 
-      if (consentSSI) {
-        const consentDSU = await this.mountParticipantConsent(consentSSI, participantDSU);
+      const incomingParticipantConsentsPromises = consentSSIs.map((x) => {
+        return this.mountEntityAsync(x, this.PARTICIPANTS_CONSENTS_PATH + '/' + participantDb.tpUid);
+      });
+      const incomingParticipantConsents = await Promise.all([...incomingParticipantConsentsPromises]);
 
-        let consent = await this.getParticipantConsentFromDb(consentDSU.uid, trial.keySSI, site.keySSI);
-        let consentDb = null;
-        if (consent) {
-          consentDb = await this.storageService.updateRecordAsync(
-            this.getConsentTableName(trial.keySSI, site.keySSI),
-            consentDSU.uid,
-            consentDSU
+      const existingConsentsPromises = [];
+      const newConsentsPromises = [];
+      for (const x of incomingParticipantConsents) {
+        if (participantDb.consents.indexOf(x.uid) > -1) {
+          existingConsentsPromises.push(
+            this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
           );
         } else {
-          consentDb = await this.storageService.insertRecordAsync(
-            this.getConsentTableName(trial.keySSI, site.keySSI),
-            consentDSU.uid,
-            consentDSU
+          newConsentsPromises.push(
+            this.storageService.insertRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
           );
         }
       }
 
-      const updatedParticipant = await this.storageService.updateRecordAsync(
-        this.getTableName(trial.keySSI, site.keySSI),
-        participantDSU.uid,
-        participantDSU
-      );
+      const existingConsents = await Promise.all([...existingConsentsPromises]);
+      const newConsents = await Promise.all([...newConsentsPromises]);
 
-      await this.storageService.commitBatch();
-      return updatedParticipant;
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  async hcoSignConsent(participantUid, siteDid, consentUid) {
-    try {
-      await this.storageService.beginBatchAsync();
-    } catch (e) {
-      console.log(e);
-    }
-
-    try {
-      const participantDSU = await this.getParticipant(participantUid);
-      const consentDSU = await this.getEntityAsync(consentUid, this.getConsentPath(participantDSU));
-      const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
-      const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
-
-      let consent = await this.getParticipantConsentFromDb(consentDSU.uid, trial.keySSI, site.keySSI);
-      let consentDb = null;
-      if (consent) {
-        consentDb = await this.storageService.updateRecordAsync(
-          this.getConsentTableName(trial.keySSI, site.keySSI),
-          consentDSU.uid,
-          consentDSU
-        );
-      } else {
-        consentDb = await this.storageService.insertRecordAsync(
-          this.getConsentTableName(trial.keySSI, site.keySSI),
-          consentDSU.uid,
-          consentDSU
-        );
-      }
+      // const participantConsentsDbPromises = participantConsents.map((x) => {
+      //   return this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x);
+      // });
+      // const participantConsentsDb = await Promise.all([...participantConsentsDbPromises]);
 
       const updatedParticipant = await this.storageService.updateRecordAsync(
         this.getTableName(trial.keySSI, site.keySSI),
         participantDSU.uid,
-        participantDSU
+        {
+          ...participantDSU,
+          tpUid: participantDb.tpUid,
+          consents: [...participantDb.consents, ...newConsents.map((x) => x.uid)],
+        }
       );
 
       await this.storageService.commitBatch();
@@ -269,11 +195,12 @@ export default class ParticipantsService extends DSUService {
       const participantDSU = await this.getParticipant(participantUid);
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
       const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
+      const participantDb = await this.getParticipantFromDb(participantUid, trial.keySSI, site.keySSI);
 
       const updatedParticipant = await this.storageService.updateRecordAsync(
         this.getTableName(trial.keySSI, site.keySSI),
         participantDSU.uid,
-        participantDSU
+        { ...participantDSU, tpUid: participantDb.tpUid, consents: participantDb.consents }
       );
 
       await this.storageService.commitBatch();
@@ -298,8 +225,11 @@ export default class ParticipantsService extends DSUService {
     return result;
   }
 
-  async getParticipantConsents(trialKeySSI, siteKeySSI) {
-    const result = await this.storageService.filterAsync(this.getConsentTableName(trialKeySSI, siteKeySSI));
+  async getParticipantConsents(trialKeySSI, siteKeySSI, tpUid) {
+    const result = await this.storageService.filterAsync(
+      this.getConsentTableName(trialKeySSI, siteKeySSI),
+      `tpUid == ${tpUid}`
+    );
     return result;
   }
 

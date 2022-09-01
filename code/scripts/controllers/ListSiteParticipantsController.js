@@ -128,6 +128,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
     this.onTagClick('view-participant-consents', async (model) => {
       this.navigateToPageTag('site-participants-consents', {
         participantUid: model.uid,
+        participantPk: model.tpUid,
         participantId: model.number,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
@@ -142,6 +143,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
     this.onTagClick('view-participant-status', async (model) => {
       this.navigateToPageTag('site-participant-status', {
         participantUid: model.uid,
+        participantPk: model.tpUid,
         participantId: model.number,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,

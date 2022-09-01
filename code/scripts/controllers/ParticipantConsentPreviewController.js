@@ -7,8 +7,11 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
   constructor(...props) {
     super(...props);
 
-    let {
-      participantUid,
+    let { participantPk, participantId, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid, consent } =
+      this.getState();
+    this.model = {
+      consent,
+      participantPk,
       participantId,
       trialId,
       trialKeySSI,
@@ -16,13 +19,11 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
       siteKeySSI,
       siteId,
       siteUid,
-      consent
-    } = this.getState();
-    this.model = {consent, participantUid, participantId, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid};
+    };
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `${participantId} / Site Participant's Consent Preview`,
-      tag: `site-participant-preview`
+      tag: `site-participant-preview`,
     });
 
     this.init();
@@ -31,7 +32,7 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
   async init() {
     window.WebCardinal.loader.hidden = false;
     const econsentFilePath = this.getEconsentManualFilePath(
-      this.model.siteUid,
+      this.model.participantPk,
       this.model.consent.uid,
       this.model.consent.version
     );
@@ -40,7 +41,7 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
     this.PDFService.displayPDF(econsentFilePath, this.model.consent.attachment);
   }
 
-  getEconsentManualFilePath(siteUid, consentUid, version) {
-    return '/sites/' + siteUid + '/consent/' + consentUid + '/versions/' + version;
+  getEconsentManualFilePath(participantPk, consentUid, version) {
+    return '/participants-consents/' + participantPk + '/' + consentUid + '/versions/' + version;
   }
 }

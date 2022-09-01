@@ -36,10 +36,12 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
     this.participantsService = new ParticipantsService(this.DSUStorage);
-    let { participantUid, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid } = this.history.location.state;
+    let { participantUid, participantPk, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid } =
+      this.history.location.state;
 
     this.model = {
       participantUid,
+      participantPk,
       trialId,
       trialKeySSI,
       trialUid,
@@ -60,7 +62,7 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `Site Participant's Consents`,
-      tag: `site-participants-consents`
+      tag: `site-participants-consents`,
     });
 
     this.attachEvents();
@@ -106,7 +108,7 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
 
     this.onTagClick('view-participant-consent-history', async (model) => {
       this.navigateToPageTag('site-participants-history', {
-        participantUid: this.model.participantUid,
+        participantPk: this.model.participantPk,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
         trialUid: this.model.trialUid,
@@ -114,13 +116,13 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
         data: model.versions.map((x) => ({ ...model, ...x })),
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
     this.onTagClick('view-participant-consent-preview', async (model) => {
       this.navigateToPageTag('site-participant-preview', {
-        participantUid: this.model.participantUid,
+        participantPk: this.model.participantPk,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,
         trialUid: this.model.trialUid,
@@ -128,7 +130,7 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
         siteId: this.model.siteId,
         siteUid: this.model.siteUid,
         consent: model,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
   }

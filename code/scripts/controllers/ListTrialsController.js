@@ -22,11 +22,13 @@ export default class ListTrialsController extends WebcController {
     label: 'Select a status',
     placeholder: 'Please select an option',
     required: false,
-    options: [{label: "All statuses", value: ""}].concat(this.statusesArray.map((x) => ({
-      label: x,
-      value: x,
-    }))),
-    value:""
+    options: [{ label: 'All statuses', value: '' }].concat(
+      this.statusesArray.map((x) => ({
+        label: x,
+        value: x,
+      }))
+    ),
+    value: '',
   };
 
   search = {
@@ -64,8 +66,8 @@ export default class ListTrialsController extends WebcController {
     this.CommunicationService = getCommunicationServiceInstance();
 
     this.model.publicDidReady = false;
-    this.CommunicationService.onPrimaryDidReady((err)=>{
-      if(err){
+    this.CommunicationService.onPrimaryDidReady((err) => {
+      if (err) {
         throw err;
       }
 
@@ -81,11 +83,13 @@ export default class ListTrialsController extends WebcController {
       clearButtonDisabled: true,
       type: 'trials',
       tableLength: 7,
-      breadcrumb: [{
-        label: "Trials",
-        tag: "trials",
-        state: {}
-      }]
+      breadcrumb: [
+        {
+          label: 'Trials',
+          tag: 'trials',
+          state: {},
+        },
+      ],
     };
 
     this.listenForMessages();
@@ -114,23 +118,24 @@ export default class ListTrialsController extends WebcController {
         }
         case Constants.MESSAGES.SPONSOR.TP_ADDED: {
           if (data.ssi) {
-            return await this.participantsService.addParticipant(data.ssi, data.senderIdentity);
-          }
-          break;
-        }
-        case Constants.MESSAGES.SPONSOR.TP_CONSENT_UPDATE: {
-          if (data.ssi) {
-            return await this.participantsService.updateParticipantConsent(
+            return await this.participantsService.addParticipant(
               data.ssi,
               data.senderIdentity,
-              data.consentSSI
+              data.tpUid,
+              data.consentsKeySSIs
             );
           }
           break;
         }
+        case Constants.MESSAGES.SPONSOR.DECLINE_ECONSENT:
+        case Constants.MESSAGES.SPONSOR.TP_CONSENT_UPDATE:
         case Constants.MESSAGES.SPONSOR.SIGN_ECONSENT: {
           if (data.ssi) {
-            return await this.participantsService.hcoSignConsent(data.ssi, data.senderIdentity, data.consentUid);
+            return await this.participantsService.updateParticipantConsent(
+              data.ssi,
+              data.senderIdentity,
+              data.consentsKeySSIs
+            );
           }
           break;
         }
@@ -166,7 +171,7 @@ export default class ListTrialsController extends WebcController {
       .map((trial) => ({
         ...trial,
         created: new Date(trial.created).toLocaleDateString('en-UK'),
-        recruitmentPeriod: trial.recruitmentPeriod ? trial.recruitmentPeriod.toShowDate : "-"
+        recruitmentPeriod: trial.recruitmentPeriod ? trial.recruitmentPeriod.toShowDate : '-',
       }))
       .sort((a, b) => a.id - b.id);
 
@@ -252,7 +257,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -261,7 +266,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -298,21 +303,27 @@ export default class ListTrialsController extends WebcController {
         const response = event.detail;
         const recruitmentPeriod = {
           ...response,
-          toShowDate: new Date(response.startDate).toLocaleDateString() + ' - ' + new Date(response.endDate).toLocaleDateString()
+          toShowDate:
+            new Date(response.startDate).toLocaleDateString() + ' - ' + new Date(response.endDate).toLocaleDateString(),
         };
-        await this.trialsService.updateTrialDetails(model, {recruitmentPeriod});
+        await this.trialsService.updateTrialDetails(model, { recruitmentPeriod });
         await this.getTrials();
         window.WebCardinal.loader.hidden = true;
-      }
+      };
       const modalConfiguration = {
         controller: 'modals/EditRecruitmentPeriodController',
         disableExpanding: false,
         disableBackdropClosing: true,
         title: 'Edit Recruitment Period',
-        recruitmentPeriod: model.recruitmentPeriod
+        recruitmentPeriod: model.recruitmentPeriod,
       };
 
-      this.showModalFromTemplate('edit-recruitment-period', recruitmentPeriodSetHandler, onCloseHandler, modalConfiguration);
+      this.showModalFromTemplate(
+        'edit-recruitment-period',
+        recruitmentPeriodSetHandler,
+        onCloseHandler,
+        modalConfiguration
+      );
     });
 
     this.onTagClick('filters-cleared', async () => {
