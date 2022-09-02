@@ -87,28 +87,39 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
       this.model.trialKeySSI,
       this.model.siteKeySSI
     );
+    const maxVersionOfMandatoryConsent = Math.max.apply(
+      Math,
+      consents.find((x) => x.type === 'Mandatory').versions.map((o) => parseInt(o.version))
+    );
+    const maxVersionOfMandatorySignedConsent = Math.max.apply(
+      Math,
+      consents
+        .find((x) => x.type === 'Mandatory')
+        .versions.map((o) => (o.participantSigned !== '-' ? parseInt(o.version) : 0))
+    );
 
     const consentsSigned = consents.filter((x) => {
       return (
+        x.versions &&
         x.versions.filter((y) => {
-          return y.actions.filter((z) => z.name === 'Signed').length > 0;
+          return y.actions && y.actions.filter((z) => z.name === 'Signed' && z.type === 'tp').length > 0;
         }).length > 0
       );
     });
 
     const rows = consentsSigned
-      .map((x) =>
-        x.versions
-          .filter((y) => {
-            return y.actions.filter((z) => z.name === 'Signed').length > 0;
-          })
-          .map((z) => ({ view: `${z.version} - ${x.trialConsentName}`, consent: { ...x, ...z } }))
+      .map(
+        (x) =>
+          x.versions &&
+          x.versions
+            .filter((y) => {
+              return y.actions && y.actions.filter((z) => z.name === 'Signed' && z.type === 'tp').length > 0;
+            })
+            .map((z) => ({ view: `${z.version} - ${x.trialConsentName}`, consent: { ...x, ...z } }))
       )
       .flat();
 
-    debugger;
     model.consentsSigned = rows.length > 0 ? rows[0].view : '-';
-    rows.shift();
 
     this.model.data = [
       {
@@ -121,11 +132,12 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
           (model.discontinuedDate !== '-' && model.discontinuedDate) ||
           (model.screenFailedDate !== '-' && model.screenFailedDate) ||
           '-',
-        reconsentRequired: !model.tpSigned,
+        reconsentRequired: maxVersionOfMandatoryConsent > maxVersionOfMandatorySignedConsent,
         consentsSigned: model.consentsSigned,
         consent: rows.length > 0 && rows[0].consent,
+        disabled: !(rows.length > 0 && rows[0].consent),
       },
-      ...rows.map((x) => ({
+      ...rows.splice(1).map((x) => ({
         screenedDate: '',
         enrolledDate: '',
         endOfTreatmentDate: '',
@@ -134,6 +146,7 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
         reconsentRequired: '',
         consentsSigned: x.view,
         consent: x.consent,
+        disabled: false,
       })),
     ];
 

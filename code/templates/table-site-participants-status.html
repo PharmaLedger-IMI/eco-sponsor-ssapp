@@ -21,7 +21,9 @@
     <div class="cell">{{@reconsentRequired}}</div>
     <div class="cell">{{@consentsSigned}}</div>
     <div class="cell">
-      <button class="btn btn-bare btn-link" data-tag="view-participant-consent-preview">Preview</button>
+      <button class="btn btn-bare btn-link" disabled="@disabled" data-tag="view-participant-consent-preview">
+        Preview
+      </button>
     </div>
 
     <div slot="no-data">There are no items to display</div>
