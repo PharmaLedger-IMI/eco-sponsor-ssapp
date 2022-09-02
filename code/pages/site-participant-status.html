@@ -1,24 +1,24 @@
 <webc-container controller="ListParticipantsStatusController">
-    <div class="container main-container common-2-rows-grid">
-        <div class="container flex-container">
-            <breadcrumb-navigator></breadcrumb-navigator>
-            <h5 class="generic-title">Participant ID: {{@participantId}} - Site Participant's Status</h5>
-            <webc-template class="w-100" data-view-model="@" template="alert"></webc-template>
-        </div>
-
-        <main>
-            <div class="d-flex flex-column w-100 h-100">
-                <div class="w-100 h-100" data-if="@consentsArrayNotEmpty">
-                    <div slot="true">
-                        <webc-template data-view-model="@" template="table-site-participants-consents"></webc-template>
-                    </div>
-
-                    <webc-spinner slot="loading"></webc-spinner>
-                    <div class="alert alert-warning" role="alert" slot="false">
-                        <h4 class="alert-heading">No patient status available yet!</h4>
-                    </div>
-                </div>
-            </div>
-        </main>
+  <div class="container main-container common-2-rows-grid">
+    <div class="container flex-container">
+      <breadcrumb-navigator></breadcrumb-navigator>
+      <h5 class="generic-title">Participant ID: {{@participantId}} - Site Participant's Status</h5>
+      <webc-template class="w-100" data-view-model="@" template="alert"></webc-template>
     </div>
+
+    <main>
+      <div class="d-flex flex-column w-100 h-100">
+        <div class="w-100 h-100" data-if="@consentsArrayNotEmpty">
+          <div slot="true">
+            <webc-template data-view-model="@" template="table-site-participants-status"></webc-template>
+          </div>
+
+          <webc-spinner slot="loading"></webc-spinner>
+          <div class="alert alert-warning" role="alert" slot="false">
+            <h4 class="alert-heading">No patient status available yet!</h4>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </webc-container>

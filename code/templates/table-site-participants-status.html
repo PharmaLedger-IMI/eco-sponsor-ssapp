@@ -1,0 +1,29 @@
+<webc-container
+  class="common-datatable dt-8-col"
+  controller="template-controllers/TableTemplateController"
+  data-view-model="@"
+>
+  <webc-datatable datasource="@dataSource">
+    <div slot="header">Screened</div>
+    <div slot="header">Enrolled</div>
+    <div slot="header">End of Treatment</div>
+    <div slot="header">Completed</div>
+    <div slot="header">Withdrew/SF/Disco.</div>
+    <div slot="header">Re-consent required</div>
+    <div slot="header">Consents Signed</div>
+    <div slot="header">Options</div>
+
+    <div class="cell">{{@screenedDate}}</div>
+    <div class="cell">{{@enrolledDate}}</div>
+    <div class="cell">{{@endOfTreatmentDate}}</div>
+    <div class="cell">{{@completedDate}}</div>
+    <div class="cell">{{@WDSFDate}}</div>
+    <div class="cell">{{@reconsentRequired}}</div>
+    <div class="cell">{{@consentsSigned}}</div>
+    <div class="cell">
+      <button class="btn btn-bare btn-link" data-tag="view-participant-consent-preview">Preview</button>
+    </div>
+
+    <div slot="no-data">There are no items to display</div>
+  </webc-datatable>
+</webc-container>
