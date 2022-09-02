@@ -57,19 +57,12 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.onTagClick('create-consent', () => {
       const createUpdateConsent = (err, visitsAndProcedures) => {
         if (err) {
-          // this.showModal(
-          //   'There was an error parsing the file, please select another file',
-          //   'Error',
-          //   () => {},
-          //   () => {}
-          // );
-          this.model.message = {
-            type: 'alert',
-            content: 'There was an error parsing the file, please select another file',
-          };
-
+          this.model.submitButtonDisabled = true;
+          this.model.consent.visitsAndProceduresDocument.invalidValue = true;
           return;
         }
+        this.model.consent.visitsAndProceduresDocument.invalidValue = false;
+
         if (this.model.isUpdate) {
           return this.updateConsentHandler(visitsAndProcedures);
         }
@@ -370,18 +363,5 @@ export default class AddNewTrialConsentModalController extends WebcController {
     }
 
     return initialViewModel;
-  }
-
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
   }
 }
