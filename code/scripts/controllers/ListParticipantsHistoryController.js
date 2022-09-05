@@ -36,10 +36,11 @@ export default class ListParticipantsHistoryController extends BreadCrumbManager
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
     this.participantsService = new ParticipantsService(this.DSUStorage);
-    let { participantPk, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid, data } =
+    let { participantDid, participantPk, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid, data } =
       this.history.location.state;
 
     this.model = {
+      participantDid,
       participantPk,
       trialId,
       trialKeySSI,
@@ -80,6 +81,7 @@ export default class ListParticipantsHistoryController extends BreadCrumbManager
 
     this.onTagClick('view-participant-consent-preview', async (model) => {
       this.navigateToPageTag('site-participant-preview', {
+        participantDid: this.model.participantDid,
         participantPk: this.model.participantPk,
         trialId: this.model.trialId,
         trialKeySSI: this.model.trialKeySSI,

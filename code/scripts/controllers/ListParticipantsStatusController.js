@@ -36,10 +36,21 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
     this.participantsService = new ParticipantsService(this.DSUStorage);
-    let { participantUid, participantPk, participantId, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid } =
-      this.history.location.state;
+    let {
+      participantDid,
+      participantUid,
+      participantPk,
+      participantId,
+      trialId,
+      trialKeySSI,
+      trialUid,
+      siteKeySSI,
+      siteId,
+      siteUid,
+    } = this.history.location.state;
 
     this.model = {
+      participantDid,
       participantUid,
       participantPk,
       participantId,
@@ -59,10 +70,11 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
       type: 'consents',
       tableLength: 7,
       addConsentButtonDisabled: true,
+      title: participantId ? `Participant's TP number: ${participantId}` : `Participant's Did: ${participantDid}`,
     };
 
     this.model.breadcrumb = this.setBreadCrumb({
-      label: `${participantId} / Site Participant's Status`,
+      label: `Site Participant's Status`,
       tag: `site-participant-status`,
     });
 

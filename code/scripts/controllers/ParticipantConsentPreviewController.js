@@ -7,10 +7,8 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
   constructor(...props) {
     super(...props);
 
-    let { participantPk, participantId, trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid, consent } =
-      this.getState();
-    this.model = {
-      consent,
+    let {
+      participantDid,
       participantPk,
       participantId,
       trialId,
@@ -19,10 +17,25 @@ export default class ParticipantConsentPreviewController extends BreadCrumbManag
       siteKeySSI,
       siteId,
       siteUid,
+      consent,
+    } = this.getState();
+
+    this.model = {
+      consent,
+      participantDid,
+      participantPk,
+      participantId,
+      trialId,
+      trialKeySSI,
+      trialUid,
+      siteKeySSI,
+      siteId,
+      siteUid,
+      title: participantId ? `Participant's TP number: ${participantId}` : `Participant's Did: ${participantDid}`,
     };
 
     this.model.breadcrumb = this.setBreadCrumb({
-      label: `${participantId} / Site Participant's Consent Preview`,
+      label: `Site Participant's Consent Preview`,
       tag: `site-participant-preview`,
     });
 
