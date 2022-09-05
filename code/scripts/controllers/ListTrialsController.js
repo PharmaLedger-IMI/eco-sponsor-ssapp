@@ -139,7 +139,8 @@ export default class ListTrialsController extends WebcController {
           }
           break;
         }
-        case Constants.MESSAGES.SPONSOR.ADDED_TS_NUMBER: {
+        case Constants.MESSAGES.SPONSOR.ADDED_TS_NUMBER:
+        case Constants.MESSAGES.PATIENT.UPDATE_TP_NUMBER: {
           if (data.ssi) {
             await this.participantsService.addParticipantNumber(data.ssi, data.senderIdentity);
           }
