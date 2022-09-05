@@ -144,7 +144,7 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
           (model.discontinuedDate !== '-' && model.discontinuedDate) ||
           (model.screenFailedDate !== '-' && model.screenFailedDate) ||
           '-',
-        reconsentRequired: maxVersionOfMandatoryConsent > maxVersionOfMandatorySignedConsent,
+        reconsentRequired: maxVersionOfMandatoryConsent > maxVersionOfMandatorySignedConsent ? 'Yes' : 'No',
         consentsSigned: model.consentsSigned,
         consent: rows.length > 0 && rows[0].consent,
         disabled: !(rows.length > 0 && rows[0].consent),
