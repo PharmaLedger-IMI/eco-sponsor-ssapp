@@ -324,7 +324,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
           value: '',
         },
         consentDocument: {
-          displayLabel: 'Select Consent file',
+          displayLabel: 'Select Consent file (*.pdf)',
           label: 'Select file',
           required: true,
           listFiles: true,
@@ -333,7 +333,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
           name: '',
         },
         visitsAndProceduresDocument: {
-          displayLabel: 'Select Visits and Procedures file',
+          displayLabel: 'Select Visits and Procedures file (*.csv)',
           label: 'Select file',
           required: true,
           listFiles: true,

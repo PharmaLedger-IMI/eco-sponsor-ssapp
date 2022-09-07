@@ -33,7 +33,7 @@ export default class AddNewSiteConsentModalController extends WebcController {
   };
 
   file = {
-    label: 'Site Consent File',
+    label: 'Site Consent File (*.pdf)',
     name: 'file',
     required: true,
     placeholder: 'Please select a consent file',
