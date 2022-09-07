@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
 const BreadCrumbManager = commonServices.getBreadCrumbManager();
+const {consentStatuses} = commonServices.ConsentStatusMapper;
 import TrialsService from '../services/TrialsService.js';
 import { participantConsentsTableHeaders } from '../constants/participant.js';
 import SitesService from '../services/SitesService.js';
@@ -114,7 +115,7 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
       return (
         x.versions &&
         x.versions.filter((y) => {
-          return y.actions && y.actions.filter((z) => z.name === 'Signed' && z.type === 'tp').length > 0;
+          return y.actions && y.actions.filter((z) => z.name === consentStatuses.signed.name && z.type === 'tp').length > 0;
         }).length > 0
       );
     });
@@ -125,7 +126,7 @@ export default class ListParticipantsStatusController extends BreadCrumbManager 
           x.versions &&
           x.versions
             .filter((y) => {
-              return y.actions && y.actions.filter((z) => z.name === 'Signed' && z.type === 'tp').length > 0;
+              return y.actions && y.actions.filter((z) => z.name === consentStatuses.signed.name && z.type === 'tp').length > 0;
             })
             .map((z) => ({ view: `${z.version} - ${x.trialConsentName}`, consent: { ...x, ...z } }))
       )
