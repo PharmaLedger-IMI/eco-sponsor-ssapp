@@ -163,7 +163,7 @@ export default class ListTrialsController extends WebcController {
     } catch (error) {
       window.WebCardinal.loader.hidden = true;
       console.error(error);
-      this.showInformationModal('ERROR', 'There was an issue accessing trials object', 'toast');
+      this.showInformationModal('There was an issue accessing trials object', 'error');
     }
   }
 
@@ -194,17 +194,11 @@ export default class ListTrialsController extends WebcController {
     this.setTrialsModel(result);
   }
 
-  showInformationModal(title, message) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
+  showInformationModal(message, alertType) {
+    this.model.message = {
+      content: message,
+      type: alertType,
+    };
   }
 
   attachEvents() {
@@ -234,14 +228,14 @@ export default class ListTrialsController extends WebcController {
         () => {
           window.WebCardinal.loader.hidden = true;
           this.getTrials();
-          this.showInformationModal('Result', 'Trial added successfully', 'toast');
+          this.showInformationModal('Trial added successfully', 'success');
         },
         (event) => {
           window.WebCardinal.loader.hidden = true;
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new trial', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new trial', 'error');
           }
         },
         {
@@ -277,13 +271,13 @@ export default class ListTrialsController extends WebcController {
         async (event) => {
           await this.updateSiteStatuses(event.detail);
           await this.getTrials();
-          this.showInformationModal('Result', 'Trial status changed successfully', 'toast');
+          this.showInformationModal('Trial status changed successfully', 'success');
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new trial', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new trial', 'error');
           }
         },
         {

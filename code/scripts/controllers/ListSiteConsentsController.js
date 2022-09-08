@@ -61,7 +61,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `${siteId} / Site Consents`,
-      tag: `site-consents`
+      tag: `site-consents`,
     });
 
     this.attachEvents();
@@ -123,17 +123,11 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     }
   }
 
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
+  showInformationModal(message, alertType) {
+    this.model.message = {
+      content: message,
+      type: alertType,
+    };
   }
 
   attachEvents() {
@@ -149,13 +143,13 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
         async (_event) => {
           await this.getConsents();
           this.checkAddConsentButton();
-          this.showInformationModal('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Consent added successfully', 'success');
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new consent', 'error');
           }
         },
         {
@@ -169,8 +163,8 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
           trialUid: this.model.trialUid,
           mandatoryExists: this.model.mandatoryExists,
           model: {
-            modalTitle: "Add New Site Consent"
-          }
+            modalTitle: 'Add New Site Consent',
+          },
         }
       );
     });
@@ -185,7 +179,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
           // const response = event.detail;
           await this.getConsents();
           this.checkAddConsentButton();
-          this.showInformationModal('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Consent added successfully', 'success');
           // this.sendMessageToHco(
           //   Constants.MESSAGES.HCO.ADD_CONSENT,
           //   response.sReadSSI,
@@ -197,7 +191,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new consent', 'error');
           }
         },
         {
@@ -210,8 +204,8 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
           consents: JSON.parse(JSON.stringify(this.model.trialConsents)),
           trialUid: this.model.trialUid,
           model: {
-            modalTitle: "Add Site Consent Version"
-          }
+            modalTitle: 'Add Site Consent Version',
+          },
         }
       );
     });
@@ -231,7 +225,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
         siteKeySSI: this.model.siteKeySSI,
         siteUid: this.model.siteUid,
         data: JSON.parse(JSON.stringify(data)),
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -245,7 +239,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
         siteUid: this.model.siteUid,
         data: model,
         history: null,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
   }

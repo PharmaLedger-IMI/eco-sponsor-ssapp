@@ -28,23 +28,27 @@ export default class ListSitesController extends BreadCrumbManager {
     label: 'Select a status',
     placeholder: 'Please select an option',
     required: false,
-    options: [{label: "All statuses", value: ""}].concat(this.statusesArray.map((x) => ({
-      label: x,
-      value: x,
-    }))),
-    value:""
+    options: [{ label: 'All statuses', value: '' }].concat(
+      this.statusesArray.map((x) => ({
+        label: x,
+        value: x,
+      }))
+    ),
+    value: '',
   };
 
   stages = {
     label: 'Select a stage',
     placeholder: 'Please select an option',
     required: false,
-    options: [{label: "All Stages", value: "", disabled: false}].concat(this.stagesArray.map((x) => ({
-      label: x.value,
-      value: x.value,
-      disabled: x.disabled
-    }))),
-    value:""
+    options: [{ label: 'All Stages', value: '', disabled: false }].concat(
+      this.stagesArray.map((x) => ({
+        label: x.value,
+        value: x.value,
+        disabled: x.disabled,
+      }))
+    ),
+    value: '',
   };
 
   search = {
@@ -93,12 +97,12 @@ export default class ListSitesController extends BreadCrumbManager {
       headers: this.headers,
       clearButtonDisabled: true,
       type: 'sites',
-      tableLength: 7
+      tableLength: 7,
     };
 
     this.model.breadcrumb = this.setBreadCrumb({
       label: `${id} / Sites`,
-      tag: `sites`
+      tag: `sites`,
     });
 
     this.attachEvents();
@@ -161,17 +165,11 @@ export default class ListSitesController extends BreadCrumbManager {
     this.setSitesModel(result);
   }
 
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
+  showInformationModal(message, alertType) {
+    this.model.message = {
+      content: message,
+      type: alertType,
+    };
   }
 
   attachEvents() {
@@ -207,14 +205,14 @@ export default class ListSitesController extends BreadCrumbManager {
           const response = event.detail;
           this.getSites();
           this.sendMessageToHco(Constants.MESSAGES.HCO.ADD_SITE, response.keySSI, 'Site added', response.did);
-          this.showInformationModal('Result', 'Site added successfully', 'toast');
+          this.showInformationModal('Site added successfully', 'success');
           eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new site', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new site', 'error');
           }
         },
         {
@@ -235,14 +233,14 @@ export default class ListSitesController extends BreadCrumbManager {
           const response = event.detail;
           this.getSites();
           this.sendMessageToHco(Constants.MESSAGES.SPONSOR.UPDATE_SITE, response.uid, 'Site updated', response.did);
-          this.showInformationModal('Result', 'Contact name changed successfully', 'toast');
+          this.showInformationModal('Contact name changed successfully', 'success');
           eventBusService.emitEventListeners(Topics.RefreshTrialDetails, null);
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new site', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new site', 'error');
           }
         },
         {
@@ -262,7 +260,7 @@ export default class ListSitesController extends BreadCrumbManager {
         siteKeySSI: model.keySSI,
         siteId: model.id,
         siteUid: model.uid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 
@@ -274,7 +272,7 @@ export default class ListSitesController extends BreadCrumbManager {
         siteKeySSI: model.keySSI,
         siteId: model.id,
         siteUid: model.uid,
-        breadcrumb: this.model.toObject('breadcrumb')
+        breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
 

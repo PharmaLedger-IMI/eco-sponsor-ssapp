@@ -88,17 +88,11 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     this.model.data = model;
   }
 
-  showInformationModal(title, message, alertType) {
-    this.showErrorModal(
-      message,
-      title,
-      () => {},
-      () => {},
-      {
-        disableExpanding: true,
-        disableCancelButton: true,
-      }
-    );
+  showInformationModal(message, alertType) {
+    this.model.message = {
+      content: message,
+      type: alertType,
+    };
   }
 
   attachEvents() {
@@ -113,13 +107,13 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         'add-new-trial-consent',
         async (_event) => {
           await this.getConsents();
-          this.showInformationModal('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Consent added successfully', 'success');
         },
         (event) => {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new consent', 'error');
           }
         },
         {
@@ -144,7 +138,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
         (_event) => {
           // const response = event.detail;
           this.getConsents();
-          this.showInformationModal('Result', 'Consent added successfully', 'toast');
+          this.showInformationModal('Consent added successfully', 'success');
           // this.sendMessageToHco('add-econsent-version', response.keySSI, 'New consent version', selectedSite.did);
           // eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
         },
@@ -152,7 +146,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
           const error = event.detail || null;
           if (error instanceof Error) {
             console.error(error);
-            this.showInformationModal('Result', 'ERROR: There was an issue creating the new consent', 'toast');
+            this.showInformationModal('ERROR: There was an issue creating the new consent', 'error');
           }
         },
         {
