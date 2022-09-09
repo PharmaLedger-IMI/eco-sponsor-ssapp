@@ -159,7 +159,8 @@ export default class ListSitesController extends BreadCrumbManager {
       result = result.filter((x) => x.stage === this.model.stages.value);
     }
     if (this.model.search.value && this.model.search.value !== '') {
-      result = result.filter((x) => x.name.toUpperCase().search(this.model.search.value.toUpperCase()) !== -1);
+      debugger;
+      result = result.filter((x) => x.siteName.toUpperCase().search(this.model.search.value.toUpperCase()) !== -1);
     }
 
     this.setSitesModel(result);
