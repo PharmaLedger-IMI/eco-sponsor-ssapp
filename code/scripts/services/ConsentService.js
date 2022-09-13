@@ -94,6 +94,7 @@ export default class ConsentService extends DSUService {
     );
     model.versions[0].attachment = model.file.name;
     consentDSU.versions.push(model.versions[0]);
+    consentDSU.trialConsentVersion = model.trialConsentVersion;
     const updatedConsent = await this.updateEntityAsync(consentDSU, path);
 
     const updatedConsentDB = this.updateConsentToDB(updatedConsent, site.keySSI);
