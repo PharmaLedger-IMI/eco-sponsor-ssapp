@@ -140,40 +140,44 @@ export default class ParticipantsService extends DSUService {
       const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
       const participantDb = await this.getParticipantFromDb(uid, trial.keySSI, site.keySSI);
 
-      const incomingParticipantConsentsPromises = consentSSIs.map((x) => {
-        return this.mountEntityAsync(x, this.PARTICIPANTS_CONSENTS_PATH + '/' + participantDb.tpUid);
-      });
-      const incomingParticipantConsents = await Promise.all([...incomingParticipantConsentsPromises]);
+      let newConsents;
+      if(consentSSIs){
 
-      const existingConsentsPromises = [];
-      const newConsentsPromises = [];
-      for (const x of incomingParticipantConsents) {
-        if (participantDb.consents.indexOf(x.uid) > -1) {
-          existingConsentsPromises.push(
-            this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
-          );
-        } else {
-          newConsentsPromises.push(
-            this.storageService.insertRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
-          );
+        const incomingParticipantConsentsPromises = consentSSIs.map((x) => {
+          return this.mountEntityAsync(x, this.PARTICIPANTS_CONSENTS_PATH + '/' + participantDb.tpUid);
+        });
+        const incomingParticipantConsents = await Promise.all([...incomingParticipantConsentsPromises]);
+
+        const existingConsentsPromises = [];
+        const newConsentsPromises = [];
+        for (const x of incomingParticipantConsents) {
+          if (participantDb.consents.indexOf(x.uid) > -1) {
+            existingConsentsPromises.push(
+                this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
+            );
+          } else {
+            newConsentsPromises.push(
+                this.storageService.insertRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
+            );
+          }
         }
+
+         await Promise.all([...existingConsentsPromises]);
+         newConsents = await Promise.all([...newConsentsPromises]);
       }
 
-      const existingConsents = await Promise.all([...existingConsentsPromises]);
-      const newConsents = await Promise.all([...newConsentsPromises]);
 
-      // const participantConsentsDbPromises = participantConsents.map((x) => {
-      //   return this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x);
-      // });
-      // const participantConsentsDb = await Promise.all([...participantConsentsDbPromises]);
-
+      let updatedConsents = [...participantDb.consents];
+      if(newConsents){
+         updatedConsents.concat(...newConsents.map((x) => x.uid));
+      }
       const updatedParticipant = await this.storageService.updateRecordAsync(
         this.getTableName(trial.keySSI, site.keySSI),
         participantDSU.uid,
         {
           ...participantDSU,
           tpUid: participantDb.tpUid,
-          consents: [...participantDb.consents, ...newConsents.map((x) => x.uid)],
+          consents: updatedConsents,
         }
       );
 
