@@ -2,6 +2,8 @@ import { countryListAlpha2 } from '../../constants/countries.js';
 import SitesService from '../../services/SitesService.js';
 const commonServices = require('common-services');
 const { getDidServiceInstance } = commonServices.DidService;
+const { DidService } = commonServices;
+const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 
 // eslint-disable-next-line no-undef
 const { WebcController } = WebCardinal.controllers;
@@ -61,6 +63,8 @@ export default class AddNewSiteModalController extends WebcController {
     this.trialId = id;
 
     this.sitesService = new SitesService(this.DSUStorage);
+    this.didService = DidService.getDidServiceInstance();
+    this.communicationService = getCommunicationServiceInstance();
 
     this.model = {
       site: {
@@ -109,6 +113,29 @@ export default class AddNewSiteModalController extends WebcController {
           };
           return;
         }
+        //known did schema has the next format : did:type:name:domain:uniqueIdentifier
+        const didSegments = this.model.site.did.value.split(':');
+        if (didSegments.length !== 5) {
+          this.model.site.did = {
+            ...this.model.site.did,
+            invalidValue: true,
+          };
+          return;
+        }
+        if (didSegments.some((segment) => segment.trim() === '')) {
+          this.model.site.did = {
+            ...this.model.site.did,
+            invalidValue: true,
+          };
+          return;
+        }
+        if (this.model.site.did.value.trim() === '') {
+          this.model.site.did = {
+            ...this.model.site.did,
+            invalidValue: true,
+          };
+          return;
+        }
         this.model.site.did = {
           ...this.model.site.did,
           invalidValue: null,
@@ -141,6 +168,17 @@ export default class AddNewSiteModalController extends WebcController {
         }
 
         if (this.existingDids.indexOf(this.model.site.did.value) > -1) {
+          valid = false;
+        }
+
+        try {
+          let tpPublicDidData = DidService.getDidData(this.model.site.did.value);
+          await this.communicationService.resolveDidDocument(tpPublicDidData);
+        } catch (e) {
+          this.model.site.did = {
+            ...this.model.site.did,
+            invalidValue: true,
+          };
           valid = false;
         }
 
