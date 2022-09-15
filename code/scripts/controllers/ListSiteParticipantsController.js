@@ -87,7 +87,7 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
     if (numberOfParticipants) {
       const statistics = {};
       statistics.enrolled = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.ENROLLED);
-      statistics.withdrew = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.WITHDRAW);
+      statistics.withdrew = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.WITHDRAWN);
       statistics.declined = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.DECLINED);
       statistics.screened = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.SCREENED);
       statistics.planned = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.PLANNED);
