@@ -94,6 +94,9 @@ export default class ListSiteParticipantsController extends BreadCrumbManager {
       statistics.endOfTreatment = participants.filter(
         (x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.END_OF_TREATMENT
       );
+      statistics.inTreatment = participants.filter(
+          (x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.IN_TREATMENT
+      );
       statistics.completed = participants.filter((x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.COMPLETED);
       statistics.discontinued = participants.filter(
         (x) => x.status === Constants.TRIAL_PARTICIPANT_STATUS.DISCONTINUED

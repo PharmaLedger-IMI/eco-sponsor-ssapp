@@ -1,7 +1,6 @@
 <h2 slot="header">New Trial</h2>
 
-<form class="m-2">
-  <div class="d-flex flex-column justify-content-between">
+  <div class="modal-form-container">
     <div class="form-group">
       <label class="col-form-label">{{ @trial.name.label }}</label>
       <input class="form-control" data-view-model="@trial.name" value="@trial.name.value" />
@@ -51,4 +50,3 @@
   <button class="btn btn-primary mt-2" slot="footer" disabled="@submitButtonDisabled" data-tag="create-trial">
     Submit
   </button>
-</form>
