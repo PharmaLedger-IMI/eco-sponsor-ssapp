@@ -11,6 +11,15 @@ export default class EditSiteContactModalController extends WebcController {
     value: '',
   };
 
+  did = {
+    label: 'Site DID',
+    name: 'did',
+    required: true,
+    placeholder: 'Please insert the site DID...',
+    disabled: true,
+    value: '',
+  };
+
   constructor(...props) {
     super(...props);
 
@@ -25,6 +34,7 @@ export default class EditSiteContactModalController extends WebcController {
     this.model = {
       site: {
         name: this.name,
+        did: { ...this.did, value: this.site.did },
       },
     };
 
