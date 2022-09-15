@@ -123,12 +123,16 @@ export default class ListSitesController extends BreadCrumbManager {
     if (!this.model.trial) {
       await this.getTrial();
     }
-    const sites = (await this.sitesService.getSites(this.model.trial.keySSI)).map((x) => ({
-      ...x,
-      active: x.status === siteStatusesEnum.Active,
-      terminated: !(x.status === siteStatusesEnum.Cancelled),
-      onHold: x.status === siteStatusesEnum.OnHold,
-    }));
+    const sites = (await this.sitesService.getSites(this.model.trial.keySSI))
+      .map((x) => ({
+        ...x,
+        active: x.status === siteStatusesEnum.Active,
+        terminated: !(x.status === siteStatusesEnum.Cancelled),
+        onHold: x.status === siteStatusesEnum.OnHold,
+      }))
+      .sort((a, b) => {
+        return b.__timestamp - a.__timestamp;
+      });
 
     this.sites = sites;
     this.setSitesModel(sites);

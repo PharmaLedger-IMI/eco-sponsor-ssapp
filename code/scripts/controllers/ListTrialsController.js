@@ -158,6 +158,9 @@ export default class ListTrialsController extends WebcController {
     try {
       window.WebCardinal.loader.hidden = false;
       this.trials = await this.trialsService.getTrials();
+      this.trials.sort((a, b) => {
+        return b.__timestamp - a.__timestamp;
+      });
       this.setTrialsModel(this.trials);
       window.WebCardinal.loader.hidden = true;
     } catch (error) {

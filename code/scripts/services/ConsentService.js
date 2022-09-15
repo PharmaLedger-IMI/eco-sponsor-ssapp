@@ -177,7 +177,7 @@ export default class ConsentService extends DSUService {
             versionDate: data.versions[0].versionDate,
             attachment: data.versions[0].file.name,
           },
-        ]
+        ],
       },
       trial.keySSI
     );
