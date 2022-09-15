@@ -54,7 +54,7 @@ export default class ListSitesController extends BreadCrumbManager {
   search = {
     label: 'Search for a site',
     required: false,
-    placeholder: 'Site name...',
+    placeholder: 'Site name or site DID...',
     value: '',
   };
 
@@ -159,7 +159,11 @@ export default class ListSitesController extends BreadCrumbManager {
       result = result.filter((x) => x.stage === this.model.stages.value);
     }
     if (this.model.search.value && this.model.search.value !== '') {
-      result = result.filter((x) => x.siteName.toUpperCase().search(this.model.search.value.toUpperCase()) !== -1);
+      result = result.filter(
+        (x) =>
+          x.siteName.toUpperCase().search(this.model.search.value.toUpperCase()) !== -1 ||
+          x.did.toUpperCase().search(this.model.search.value.toUpperCase()) !== -1
+      );
     }
 
     this.setSitesModel(result);
