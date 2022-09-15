@@ -7,6 +7,7 @@ const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ConsentService from '../services/ConsentService.js';
 import { consentTypeEnum } from '../constants/consent.js';
+import VisitsService from '../services/VisitsService.js';
 
 export default class ListTrialConsentsController extends BreadCrumbManager {
   itemsPerPageArray = [5, 10, 15, 20, 30];
@@ -38,6 +39,8 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
     this.consentService = new ConsentService(this.DSUStorage);
+    this.visitsService = new VisitsService(this.DSUStorage);
+
     let { id, keySSI, uid } = this.history.location.state;
 
     this.model = {
@@ -103,6 +106,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     );
 
     this.onTagClick('add-consent', async () => {
+      const visits = await this.visitsService.getVisitsFromDB(this.model.keySSI);
       this.showModalFromTemplate(
         'add-new-trial-consent',
         async (_event) => {
@@ -124,6 +128,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
             isUpdate: false,
             existingIds: this.model.consents.map((x) => x.id) || [],
             numberOfMandatoryConsents: this.model.numberOfMandatoryConsents,
+            existingVisits: visits,
           },
         }
       );
@@ -136,11 +141,8 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       this.showModalFromTemplate(
         'add-new-trial-consent',
         (_event) => {
-          // const response = event.detail;
           this.getConsents();
           this.showInformationModal('Consent added successfully', 'success');
-          // this.sendMessageToHco('add-econsent-version', response.keySSI, 'New consent version', selectedSite.did);
-          // eventBusService.emitEventListeners(Topics.RefreshTrialConsents, null);
         },
         (event) => {
           const error = event.detail || null;

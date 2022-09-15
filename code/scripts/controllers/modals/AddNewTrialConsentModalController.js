@@ -170,6 +170,16 @@ export default class AddNewTrialConsentModalController extends WebcController {
               };
             });
 
+            const existingVisits = this.model.toObject('existingVisits');
+            if (this.model.numberOfMandatoryConsents !== 0) {
+              const check = this.checkOptionalVisits(result, existingVisits.visits[0].visits);
+
+              if (!check) {
+                callback('Visits are not the same as mandatory consent!', null);
+                return;
+              }
+            }
+
             callback(undefined, result);
           } else {
             callback('Could not parse file', null);
@@ -363,5 +373,25 @@ export default class AddNewTrialConsentModalController extends WebcController {
     }
 
     return initialViewModel;
+  }
+
+  checkOptionalVisits(result, existingVisits) {
+    if (result.length !== existingVisits.length) {
+      return false;
+    }
+
+    if (
+      !result.every(
+        (x, idx) =>
+          JSON.stringify(x.titles) === JSON.stringify(existingVisits[idx].titles) &&
+          JSON.stringify(x.visitWindow) === JSON.stringify(existingVisits[idx].visitWindow) &&
+          // x.name === existingVisits[idx].name && //name is different i see on sample file
+          x.week === existingVisits[idx].week &&
+          x.day === existingVisits[idx].day
+      )
+    ) {
+      return false;
+    }
+    return true;
   }
 }
