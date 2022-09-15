@@ -138,10 +138,11 @@ export default class SitesService extends DSUService {
     }
 
     const siteDSU = await this.getSite(model.uid);
-
+    const siteDB = await this.getSiteFromDB(siteDSU.did, trialKeySSI);
     const updatedSiteDSU = this.updateEntityAsync({ ...siteDSU, name: model.name });
     const updatedSite = this.storageService.updateRecordAsync(this.getTableName(trialKeySSI), did, {
-      ...model,
+      ...siteDB,
+      name: model.name,
     });
 
     const result = await Promise.allSettled([updatedSite, updatedSiteDSU]);

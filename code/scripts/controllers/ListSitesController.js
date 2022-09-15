@@ -4,7 +4,7 @@ import TrialsService from '../services/TrialsService.js';
 import { siteStatusesEnum, getActivatedSiteStagesEnum, siteTableHeaders } from '../constants/site.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const BreadCrumbManager = commonServices.getBreadCrumbManager();
-const Constants = commonServices.Constants;
+const { Constants, momentService } = commonServices;
 import SitesService from '../services/SitesService.js';
 
 import eventBusService from '../services/EventBusService.js';
@@ -131,9 +131,8 @@ export default class ListSitesController extends BreadCrumbManager {
         onHold: x.status === siteStatusesEnum.OnHold,
       }))
       .sort((a, b) => {
-        return b.__timestamp - a.__timestamp;
+        return momentService(a.created).isBefore(momentService(b.created)) ? 1 : -1;
       });
-
     this.sites = sites;
     this.setSitesModel(sites);
     window.WebCardinal.loader.hidden = true;

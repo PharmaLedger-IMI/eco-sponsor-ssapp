@@ -4,7 +4,7 @@ import TrialsService from '../services/TrialsService.js';
 import { trialStatusesEnum, trialTableHeaders } from '../constants/trial.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const MessageHandlerService = commonServices.MessageHandlerService;
-const Constants = commonServices.Constants;
+const { Constants, momentService } = commonServices;
 import ParticipantsService from '../services/ParticipantsService.js';
 import SitesService from '../services/SitesService.js';
 
@@ -159,7 +159,7 @@ export default class ListTrialsController extends WebcController {
       window.WebCardinal.loader.hidden = false;
       this.trials = await this.trialsService.getTrials();
       this.trials.sort((a, b) => {
-        return b.__timestamp - a.__timestamp;
+        return momentService(a.created).isBefore(momentService(b.created)) ? 1 : -1;
       });
       this.setTrialsModel(this.trials);
       window.WebCardinal.loader.hidden = true;
