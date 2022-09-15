@@ -2,18 +2,25 @@
 
 <div>
   <div class="form-group">
-    <label>Trial Consent Type</label>
-    <input class="form-control" value="@consent.type" disabled="true"></input>
+    <label class="col-form-label">Trial Consent Type</label>
+    <input class="form-control" value="@consent.type" disabled="true" />
   </div>
 
   <div class="form-group" data-if="@existingConsent">
-    <label>Trial Consent Name</label>
-    <input class="form-control" value="@consent.trialConsentName" disabled="true"></input>
+    <label class="col-form-label">Trial Consent Name</label>
+    <input class="form-control" value="@consent.trialConsentName" disabled="true" />
   </div>
-  
+
   <div class="form-group" data-if="@newConsent">
-    <label>Trial Consent Name</label>
-    <select data-tag="selected-consent-changed" class="form-control" data-for="@consent.trialConsentName.selectOptions" required="required" value="@consent.trialConsentName.value" disabled="@consent.trialConsentName.disabled">
+    <label class="col-form-label">Trial Consent Name</label>
+    <select
+      data-tag="selected-consent-changed"
+      class="form-control"
+      data-for="@consent.trialConsentName.selectOptions"
+      required="required"
+      value="@consent.trialConsentName.value"
+      disabled="@consent.trialConsentName.disabled"
+    >
       <option value="@value">{{@label}}</option>
     </select>
     <div data-if="@consent.trialConsentName.invalidValue" class="d-flex flex-row">
@@ -23,13 +30,13 @@
   </div>
 
   <div class="form-group">
-    <label>Trial Consent Version</label>
-    <input class="form-control" value="@consent.trialConsentVersion" disabled="true"></input>
+    <label class="col-form-label">Trial Consent Version</label>
+    <input class="form-control" value="@consent.trialConsentVersion" disabled="true" />
   </div>
 
   <div class="form-group">
-    <label>{{ @consent.name.label }}</label>
-    <input class="form-control" data-view-model="@consent.name"></input>
+    <label class="col-form-label">{{ @consent.name.label }}</label>
+    <input class="form-control" data-view-model="@consent.name" />
     <span data-if="@consent.name.invalidValue">
       <i class="red-invalid fas fa-times"></i>
       <small class="form-text text-danger">A consent with this name already exits</small>
@@ -37,19 +44,26 @@
   </div>
 
   <div class="form-group">
-    <label>{{ @consent.version.label }}</label>
-    <input class="form-control" id="version-field" data-view-model="@consent.version" event-name="version-changed"></input>
+    <label class="col-form-label">{{ @consent.version.label }}</label>
+    <input class="form-control" id="version-field" data-view-model="@consent.version" event-name="version-changed" />
     <span data-if="@consent.version.invalidValue">
       <i class="red-invalid fas fa-times"></i>
       <small class="form-text text-danger">A consent with this version already exits, or version is too small</small>
     </span>
   </div>
   <div class="form-group">
-    <label>{{ @consent.file.label }}</label>
+    <label class="col-form-label">{{ @consent.file.label }}</label>
     <!-- <psk-files-chooser style="margin: 10px" view-model="consent.attachment" event-name="add-file"> </psk-files-chooser> -->
-    <div class='input-group d-flex justify-content-between align-items-center'>
-      <input class='form-control' disabled value='@consent.attachment.name' placeholder="Select a *.pdf file"/>
-      <psk-files-chooser style="margin: 10px" data-view-model="@consent.attachment" event-name="add-file" accept=".pdf" class="classic-file-chooser"> </psk-files-chooser>
+    <div class="input-group d-flex justify-content-between align-items-center">
+      <input class="form-control" disabled value="@consent.attachment.name" placeholder="Select a *.pdf file" />
+      <psk-files-chooser
+        style="margin: 10px"
+        data-view-model="@consent.attachment"
+        event-name="add-file"
+        accept=".pdf"
+        class="classic-file-chooser"
+      >
+      </psk-files-chooser>
     </div>
     <span data-if="@consent.file.invalidValue" class="d-flex flex-row">
       <i class="red-invalid fas fa-times mr-2"></i>

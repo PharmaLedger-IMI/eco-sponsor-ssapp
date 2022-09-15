@@ -5,7 +5,7 @@
 
 <div class="d-flex flex-column justify-content-between" style="row-gap: 0.5rem">
   <div class="form-group">
-    <label>{{ @consent.name.label }}</label>
+    <label class="col-form-label">{{ @consent.name.label }}</label>
     <input class="form-control" data-view-model="@consent.name" />
     <span class="d-flex flex-row" data-if="@consent.name.invalidValue">
       <i class="red-invalid fas fa-times mr-2"></i>
@@ -13,7 +13,7 @@
     </span>
   </div>
   <div class="form-group">
-    <label>{{ @consent.id.label }}</label>
+    <label class="col-form-label">{{ @consent.id.label }}</label>
     <input class="form-control" data-view-model="@consent.id" id="id-field" />
     <span class="d-flex flex-row" data-if="@consent.id.invalidValue">
       <i class="red-invalid fas fa-times mr-2"></i>
@@ -21,7 +21,7 @@
     </span>
   </div>
   <div class="form-group">
-    <label>{{ @consent.type.label }}</label>
+    <label class="col-form-label">{{ @consent.type.label }}</label>
     <select
       class="form-control"
       data-for="@consent.type.selectOptions"
@@ -37,7 +37,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label>{{ @consent.version.label }}</label>
+    <label class="col-form-label">{{ @consent.version.label }}</label>
     <input class="form-control" data-view-model="@consent.version" id="version-field" />
     <span class="d-flex flex-row" data-if="@consent.version.invalidValue">
       <i class="red-invalid fas fa-times mr-2"></i>
@@ -45,7 +45,7 @@
     </span>
   </div>
   <div class="form-group">
-    <label>{{ @consent.consentDocument.displayLabel }}</label>
+    <label class="col-form-label">{{ @consent.consentDocument.displayLabel }}</label>
     <div class="modal-input-file-wrapper">
       <input class="form-control" disabled placeholder="Select a consent file" value="@consent.consentDocument.name" />
       <psk-files-chooser
@@ -72,7 +72,7 @@
     </div>
   </div>
   <div class="form-group" data-if="@canDisplayVisitAndProceduresUpload">
-    <label>{{ @consent.visitsAndProceduresDocument.displayLabel }}</label>
+    <label class="col-form-label">{{ @consent.visitsAndProceduresDocument.displayLabel }}</label>
     <div class="modal-input-file-wrapper">
       <input
         class="form-control"

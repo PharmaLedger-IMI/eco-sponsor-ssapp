@@ -3,14 +3,14 @@
 <form class="m-2">
   <div class="d-flex flex-column justify-content-between">
     <div class="form-group">
-      <label>{{ @trial.name.label }}</label>
+      <label class="col-form-label">{{ @trial.name.label }}</label>
       <input class="form-control" data-view-model="@trial.name" value="@trial.name.value" />
       <span data-if="@trial.name.invalidValue">
         <i class="red-invalid fas fa-times"></i>
       </span>
     </div>
     <div class="form-group">
-      <label>{{ @trial.id.label }}</label>
+      <label class="col-form-label">{{ @trial.id.label }}</label>
       <input
         class="form-control"
         id="id-field"
@@ -24,7 +24,7 @@
       </span>
     </div>
     <div class="form-group">
-      <label>{{ @trial.sponsor.label }}</label>
+      <label class="col-form-label">{{ @trial.sponsor.label }}</label>
       <input
         class="form-control"
         id="sponsor-field"
@@ -37,7 +37,7 @@
       </span>
     </div>
     <div class="form-group">
-      <label>{{ @trial.did.label }}</label>
+      <label class="col-form-label">{{ @trial.did.label }}</label>
       <input
         class="form-control"
         id="did-field"

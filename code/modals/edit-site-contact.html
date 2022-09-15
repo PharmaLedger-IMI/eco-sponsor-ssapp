@@ -3,19 +3,17 @@
 <form class="m-2">
   <div class="d-flex flex-column justify-content-between">
     <div class="form-group">
-      <label>{{ @site.did.label }}</label>
-      <input  class="form-control" data-view-model="@site.did"></input>
+      <label class="col-form-label">{{ @site.did.label }}</label>
+      <input class="form-control" data-view-model="@site.did" />
     </div>
   </div>
 
   <div class="d-flex flex-column justify-content-between">
     <div class="form-group">
-      <label>{{ @site.name.label }}</label>
-      <input  class="form-control" data-view-model="@site.name"></input>
+      <label class="col-form-label">{{ @site.name.label }}</label>
+      <input class="form-control" data-view-model="@site.name" />
     </div>
   </div>
 
-  <button class="btn btn-primary mt-2" slot="footer" data-tag="update-contact">
-    Submit
-  </button>
+  <button class="btn btn-primary mt-2" slot="footer" data-tag="update-contact">Submit</button>
 </form>
