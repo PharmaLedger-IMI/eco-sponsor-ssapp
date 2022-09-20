@@ -4,7 +4,7 @@ const { WebcController } = WebCardinal.controllers;
 
 export default class EditSiteContactModalController extends WebcController {
   name = {
-    label: 'Health Care Professional Last Name',
+    label: 'Principal Investigator',
     name: 'name',
     required: true,
     placeholder: 'Please insert a name...',
