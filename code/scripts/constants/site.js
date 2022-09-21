@@ -71,7 +71,7 @@ export const siteTableHeaders = [
   },
   {
     column: 'did',
-    label: 'Contact Data',
+    label: 'Principal Investigator',
     notSortable: false,
     type: 'number',
     asc: null,
