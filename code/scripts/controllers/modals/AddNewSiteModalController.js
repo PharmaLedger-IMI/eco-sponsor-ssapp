@@ -21,10 +21,10 @@ export default class AddNewSiteModalController extends WebcController {
   };
 
   name = {
-    label: 'Principal Investigator',
+    label: 'Principal Investigator Name',
     name: 'name',
     required: true,
-    placeholder: 'Please insert a name...',
+    placeholder: 'Please insert principal investigator name',
     value: '',
   };
 
