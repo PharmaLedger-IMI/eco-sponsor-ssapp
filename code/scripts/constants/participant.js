@@ -80,7 +80,7 @@ export const participantConsentsTableHeaders = [
   },
   {
     column: 'hcoSigned',
-    label: 'HCO Signature',
+    label: 'HCP Signature',
     notSortable: false,
     type: 'string',
     asc: null,
