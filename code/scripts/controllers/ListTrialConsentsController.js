@@ -135,6 +135,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     });
 
     this.onTagClick('add-trial-version', async (model, _target) => {
+      const visits = await this.visitsService.getVisitsFromDB(this.model.keySSI);
       const selectedConsent = model;
       const existingVersions = selectedConsent.versions.map((x) => x.version);
 
@@ -159,6 +160,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
             isUpdate: selectedConsent,
             existingVersions: existingVersions || [],
             numberOfMandatoryConsents: this.model.numberOfMandatoryConsents,
+            existingVisits: visits,
           },
         }
       );
