@@ -54,7 +54,7 @@ export default class TrialsService extends DSUService {
       did: trial.did,
       stage: trial.stage,
       created: trial.created,
-      consents: []
+      consents: [],
     });
 
     const visitDSU = await this.visitsService.createConsentVisits(trial.keySSI);
@@ -134,11 +134,20 @@ export default class TrialsService extends DSUService {
     const trialDb = await this.getTrialFromDB(trial.id);
     const trialDSU = await this.getEntityAsync(trial.uid);
 
-    const updateTrialDB = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, {
-      ...trialDb,
-      ...trialNewDetails,
-    });
+    const newTrialDb = { ...trialDb, ...trialNewDetails };
+
+    let promises = [];
+    if (newTrialDb.id === trial.id) {
+      const updateTrialDB = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, newTrialDb);
+      promises.push(updateTrialDB);
+    } else {
+      const updateTrialDB = this.addTrialToDB(newTrialDb);
+      promises.push(updateTrialDB);
+      const deletedRecord = this.storageService.deleteRecord(this.TRIALS_TABLE, trial.id, trialDb);
+      promises.push(deletedRecord);
+    }
     const updatedTrialDSU = this.updateEntityAsync({ ...trialDSU, ...trialNewDetails });
-    return await Promise.allSettled([updateTrialDB, updatedTrialDSU]);
+    promises.push(updatedTrialDSU);
+    return await Promise.allSettled(promises);
   }
 }
