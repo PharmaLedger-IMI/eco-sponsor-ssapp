@@ -175,7 +175,15 @@ export default class ListTrialsController extends WebcController {
       .map((trial) => ({
         ...trial,
         created: new Date(trial.created).toLocaleDateString('en-UK'),
-        recruitmentPeriod: trial.recruitmentPeriod ? trial.recruitmentPeriod.toShowDate : '-',
+        recruitmentPeriod: trial.recruitmentPeriod
+          ? {
+              ...trial.recruitmentPeriod,
+              toShowDate:
+                momentService(trial.recruitmentPeriod.startDate).format('DD-MM-YYYY') +
+                '-' +
+                momentService(trial.recruitmentPeriod.endDate).format('DD-MM-YYYY'),
+            }
+          : { ...trial.recruitmentPeriod, toShowDate: '-' },
       }))
       .sort((a, b) => a.id - b.id);
 
@@ -325,7 +333,9 @@ export default class ListTrialsController extends WebcController {
         const recruitmentPeriod = {
           ...response,
           toShowDate:
-            new Date(response.startDate).toLocaleDateString() + ' - ' + new Date(response.endDate).toLocaleDateString(),
+            momentService(response.startDate).format('DD-MM-YYYY') +
+            ' - ' +
+            momentService(response.endDate).format('DD-MM-YYYY'),
         };
         await this.trialsService.updateTrialDetails(model, { recruitmentPeriod });
         await this.getTrials();

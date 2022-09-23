@@ -135,7 +135,6 @@ export default class TrialsService extends DSUService {
     const trialDSU = await this.getEntityAsync(trial.uid);
 
     const newTrialDb = { ...trialDb, ...trialNewDetails };
-
     let promises = [];
     if (newTrialDb.id === trial.id) {
       const updateTrialDB = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, newTrialDb);

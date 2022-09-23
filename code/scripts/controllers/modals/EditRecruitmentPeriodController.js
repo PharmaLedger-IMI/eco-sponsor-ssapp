@@ -22,8 +22,8 @@ export default class EditRecruitmentPeriodController extends WebcController {
       let startDate = this.model.startDate.value;
       let endDate = this.model.endDate.value;
 
-      let fromDateObj = new Date(startDate);
-      let toDateObj = new Date(endDate);
+      let fromDateObj = momentService(startDate).toDate();
+      let toDateObj = momentService(endDate).toDate();
 
       if (startDate) {
         this.model.endDate.min = momentService(startDate).format(Constants.DATE_UTILS.FORMATS.YearMonthDayPattern);
@@ -49,17 +49,27 @@ export default class EditRecruitmentPeriodController extends WebcController {
     this.onTagEvent('tp:submit', 'click', (model, target, event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
-      this.send('confirmed', { startDate: this.model.startDate.value, endDate: this.model.endDate.value });
+      this.send('confirmed', {
+        startDate: momentService(this.model.startDate.value).utc().format(),
+        endDate: momentService(this.model.endDate.value).utc().format(),
+      });
     });
   }
 
   getInitModel(prevProps) {
     let startDateValue = '',
       endDateValue = '';
-    if (prevProps.recruitmentPeriod && prevProps.recruitmentPeriod !== '-') {
-      const dates = prevProps.recruitmentPeriod.split('-');
-      startDateValue = momentService(dates[0]).format(Constants.DATE_UTILS.FORMATS.YearMonthDayPattern);
-      endDateValue = momentService(dates[1]).format(Constants.DATE_UTILS.FORMATS.YearMonthDayPattern);
+    if (
+      prevProps.recruitmentPeriod &&
+      prevProps.recruitmentPeriod.startDate &&
+      prevProps.recruitmentPeriod.startDate !== '-'
+    ) {
+      startDateValue = momentService(prevProps.recruitmentPeriod.startDate).format(
+        Constants.DATE_UTILS.FORMATS.YearMonthDayPattern
+      );
+      endDateValue = momentService(prevProps.recruitmentPeriod.endDate).format(
+        Constants.DATE_UTILS.FORMATS.YearMonthDayPattern
+      );
     }
 
     return {
