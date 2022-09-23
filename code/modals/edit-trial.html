@@ -1,0 +1,23 @@
+<h2 slot="header">Edit Trial Details</h2>
+
+<div class="modal-form-container">
+  <div class="form-group">
+    <label class="col-form-label">{{ @trial.name.label }}</label>
+    <input class="form-control" data-view-model="@trial.name" />
+    <span data-if="@trial.name.invalidValue" class="d-flex flex-row">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">A trial must have a valid name</small>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label class="col-form-label">{{ @trial.id.label }}</label>
+    <input class="form-control" data-view-model="@trial.id" />
+    <span data-if="@trial.id.invalidValue" class="d-flex flex-row">
+      <i class="red-invalid fas fa-times mr-2"></i>
+      <small class="form-text text-danger">A trial must have a valid id</small>
+    </span>
+  </div>
+</div>
+
+<button class="btn btn-primary mt-2" slot="footer" data-tag="update-trial">Submit</button>

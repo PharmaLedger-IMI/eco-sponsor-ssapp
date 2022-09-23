@@ -292,6 +292,29 @@ export default class ListTrialsController extends WebcController {
       );
     });
 
+    this.onTagClick('edit-trial', async (model) => {
+      this.showModalFromTemplate(
+        'edit-trial',
+        async (event) => {
+          await this.getTrials();
+          this.showInformationModal('Trial edited changed successfully', 'success');
+        },
+        (event) => {
+          const error = event.detail || null;
+          if (error instanceof Error) {
+            console.error(error);
+            this.showInformationModal('ERROR: There was an issue editing the trial', 'error');
+          }
+        },
+        {
+          controller: 'modals/EditTrialModalController',
+          disableExpanding: true,
+          disableBackdropClosing: true,
+          trial: model,
+        }
+      );
+    });
+
     this.onTagClick('set-recruitment-period', (model, target, event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
