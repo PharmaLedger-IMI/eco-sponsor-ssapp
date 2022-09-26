@@ -94,7 +94,7 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
       return {
         ...x,
         ...maxVersionObj,
-        versionToShow: `V${maxVersionObj.version} ${new Date(maxVersionObj.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB)}`,
+        versionToShow: `V${maxVersionObj.version} ${new Date(maxVersionObj.versionDate).toLocaleDateString(Constants.DATE_UTILS.FORMATS.EN_UK)}`,
       };
     });
     this.model.data = JSON.parse(JSON.stringify(dataModel));

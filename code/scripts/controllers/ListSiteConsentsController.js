@@ -115,7 +115,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     } else {
       const result = site.consents.map((x) => ({
         ...x,
-        ...x.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB) }))[
+        ...x.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.FORMATS.EN_UK) }))[
           x.versions.length - 1
         ],
         trialConsentVersion: 1,
@@ -216,7 +216,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
       const data = selectedConsent.versions.map((x) => ({
         ...selectedConsent,
         ...x,
-        versionDate: new Date(x.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB),
+        versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.FORMATS.EN_UK),
       }));
       this.navigateToPageTag('site-consent-history', {
         trialId: this.model.trialId,
