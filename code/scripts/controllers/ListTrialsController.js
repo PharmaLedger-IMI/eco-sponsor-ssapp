@@ -319,6 +319,7 @@ export default class ListTrialsController extends WebcController {
           disableExpanding: true,
           disableBackdropClosing: true,
           trial: model,
+          existingIds: this.trials.map((x) => x.id) || [],
         }
       );
     });

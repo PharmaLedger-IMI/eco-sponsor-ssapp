@@ -22,6 +22,7 @@ export default class EditTrialModalController extends WebcController {
     super(...props);
 
     this.trial = props[0].trial;
+    this.existingIds = props[0].existingIds;
     this.trialsService = new TrialsService(this.DSUStorage);
 
     this.model = {
@@ -53,7 +54,11 @@ export default class EditTrialModalController extends WebcController {
           valid = false;
         }
 
-        if (!this.model.trial.id.value || this.model.trial.id.value === '') {
+        if (
+          !this.model.trial.id.value ||
+          this.model.trial.id.value === '' ||
+          (this.existingIds.indexOf(this.model.trial.id.value) > -1 && this.model.trial.id.value !== this.trial.id)
+        ) {
           this.model.trial.id = {
             ...this.model.trial.id,
             invalidValue: true,
