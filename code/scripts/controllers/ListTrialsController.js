@@ -174,14 +174,14 @@ export default class ListTrialsController extends WebcController {
     const model = trials
       .map((trial) => ({
         ...trial,
-        created: new Date(trial.created).toLocaleDateString('en-UK'),
+        created: new Date(trial.created).toLocaleDateString(),
         recruitmentPeriod: trial.recruitmentPeriod
           ? {
               ...trial.recruitmentPeriod,
               toShowDate:
-                momentService(trial.recruitmentPeriod.startDate).format('DD-MM-YYYY') +
+                (new Date(trial.recruitmentPeriod.startDate)).toLocaleDateString() +
                 '-' +
-                momentService(trial.recruitmentPeriod.endDate).format('DD-MM-YYYY'),
+                (new Date(trial.recruitmentPeriod.endDate)).toLocaleDateString(),
             }
           : { ...trial.recruitmentPeriod, toShowDate: '-' },
       }))
@@ -300,30 +300,6 @@ export default class ListTrialsController extends WebcController {
       );
     });
 
-    this.onTagClick('edit-trial', async (model) => {
-      this.showModalFromTemplate(
-        'edit-trial',
-        async (event) => {
-          await this.getTrials();
-          this.showInformationModal('Trial edited changed successfully', 'success');
-        },
-        (event) => {
-          const error = event.detail || null;
-          if (error instanceof Error) {
-            console.error(error);
-            this.showInformationModal('ERROR: There was an issue editing the trial', 'error');
-          }
-        },
-        {
-          controller: 'modals/EditTrialModalController',
-          disableExpanding: true,
-          disableBackdropClosing: true,
-          trial: model,
-          existingIds: this.trials.map((x) => x.id) || [],
-        }
-      );
-    });
-
     this.onTagClick('set-recruitment-period', (model, target, event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -334,9 +310,7 @@ export default class ListTrialsController extends WebcController {
         const recruitmentPeriod = {
           ...response,
           toShowDate:
-            momentService(response.startDate).format('DD-MM-YYYY') +
-            ' - ' +
-            momentService(response.endDate).format('DD-MM-YYYY'),
+            new Date(response.startDate).toLocaleDateString() + ' - ' + new Date(response.endDate).toLocaleDateString(),
         };
         await this.trialsService.updateTrialDetails(model, { recruitmentPeriod });
         await this.getTrials();

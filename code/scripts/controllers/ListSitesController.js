@@ -141,7 +141,7 @@ export default class ListSitesController extends BreadCrumbManager {
   setSitesModel(sites) {
     const model = sites.map((site) => ({
       ...site,
-      created: new Date(site.created).toLocaleDateString('en-UK'),
+      created: new Date(site.created).toLocaleDateString(),
     }));
 
     this.model.sites = model;
