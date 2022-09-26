@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const Constants = commonServices.Constants;
 import TrialsService from '../services/TrialsService.js';
 import { consentTableHeaders } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
@@ -81,7 +82,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
   setConsentsModel(consents) {
     const model = consents.map((consent) => ({
       ...consent,
-      ...consent.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString() }))[
+      ...consent.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB) }))[
         consent.versions.length - 1
       ],
     }));
@@ -171,7 +172,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       const data = selectedConsent.versions.map((x) => ({
         ...selectedConsent,
         ...x,
-        versionDate: new Date(x.versionDate).toLocaleDateString(),
+        versionDate: new Date(x.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB),
       }));
 
       this.navigateToPageTag('consent-history', {

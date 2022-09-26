@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const Constants = commonServices.Constants;
 import TrialsService from '../services/TrialsService.js';
 import { participantConsentsTableHeaders } from '../constants/participant.js';
 const BreadCrumbManager = commonServices.getBreadCrumbManager();
@@ -93,7 +94,7 @@ export default class ListParticipantsConsentsController extends BreadCrumbManage
       return {
         ...x,
         ...maxVersionObj,
-        versionToShow: `V${maxVersionObj.version} ${new Date(maxVersionObj.versionDate).toLocaleDateString()}`,
+        versionToShow: `V${maxVersionObj.version} ${new Date(maxVersionObj.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB)}`,
       };
     });
     this.model.data = JSON.parse(JSON.stringify(dataModel));

@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+const Constants = commonServices.Constants;
 import TrialsService from '../services/TrialsService.js';
 import { siteConsentTableHeaders, consentTypeEnum } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
@@ -114,7 +115,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     } else {
       const result = site.consents.map((x) => ({
         ...x,
-        ...x.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString() }))[
+        ...x.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB) }))[
           x.versions.length - 1
         ],
         trialConsentVersion: 1,
@@ -215,7 +216,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
       const data = selectedConsent.versions.map((x) => ({
         ...selectedConsent,
         ...x,
-        versionDate: new Date(x.versionDate).toLocaleDateString(),
+        versionDate: new Date(x.versionDate).toLocaleString(Constants.DATE_UTILS.FORMATS.EN_GB),
       }));
       this.navigateToPageTag('site-consent-history', {
         trialId: this.model.trialId,
