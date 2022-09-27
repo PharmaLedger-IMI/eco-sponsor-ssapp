@@ -82,7 +82,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
   setConsentsModel(consents) {
     const model = consents.map((consent) => ({
       ...consent,
-      ...consent.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.FORMATS.EN_UK) }))[
+      ...consent.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) }))[
         consent.versions.length - 1
       ],
     }));
@@ -172,7 +172,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       const data = selectedConsent.versions.map((x) => ({
         ...selectedConsent,
         ...x,
-        versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.FORMATS.EN_UK),
+        versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
       }));
 
       this.navigateToPageTag('consent-history', {
