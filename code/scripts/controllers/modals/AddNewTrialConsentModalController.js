@@ -170,8 +170,11 @@ export default class AddNewTrialConsentModalController extends WebcController {
               };
             });
 
-            const existingVisits = this.model.toObject('existingVisits');
-            if (this.model.numberOfMandatoryConsents !== 0) {
+            if (
+              this.model.numberOfMandatoryConsents !== 0 &&
+              this.model.consent.type.value !== consentTypeEnum.Mandatory
+            ) {
+              const existingVisits = this.model.toObject('existingVisits');
               const check = this.checkOptionalVisits(result, existingVisits.visits[0].visits);
 
               if (!check) {
