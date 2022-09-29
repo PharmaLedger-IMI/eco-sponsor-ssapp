@@ -134,19 +134,20 @@ export default class TrialsService extends DSUService {
     const trialDb = await this.getTrialFromDB(trial.id);
     const trialDSU = await this.getEntityAsync(trial.uid);
 
-    const newTrialDb = { ...trialDb, ...trialNewDetails };
+    const newTrialDb = Object.assign({}, trialDb, trialNewDetails);
     let promises = [];
-    if (newTrialDb.id === trial.id) {
-      const updateTrialDB = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trial.id, newTrialDb);
+    if (newTrialDb.id === trialDb.id) {
+      const updateTrialDB = this.storageService.updateRecordAsync(this.TRIALS_TABLE, trialDb.id, newTrialDb);
       promises.push(updateTrialDB);
     } else {
-      const updateTrialDB = this.addTrialToDB(newTrialDb);
-      promises.push(updateTrialDB);
-      const deletedRecord = this.storageService.deleteRecord(this.TRIALS_TABLE, trial.id, trialDb);
-      promises.push(deletedRecord);
+      const deletedRecord = await this.storageService.deleteRecordAsync(this.TRIALS_TABLE, trialDb.id, trialDb);
+      const newTrialDB = this.addTrialToDB(newTrialDb);
+      // promises.push(deletedRecord);
+      promises.push(newTrialDB);
     }
     const updatedTrialDSU = this.updateEntityAsync({ ...trialDSU, ...trialNewDetails });
     promises.push(updatedTrialDSU);
-    return await Promise.allSettled(promises);
+    const result = await Promise.allSettled(promises);
+    return result;
   }
 }
