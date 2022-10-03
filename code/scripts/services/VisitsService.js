@@ -75,14 +75,20 @@ export default class VisitsService extends DSUService {
       });
 
       if (existingVisitInDBIndex === -1) {
-        visitsDb.visits.push({ trialId, consentId, consentVersion, visits: visitsAndProcedures, updatedAtConsentVersion: consentVersion });
+        visitsDb.visits.push({
+          trialId,
+          consentId,
+          consentVersion,
+          visits: visitsAndProcedures,
+          updatedAtConsentVersion: consentVersion,
+        });
       } else {
         visitsDb.visits[existingVisitInDBIndex] = {
           trialId,
           consentId,
           consentVersion,
           visits: visitsAndProcedures,
-          updatedAtConsentVersion: consentVersion
+          updatedAtConsentVersion: consentVersion,
         };
       }
     }

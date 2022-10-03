@@ -175,7 +175,10 @@ export default class AddNewTrialConsentModalController extends WebcController {
               this.model.consent.type.value !== consentTypeEnum.Mandatory
             ) {
               const existingVisits = this.model.toObject('existingVisits');
-              const check = this.checkOptionalVisits(result, existingVisits.visits[0].visits);
+              const check = this.checkOptionalVisits(
+                result,
+                existingVisits.visits[existingVisits.visits.length - 1].visits
+              );
 
               if (!check) {
                 callback('Visits are not the same as mandatory consent!', null);
@@ -251,7 +254,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
       this.model.consent.version.value,
       visitsAndProcedures
     );
-    if(visitsAndProcedures) {
+    if (visitsAndProcedures) {
       await this.sendMessageToAllTrialSites(this.model.trialSSI);
     }
     this.model.submitButtonDisabled = false;
