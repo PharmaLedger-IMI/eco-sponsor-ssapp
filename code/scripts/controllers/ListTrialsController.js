@@ -161,6 +161,9 @@ export default class ListTrialsController extends WebcController {
       this.trials.sort((a, b) => {
         return momentService(a.created).isBefore(momentService(b.created)) ? 1 : -1;
       });
+      for (const trial of this.trials) {
+        trial.disabledEdited = !!(await this.participantsService.getParticipantCount(trial.id));
+      }
       this.setTrialsModel(this.trials);
       window.WebCardinal.loader.hidden = true;
     } catch (error) {
@@ -174,14 +177,14 @@ export default class ListTrialsController extends WebcController {
     const model = trials
       .map((trial) => ({
         ...trial,
-        created: (new Date(trial.created)).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
+        created: new Date(trial.created).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
         recruitmentPeriod: trial.recruitmentPeriod
           ? {
               ...trial.recruitmentPeriod,
               toShowDate:
-                (new Date(trial.recruitmentPeriod.startDate)).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) +
+                new Date(trial.recruitmentPeriod.startDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) +
                 '-' +
-                (new Date(trial.recruitmentPeriod.endDate)).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
+                new Date(trial.recruitmentPeriod.endDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
             }
           : { ...trial.recruitmentPeriod, toShowDate: '-' },
       }))
@@ -260,25 +263,25 @@ export default class ListTrialsController extends WebcController {
 
     this.onTagClick('edit-trial', async (model) => {
       this.showModalFromTemplate(
-          'edit-trial',
-          async (event) => {
-            await this.getTrials();
-            this.showInformationModal('Trial edited changed successfully', 'success');
-          },
-          (event) => {
-            const error = event.detail || null;
-            if (error instanceof Error) {
-              console.error(error);
-              this.showInformationModal('ERROR: There was an issue editing the trial', 'error');
-            }
-          },
-          {
-            controller: 'modals/EditTrialModalController',
-            disableExpanding: true,
-            disableBackdropClosing: true,
-            trial: model,
-            existingIds: this.trials.map((x) => x.id) || [],
+        'edit-trial',
+        async (event) => {
+          await this.getTrials();
+          this.showInformationModal('Trial edited changed successfully', 'success');
+        },
+        (event) => {
+          const error = event.detail || null;
+          if (error instanceof Error) {
+            console.error(error);
+            this.showInformationModal('ERROR: There was an issue editing the trial', 'error');
           }
+        },
+        {
+          controller: 'modals/EditTrialModalController',
+          disableExpanding: true,
+          disableBackdropClosing: true,
+          trial: model,
+          existingIds: this.trials.map((x) => x.id) || [],
+        }
       );
     });
 
@@ -334,7 +337,9 @@ export default class ListTrialsController extends WebcController {
         const recruitmentPeriod = {
           ...response,
           toShowDate:
-            new Date(response.startDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) + ' - ' + new Date(response.endDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
+            new Date(response.startDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) +
+            ' - ' +
+            new Date(response.endDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
         };
         await this.trialsService.updateTrialDetails(model, { recruitmentPeriod });
         await this.getTrials();

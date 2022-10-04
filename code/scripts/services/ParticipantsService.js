@@ -90,6 +90,7 @@ export default class ParticipantsService extends DSUService {
         consentsKeySSIs
       );
 
+      await this.addParticipantCountForTrial(participantDSU.trialId);
       const trial = await this.trialsService.getTrialFromDB(participantDSU.trialId);
       const site = await this.sitesService.getSiteFromDB(siteDid, trial.keySSI);
       const newParticipant = await this.storageService.insertRecordAsync(
@@ -106,6 +107,34 @@ export default class ParticipantsService extends DSUService {
     } catch (error) {
       console.log(error.message);
     }
+  }
+
+  async addParticipantCountForTrial(trialId) {
+    let participantCount = { count: 0 };
+    const participantCountStored = await this.getParticipantCount(trialId);
+    if (participantCountStored === 0) {
+      debugger;
+      participantCount = await this.storageService.insertRecordAsync('TRIAL_PARTICIPANTS_COUNT', trialId, {
+        count: 1,
+      });
+    } else {
+      debugger;
+      participantCount = await this.storageService.updateRecordAsync('TRIAL_PARTICIPANTS_COUNT', trialId, {
+        count: participantCountStored + 1,
+      });
+    }
+
+    return participantCount.count;
+  }
+
+  async getParticipantCount(trialId) {
+    let result = null;
+    try {
+      result = await this.storageService.getRecordAsync('TRIAL_PARTICIPANTS_COUNT', trialId);
+    } catch (e) {
+      result = 0;
+    }
+    return (result && result.count) || 0;
   }
 
   async createParticipantConsents(participantUid, tpUid, siteDid, consentsKeySSIs) {
@@ -141,8 +170,7 @@ export default class ParticipantsService extends DSUService {
       const participantDb = await this.getParticipantFromDb(uid, trial.keySSI, site.keySSI);
 
       let newConsents;
-      if(consentSSIs){
-
+      if (consentSSIs) {
         const incomingParticipantConsentsPromises = consentSSIs.map((x) => {
           return this.mountEntityAsync(x, this.PARTICIPANTS_CONSENTS_PATH + '/' + participantDb.tpUid);
         });
@@ -153,23 +181,22 @@ export default class ParticipantsService extends DSUService {
         for (const x of incomingParticipantConsents) {
           if (participantDb.consents.indexOf(x.uid) > -1) {
             existingConsentsPromises.push(
-                this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
+              this.storageService.updateRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
             );
           } else {
             newConsentsPromises.push(
-                this.storageService.insertRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
+              this.storageService.insertRecordAsync(this.getConsentTableName(trial.keySSI, site.keySSI), x.uid, x)
             );
           }
         }
 
-         await Promise.all([...existingConsentsPromises]);
-         newConsents = await Promise.all([...newConsentsPromises]);
+        await Promise.all([...existingConsentsPromises]);
+        newConsents = await Promise.all([...newConsentsPromises]);
       }
 
-
       let updatedConsents = [...participantDb.consents];
-      if(newConsents){
-         updatedConsents.concat(...newConsents.map((x) => x.uid));
+      if (newConsents) {
+        updatedConsents.concat(...newConsents.map((x) => x.uid));
       }
       const updatedParticipant = await this.storageService.updateRecordAsync(
         this.getTableName(trial.keySSI, site.keySSI),
