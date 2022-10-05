@@ -110,15 +110,14 @@ export default class ParticipantsService extends DSUService {
   }
 
   async addParticipantCountForTrial(trialId) {
-    let participantCount = { count: 0 };
+    let participantCount;
     const participantCountStored = await this.getParticipantCount(trialId);
+
     if (participantCountStored === 0) {
-      debugger;
       participantCount = await this.storageService.insertRecordAsync('TRIAL_PARTICIPANTS_COUNT', trialId, {
         count: 1,
       });
     } else {
-      debugger;
       participantCount = await this.storageService.updateRecordAsync('TRIAL_PARTICIPANTS_COUNT', trialId, {
         count: participantCountStored + 1,
       });
