@@ -100,25 +100,44 @@ export default class ListTrialsController extends WebcController {
   }
 
   listenForMessages() {
+    const loader = window.WebCardinal.loader;
+    const onConfirmRefresh = function (event) {
+      event.preventDefault();
+      return event.returnValue = "Are you sure you want to leave?";
+    }
+
+    const blockUI = () =>{
+      loader.hidden = false;
+      loader.setAttribute("data-value","Updating wallet. Please wait...")
+      window.addEventListener("beforeunload", onConfirmRefresh, { capture: true });
+    }
+
+    const unBlockUI = ()=>{
+      loader.removeAttribute("data-value");
+      loader.hidden = true;
+      window.removeEventListener("beforeunload", onConfirmRefresh, { capture: true });
+    }
+
     MessageHandlerService.init(async (data) => {
       console.log('DATA MESSAGE:', data);
+      blockUI();
       data = JSON.parse(data);
       switch (data.operation) {
         case Constants.MESSAGES.SPONSOR.UPDATE_SITE_STATUS: {
           if (data.stageInfo.siteSSI) {
-            return await this.sitesService.updateSiteStage(data.stageInfo.siteSSI);
+            await this.sitesService.updateSiteStage(data.stageInfo.siteSSI);
           }
           break;
         }
         case Constants.MESSAGES.HCO.SEND_HCO_DSU_TO_SPONSOR: {
           if (data.ssi) {
-            return await this.sitesService.addHCODsu(data.ssi, data.senderIdentity);
+            await this.sitesService.addHCODsu(data.ssi, data.senderIdentity);
           }
           break;
         }
         case Constants.MESSAGES.SPONSOR.TP_ADDED: {
           if (data.ssi) {
-            return await this.participantsService.addParticipant(
+            await this.participantsService.addParticipant(
               data.ssi,
               data.senderIdentity,
               data.tpUid,
@@ -131,7 +150,7 @@ export default class ListTrialsController extends WebcController {
         case Constants.MESSAGES.SPONSOR.TP_CONSENT_UPDATE:
         case Constants.MESSAGES.SPONSOR.SIGN_ECONSENT: {
           if (data.ssi) {
-            return await this.participantsService.updateParticipantConsent(
+            await this.participantsService.updateParticipantConsent(
               data.ssi,
               data.senderIdentity,
               data.consentsKeySSIs
@@ -147,6 +166,7 @@ export default class ListTrialsController extends WebcController {
           break;
         }
       }
+      unBlockUI();
     });
   }
 
@@ -392,6 +412,5 @@ export default class ListTrialsController extends WebcController {
       await this.sitesService.changeSiteStatus(trial.status, site.did, trial.keySSI);
       this.sendMessageToHco(Constants.MESSAGES.SPONSOR.UPDATE_SITE_STATUS, site.uid, 'Status updated', site.did);
     }
-    return;
   }
 }
