@@ -220,7 +220,7 @@ export default class AddNewTrialConsentModalController extends WebcController {
       this.model.consent.version.value,
       visitsAndProcedures
     );
-    this.sendMessageToAllTrialSites(this.model.trialSSI);
+    // this.sendMessageToAllTrialSites(this.model.trialSSI);
     window.WebCardinal.loader.hidden = true;
     this.send('confirmed', result);
   }
@@ -254,9 +254,9 @@ export default class AddNewTrialConsentModalController extends WebcController {
       this.model.consent.version.value,
       visitsAndProcedures
     );
-    if (visitsAndProcedures) {
-      await this.sendMessageToAllTrialSites(this.model.trialSSI);
-    }
+    // if (visitsAndProcedures) {
+    // await this.sendMessageToAllTrialSites(this.model.trialSSI);
+    // }
     this.model.submitButtonDisabled = false;
     window.WebCardinal.loader.hidden = true;
     this.send('confirmed', result);
