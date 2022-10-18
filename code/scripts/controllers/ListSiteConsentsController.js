@@ -115,9 +115,10 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     } else {
       const result = site.consents.map((x) => ({
         ...x,
-        ...x.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) }))[
-          x.versions.length - 1
-        ],
+        ...x.versions.map((x) => ({
+          ...x,
+          versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
+        }))[x.versions.length - 1],
         trialConsentVersion: 1,
       }));
       return result;
@@ -177,16 +178,9 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
       this.showModalFromTemplate(
         'add-new-site-consent',
         async (_event) => {
-          // const response = event.detail;
           await this.getConsents();
           this.checkAddConsentButton();
           this.showInformationModal('Consent added successfully', 'success');
-          // this.sendMessageToHco(
-          //   Constants.MESSAGES.HCO.ADD_CONSENT,
-          //   response.sReadSSI,
-          //   'Site consent',
-          //   selectedSite.did
-          // );
         },
         (event) => {
           const error = event.detail || null;

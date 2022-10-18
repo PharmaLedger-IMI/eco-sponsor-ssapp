@@ -148,7 +148,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
             const result = visits.map((visit, idx) => {
               const uuid = uuidv4();
               return {
-                id: idx,
                 uuid,
                 name: visit,
                 week: parseInt(week[idx]),
@@ -165,7 +164,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
                   name: procedure[0],
                   uuid: uuidv4(),
                   checked: procedure[idx + 1] === 'X',
-                  id: procedureIdx,
                 })),
               };
             });
@@ -220,7 +218,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
       this.model.consent.version.value,
       visitsAndProcedures
     );
-    // this.sendMessageToAllTrialSites(this.model.trialSSI);
     window.WebCardinal.loader.hidden = true;
     this.send('confirmed', result);
   }
@@ -254,9 +251,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
       this.model.consent.version.value,
       visitsAndProcedures
     );
-    // if (visitsAndProcedures) {
-    // await this.sendMessageToAllTrialSites(this.model.trialSSI);
-    // }
     this.model.submitButtonDisabled = false;
     window.WebCardinal.loader.hidden = true;
     this.send('confirmed', result);
