@@ -256,31 +256,6 @@ export default class AddNewTrialConsentModalController extends WebcController {
     this.send('confirmed', result);
   }
 
-  async sendMessageToAllTrialSites(trialSSI) {
-    const sites = await this.sitesService.getSites(trialSSI);
-    for (const site of sites) {
-      await this.sendMessageToHco(
-        Constants.MESSAGES.HCO.UPDATE_BASE_PROCEDURES,
-        trialSSI,
-        'New visits and procedures',
-        site.did
-      );
-    }
-  }
-
-  async sendMessageToHco(operation, ssi, shortMessage, receiverDid) {
-    try {
-      let communicationService = getCommunicationServiceInstance();
-      await communicationService.sendMessage(receiverDid, {
-        operation: operation,
-        ssi: ssi,
-        shortDescription: shortMessage,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   getInitialViewModel() {
     let typesArray = Object.entries(consentTypeEnum).map(([_k, v]) => ({ value: v, label: v }));
     if (!this.model.isUpdate && this.model.numberOfMandatoryConsents >= maxAllowedMandatoryConsents) {
