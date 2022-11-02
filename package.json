@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/PharmaLedger-IMI/eco-sponsor-ssapp",
   "dependencies": {
-    "octopus": "git+http://github.com/privatesky/octopus.git"
+    "octopus": "git+http://github.com/opendsu/octopus.git"
   }
 }
