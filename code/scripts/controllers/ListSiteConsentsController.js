@@ -2,6 +2,7 @@
 const commonServices = require('common-services');
 const Constants = commonServices.Constants;
 import TrialsService from '../services/TrialsService.js';
+import { trialStatusesEnum } from '../constants/trial.js';
 import { siteConsentTableHeaders, consentTypeEnum } from '../constants/consent.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
 const BreadCrumbManager = commonServices.getBreadCrumbManager();
@@ -38,6 +39,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
     this.consentService = new ConsentService(this.DSUStorage);
+    this.status = this.history.location.state.status;
     let { trialId, trialKeySSI, trialUid, siteKeySSI, siteId, siteUid } = this.history.location.state;
 
     this.model = {
@@ -84,6 +86,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     this.model.site = site;
     this.model.data = model.map((x) => ({
       ...x,
+      addConsentButtonDisabled: this.model.addConsentButtonDisabled,
       siteConsentNameVer: `${x.name}, ver. ${this.getMaxVersionNumber(x)} ${
         this.checkConsentVersion(x) ? 'OUTDATED' : ''
       }`,
@@ -104,7 +107,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
   checkAddConsentButton() {
     if (this.model.trialConsents.length === 0) {
       this.model.addConsentButtonDisabled = true;
-    } else if (this.model.trialConsents.length > this.model.site.consents.length) {
+    } else if (this.model.trialConsents.length > this.model.site.consents.length && this.status === trialStatusesEnum.Active) {
       this.model.addConsentButtonDisabled = false;
     } else this.model.addConsentButtonDisabled = true;
   }

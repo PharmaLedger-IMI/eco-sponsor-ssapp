@@ -310,6 +310,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
+        status: model.status,
         breadcrumb: this.model.toObject('breadcrumb'),
       });
     });
@@ -319,6 +320,7 @@ export default class ListTrialsController extends WebcController {
         id: model.id,
         keySSI: model.keySSI,
         uid: model.uid,
+        status: model.status,
         breadcrumb: this.model.toObject('breadcrumb'),
       });
     });

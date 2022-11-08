@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-undef
 const commonServices = require('common-services');
+import {trialStatusesEnum} from "../constants/trial.js";
 import TrialsService from '../services/TrialsService.js';
 import { siteStatusesEnum, getActivatedSiteStagesEnum, siteTableHeaders } from '../constants/site.js';
 const { getCommunicationServiceInstance } = commonServices.CommunicationService;
@@ -82,12 +83,13 @@ export default class ListSitesController extends BreadCrumbManager {
 
     this.trialsService = new TrialsService(this.DSUStorage);
     this.sitesService = new SitesService(this.DSUStorage);
-    let { id, keySSI, uid } = this.history.location.state;
+    let { id, keySSI, uid, status } = this.history.location.state;
 
     this.model = {
       id,
       keySSI,
       uid,
+      status,
       statuses: this.statuses,
       stages: this.stages,
       countries: this.countries,
@@ -104,6 +106,10 @@ export default class ListSitesController extends BreadCrumbManager {
       label: `${id} / Sites`,
       tag: `sites`,
     });
+
+    if(this.model.status !== trialStatusesEnum.Active) {
+      this.model.isStatusNegative = true;
+    } else this.model.isStatusNegative = false;
 
     this.attachEvents();
 
@@ -142,6 +148,7 @@ export default class ListSitesController extends BreadCrumbManager {
     const model = sites.map((site) => ({
       ...site,
       created: new Date(site.created).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
+      isStatusNegative: this.model.isStatusNegative
     }));
 
     this.model.sites = model;
@@ -267,6 +274,7 @@ export default class ListSitesController extends BreadCrumbManager {
         siteKeySSI: model.keySSI,
         siteId: model.id,
         siteUid: model.uid,
+        status: this.model.status,
         breadcrumb: this.model.toObject('breadcrumb'),
       });
     });

@@ -8,6 +8,7 @@ const BreadCrumbManager = commonServices.getBreadCrumbManager();
 import SitesService from '../services/SitesService.js';
 import ConsentService from '../services/ConsentService.js';
 import { consentTypeEnum } from '../constants/consent.js';
+import { trialStatusesEnum } from '../constants/trial.js';
 import VisitsService from '../services/VisitsService.js';
 
 export default class ListTrialConsentsController extends BreadCrumbManager {
@@ -42,12 +43,13 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
     this.consentService = new ConsentService(this.DSUStorage);
     this.visitsService = new VisitsService(this.DSUStorage);
 
-    let { id, keySSI, uid } = this.history.location.state;
+    let { id, keySSI, uid, status } = this.history.location.state;
 
     this.model = {
       id,
       keySSI,
       uid,
+      status,
       consents: [],
       pagination: this.pagination,
       headers: this.headers,
@@ -62,8 +64,11 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       tag: `trial-consents`,
     });
 
-    this.attachEvents();
+    if(this.model.status !== trialStatusesEnum.Active) {
+      this.model.isStatusNegative = true;
+    } else this.model.isStatusNegative = false;
 
+    this.attachEvents();
     this.init();
   }
 
@@ -85,6 +90,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       ...consent.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) }))[
         consent.versions.length - 1
       ],
+      isStatusNegative: this.model.isStatusNegative
     }));
 
     this.model.consents = model;
