@@ -107,9 +107,7 @@ export default class ListSitesController extends BreadCrumbManager {
       tag: `sites`,
     });
 
-    if(this.model.status !== trialStatusesEnum.Active) {
-      this.model.isStatusNegative = true;
-    } else this.model.isStatusNegative = false;
+    this.model.trialIsNotActive = this.model.status !== trialStatusesEnum.Active;
 
     this.attachEvents();
 
@@ -148,7 +146,7 @@ export default class ListSitesController extends BreadCrumbManager {
     const model = sites.map((site) => ({
       ...site,
       created: new Date(site.created).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE),
-      isStatusNegative: this.model.isStatusNegative
+      trialIsNotActive: this.model.trialIsNotActive
     }));
 
     this.model.sites = model;

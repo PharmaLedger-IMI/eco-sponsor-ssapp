@@ -86,7 +86,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
     this.model.site = site;
     this.model.data = model.map((x) => ({
       ...x,
-      addConsentButtonDisabled: this.model.addConsentButtonDisabled,
+      trialIsNotActive: this.status !== trialStatusesEnum.Active,
       siteConsentNameVer: `${x.name}, ver. ${this.getMaxVersionNumber(x)} ${
         this.checkConsentVersion(x) ? 'OUTDATED' : ''
       }`,
@@ -107,9 +107,7 @@ export default class ListSiteConsentsController extends BreadCrumbManager {
   checkAddConsentButton() {
     if (this.model.trialConsents.length === 0) {
       this.model.addConsentButtonDisabled = true;
-    } else if (this.model.trialConsents.length > this.model.site.consents.length && this.status === trialStatusesEnum.Active) {
-      this.model.addConsentButtonDisabled = false;
-    } else this.model.addConsentButtonDisabled = true;
+    } else this.model.addConsentButtonDisabled = !(this.model.trialConsents.length > this.model.site.consents.length && this.status === trialStatusesEnum.Active);
   }
 
   getSiteConsents(site) {

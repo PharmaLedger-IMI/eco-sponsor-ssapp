@@ -64,9 +64,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       tag: `trial-consents`,
     });
 
-    if(this.model.status !== trialStatusesEnum.Active) {
-      this.model.isStatusNegative = true;
-    } else this.model.isStatusNegative = false;
+    this.model.trialIsNotActive = this.model.status !== trialStatusesEnum.Active;
 
     this.attachEvents();
     this.init();
@@ -90,7 +88,7 @@ export default class ListTrialConsentsController extends BreadCrumbManager {
       ...consent.versions.map((x) => ({ ...x, versionDate: new Date(x.versionDate).toLocaleDateString(Constants.DATE_UTILS.DATE_LOCALE) }))[
         consent.versions.length - 1
       ],
-      isStatusNegative: this.model.isStatusNegative
+      trialIsNotActive: this.model.trialIsNotActive
     }));
 
     this.model.consents = model;
