@@ -41,7 +41,7 @@
     </div>
     <div class="form-group">
         <label class="col-form-label">{{ @site.did.label }}</label>
-        <input id="did-field" class="form-control" data-view-model="@site.did" event-name="did-changed"/>
+        <did-input id="did-field" class="form-control" data-view-model="@site.did"></did-input>
         <span data-if="@site.did.invalidValue" class="d-flex flex-row">
       <i class="red-invalid fas fa-times mr-2"></i>
       <small class="form-text text-danger">DID is invalid or a site with this DID already exits</small>
